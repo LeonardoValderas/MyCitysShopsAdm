@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">My Citys Shops.(Adm)</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_delete">Eliminar</string>
+    <string name="my_account_title">MI CUENTA</string>
+    <string name="notification_title">NOTIFICACION</string>
+    <string name="account_save">Datos guardados.</string>
+    <string name="error_name">Ingrese un nombre.</string>
+    <string name="error_logo">Seleccione un logo.</string>
+    <string name="error_address">Ingrese una dirección.</string>
+    <string name="error_map">Seleccione un punto en el mapa.</string>
+    <string name="error_description">Ingrese una descripción</string>
+    <!--Deb-->
+    <string name="google_maps_key">AIzaSyAWfQFYnINp_aoysUJlg1vvcb5h7HwGhyU</string>
+    <string name="title_empty">Ingrese un titulo.</string>
+    <string name="description_empty">Ingrese la promo.</string>
+    <string name="offer_success">Promo cargada corectamente.</string>
+    <string name="offer_update">Promo actualizada correctamente.</string>
+    <string name="send_notification_success">Notificación enviada.</string>
+    <string name="notification_empty">Ingrese una notificación.</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+
+</resources>

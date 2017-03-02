@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_account"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    tools:context="com.valdroide.mycitysshopsadm.main.account.ui.AccountActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextNameHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/editTextName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ingrese Nombre del Comercio"
+                    android:maxLength="49" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/imageViewLogo"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_below="@+id/editTextNameHint"
+                android:layout_centerHorizontal="true"
+                android:clickable="true"
+                android:src="@android:drawable/ic_menu_crop" />
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextPhoneHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageViewLogo">
+
+                <EditText
+                    android:id="@+id/editTextPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:hint="Ingrese Número de Contacto.(Opcional)"
+                    android:maxLength="20" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextEmailHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextPhoneHint">
+
+                <EditText
+                    android:id="@+id/editTextEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:hint="Ingrese Email de Contacto.(Opcional)"
+                    android:maxLength="30" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextAddressHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextEmailHint">
+
+                <EditText
+                    android:id="@+id/editTextAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ingrese la Dirección del Comercio."
+                    android:maxLength="30" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextDescriptionHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextAddressHint">
+
+                <EditText
+                    android:id="@+id/editTextDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ingrese una Descripción del Comercio."
+                    android:lines="3"
+                    android:maxLength="200" />
+            </android.support.design.widget.TextInputLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

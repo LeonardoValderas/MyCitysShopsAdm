@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "939175051020",
+    "firebase_url": "https://photoproject-727b6.firebaseio.com",
+    "project_id": "photoproject-727b6",
+    "storage_bucket": "photoproject-727b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:939175051020:android:d83276c55fe8efef",
+        "android_client_info": {
+          "package_name": "com.valdroide.mycitysshopsadm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "939175051020-8fc4ran92kr283ub2tpvv046h9bpfnqt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_wXoGAXUqT7Vir93sUjMvMLcQqnEzWLA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
