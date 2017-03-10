@@ -5,7 +5,6 @@ package com.valdroide.mycitysshopsadm.main.navigation.ui;
  */
 
 public interface NavigationActivityView {
-    void goToAccount();
-    void goToOffer();
-    void goToNotification();
+    void logOut();
+    void setError(String error);
 }

@@ -1,5 +1,8 @@
 package com.valdroide.mycitysshopsadm.main.place;
 
+import android.content.Context;
+
+import com.valdroide.mycitysshopsadm.entities.user.MyPlace;
 
 public class PlaceActivityInteractorImpl implements PlaceActivityInteractor {
 
@@ -22,5 +25,10 @@ public class PlaceActivityInteractorImpl implements PlaceActivityInteractor {
     @Override
     public void getCitiesForState(int id_state) {
         repository.getCitiesForState(id_state);
+    }
+
+    @Override
+    public void savePlace(Context context, MyPlace place) {
+        repository.savePlace(context, place);
     }
 }

@@ -1,7 +1,7 @@
 package com.valdroide.mycitysshopsadm.main.account;
 
 import android.content.Context;
-import com.valdroide.mycitysshopsadm.entities.Account;
+import com.valdroide.mycitysshopsadm.entities.user.Account;
 
 public class AccountActivityInteractorImpl implements AccountActivityInteractor {
     AccountActivityRepository repository;
@@ -15,10 +15,10 @@ public class AccountActivityInteractorImpl implements AccountActivityInteractor 
         repository.getAccount();
     }
 
-    @Override
-    public void saveAccount(Context context, Account account) {
-        repository.saveAccount(context, account);
-    }
+//    @Override
+//    public void saveAccount(Context context, Account account) {
+//        repository.saveAccount(context, account);
+//    }
 
     @Override
     public void updateAccount(Context context, Account account) {

@@ -1,8 +1,14 @@
 package com.valdroide.mycitysshopsadm.main.navigation;
 
-/**
- * Created by LEO on 20/2/2017.
- */
+public class NavigationActivityInteractorImpl implements NavigationActivityInteractor {
+    private NavigationActivityRepository repository;
 
-public class NavigationActivityInteractorImpl {
+    public NavigationActivityInteractorImpl(NavigationActivityRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public void logOut() {
+      repository.logOut();
+    }
 }

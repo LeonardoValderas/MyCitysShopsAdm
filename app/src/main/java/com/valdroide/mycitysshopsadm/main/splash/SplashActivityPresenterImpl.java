@@ -36,15 +36,10 @@ public class SplashActivityPresenterImpl implements SplashActivityPresenter {
         interactor.validateDatePlace(context);
     }
 
-//    @Override
-//    public void getDateTable() {
-//        interactor.getDateTable();
-//    }
-//
-//    @Override
-//    public void getAllData(Context context) {
-//        interactor.getAllData(context);
-//    }
+    @Override
+    public void validateDateUser(Context context) {
+        interactor.validateDateUser(context);
+    }
 
     @Override
     @Subscribe
@@ -53,6 +48,9 @@ public class SplashActivityPresenterImpl implements SplashActivityPresenter {
             switch (event.getType()) {
                 case SplashActivityEvent.GOTOLOG:
                     view.goToLog();
+                    break;
+                case SplashActivityEvent.GOTONAV:
+                    view.goToNav();
                     break;
                 case SplashActivityEvent.GOTOPLACE:
                     view.goToPlace();

@@ -1,8 +1,10 @@
 package com.valdroide.mycitysshopsadm.main.navigation;
 
-/**
- * Created by LEO on 20/2/2017.
- */
+import com.valdroide.mycitysshopsadm.main.navigation.events.NavigationActivityEvent;
 
 public interface NavigationActivityPresenter {
+    void onCreate();
+    void onDestroy();
+    void logOut();
+    void onEventMainThread(NavigationActivityEvent event);
 }

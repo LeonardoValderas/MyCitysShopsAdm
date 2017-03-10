@@ -2,7 +2,7 @@ package com.valdroide.mycitysshopsadm.main.offer;
 
 import android.content.Context;
 
-import com.valdroide.mycitysshopsadm.entities.Offer;
+import com.valdroide.mycitysshopsadm.entities.user.Offer;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.offer.events.OfferActivityEvent;
 import com.valdroide.mycitysshopsadm.main.offer.ui.OfferActivityView;
@@ -37,8 +37,8 @@ public class OfferActivityPresenterImpl implements OfferActivityPresenter {
     }
 
     @Override
-    public void getOffer() {
-        interactor.getOffer();
+    public void getOffer(Context context) {
+        interactor.getOffer(context);
     }
 
     @Override
@@ -52,8 +52,8 @@ public class OfferActivityPresenterImpl implements OfferActivityPresenter {
     }
 
     @Override
-    public void deleteOffer(Context context, Offer offer) {
-        interactor.deleteOffer(context, offer);
+    public void deleteOffer(Context context, Offer offer, boolean isDelete) {
+        interactor.deleteOffer(context, offer, isDelete);
     }
 
     @Override

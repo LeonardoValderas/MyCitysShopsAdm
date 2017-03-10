@@ -15,41 +15,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/editTextNameHint"
+            <TextView
+                android:id="@+id/textViewName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/editTextName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Ingrese Nombre del Comercio"
-                    android:maxLength="49" />
-            </android.support.design.widget.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:shadowColor="#757575"
+                android:shadowDx="-1"
+                android:shadowDy="-1"
+                android:shadowRadius="1"
+                android:text="NOMBRE"
+                android:textAllCaps="true"
+                android:textSize="25dp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/imageViewLogo"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:layout_below="@+id/editTextNameHint"
+                android:layout_below="@+id/textViewName"
                 android:layout_centerHorizontal="true"
                 android:clickable="true"
                 android:src="@android:drawable/ic_menu_crop" />
-
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/editTextPhoneHint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/imageViewLogo">
+                android:layout_below="@+id/imageViewLogo"
+                android:layout_marginTop="5dp">
 
                 <EditText
                     android:id="@+id/editTextPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="phone"
                     android:hint="Ingrese Número de Contacto.(Opcional)"
+                    android:inputType="phone"
                     android:maxLength="20" />
             </android.support.design.widget.TextInputLayout>
 
@@ -63,8 +64,8 @@
                     android:id="@+id/editTextEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
                     android:hint="Ingrese Email de Contacto.(Opcional)"
+                    android:inputType="textEmailAddress"
                     android:maxLength="30" />
             </android.support.design.widget.TextInputLayout>
 

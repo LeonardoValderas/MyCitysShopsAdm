@@ -2,7 +2,7 @@ package com.valdroide.mycitysshopsadm.main.account;
 
 import android.content.Context;
 
-import com.valdroide.mycitysshopsadm.entities.Account;
+import com.valdroide.mycitysshopsadm.entities.user.Account;
 
 /**
  * Created by LEO on 20/2/2017.
@@ -10,6 +10,6 @@ import com.valdroide.mycitysshopsadm.entities.Account;
 
 public interface AccountActivityRepository {
     void getAccount();
-    void saveAccount(Context context, Account account);
+   // void saveAccount(Context context, Account account);
     void updateAccount(Context context, Account account);
 }

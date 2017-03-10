@@ -1,5 +1,8 @@
 package com.valdroide.mycitysshopsadm.main.place;
 
+import android.content.Context;
+
+import com.valdroide.mycitysshopsadm.entities.user.MyPlace;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.place.events.PlaceActivityEvent;
 import com.valdroide.mycitysshopsadm.main.place.ui.PlaceActivityView;
@@ -45,6 +48,11 @@ public class PlaceActivityPresenterImpl implements PlaceActivityPresenter {
     }
 
     @Override
+    public void savePlace(Context context, MyPlace place) {
+        interactor.savePlace(context, place);
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(PlaceActivityEvent event) {
         if (this.view != null) {
@@ -57,6 +65,9 @@ public class PlaceActivityPresenterImpl implements PlaceActivityPresenter {
                     break;
                 case PlaceActivityEvent.GETCITIES:
                     view.setCity(event.getCities());
+                    break;
+                case PlaceActivityEvent.SAVE:
+                    view.saveSuccess(event.getPlace());
                     break;
                 case PlaceActivityEvent.ERROR:
                     view.setError(event.getError());

@@ -2,6 +2,7 @@ package com.valdroide.mycitysshopsadm.main.account.ui;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,15 +16,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
-import com.valdroide.mycitysshopsadm.entities.Account;
+import com.valdroide.mycitysshopsadm.entities.user.Account;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityPresenter;
 import com.valdroide.mycitysshopsadm.main.map.MapActivity;
 import com.valdroide.mycitysshopsadm.utils.Utils;
@@ -38,8 +42,8 @@ import butterknife.OnClick;
 
 public class AccountActivity extends AppCompatActivity implements AccountActivityView {
 
-    @Bind(R.id.editTextName)
-    EditText editTextName;
+    @Bind(R.id.textViewName)
+    TextView textViewName;
     @Bind(R.id.imageViewLogo)
     ImageView imageViewLogo;
     @Bind(R.id.editTextPhone)
@@ -57,10 +61,12 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
     public static final int GALERY = 1;
     private byte[] imageByte;
     private String latitud = "", longitud = "", name_before = "", name_logo = "", url_logo = "", encode = "";
-    private int id_account = 0, id_shop = 0;
+    private int id_account = 0;
     private boolean isMap = false;
     private ProgressDialog pDialog;
     private Uri uriExtra;
+    private Menu menu;
+
     @Inject
     AccountActivityPresenter presenter;
 
@@ -70,6 +76,8 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
         ButterKnife.bind(this);
+        setEnable(false);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.my_account_title);
         setupInjection();
@@ -79,11 +87,18 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         presenter.getAccount();
         isMap = getIntent().getBooleanExtra("isMap", false);
         if (isMap) {
+            if (getIntent().getStringExtra("uri") != null)
+                uriExtra = Uri.parse(getIntent().getStringExtra("uri"));
+            if (uriExtra != null)
+                assignImage(uriExtra);
+
+            editTextPhone.setText(getIntent().getStringExtra("phone"));
+            editTextEmail.setText(getIntent().getStringExtra("email"));
+            editTextAddress.setText(getIntent().getStringExtra("address"));
+            editTextDescription.setText(getIntent().getStringExtra("description"));
             latitud = getIntent().getStringExtra("latitud");
             longitud = getIntent().getStringExtra("longitud");
-            uriExtra = Uri.parse(getIntent().getStringExtra("uri"));
-            if(uriExtra != null)
-                assignImage(uriExtra);
+
         }
     }
 
@@ -91,6 +106,22 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Procesando...");
         pDialog.setCancelable(false);
+    }
+
+    public void setEnable(boolean isEnable) {
+        imageViewLogo.setEnabled(isEnable);
+        editTextPhone.setEnabled(isEnable);
+        editTextPhone.setFocusable(isEnable);
+        editTextPhone.setFocusableInTouchMode(isEnable);
+        editTextEmail.setEnabled(isEnable);
+        editTextEmail.setFocusable(isEnable);
+        editTextEmail.setFocusableInTouchMode(isEnable);
+        editTextAddress.setEnabled(isEnable);
+        editTextAddress.setFocusable(isEnable);
+        editTextAddress.setFocusableInTouchMode(isEnable);
+        editTextDescription.setEnabled(isEnable);
+        editTextDescription.setFocusable(isEnable);
+        editTextDescription.setFocusableInTouchMode(isEnable);
     }
 
     @Override
@@ -117,8 +148,10 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
     @Override
     public void saveSuccess() {
         pDialog.hide();
-        Utils.showSnackBar(activityAccount, getString(R.string.account_save));
         cleanData();
+        menuEdit();
+        setEnable(false);
+        Utils.showSnackBar(activityAccount, getString(R.string.account_save));
     }
 
     private void cleanData() {
@@ -130,17 +163,16 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
     @Override
     public void setAccount(Account account) {
         id_account = account.getID_ACCOUNT_KEY();
-        id_shop = account.getID_SHOP_FOREIGN();
-        editTextName.setText(account.getSHOP_NAME());
+        textViewName.setText(account.getSHOP_NAME());
         Utils.setPicasso(this, account.getURL_LOGO(), android.R.drawable.ic_menu_crop, imageViewLogo);
         name_logo = account.getNAME_LOGO();
         name_before = name_logo;
-        url_logo = account.getURL_LOGO();
+        url_logo = account.getURL_LOGO() == null ? "" : account.getURL_LOGO();
         editTextPhone.setText(account.getPHONE());
         editTextEmail.setText(account.getEMAIL());
         editTextAddress.setText(account.getADDRESS());
-        latitud = account.getLATITUD();
-        longitud = account.getLONGITUD();
+        latitud = account.getLATITUD() == null ? "" : account.getLATITUD();
+        longitud = account.getLONGITUD() == null ? "" : account.getLONGITUD();
         editTextDescription.setText(account.getDESCRIPTION());
         if (pDialog.isShowing())
             pDialog.hide();
@@ -155,11 +187,11 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
             } catch (Exception e) {
                 encode = "";
             }
-            name_logo = Utils.removeAccents(editTextName.getText().toString()) + Utils.getFechaOficial() + ".PNG";
+            name_logo = Utils.removeAccents(textViewName.getText().toString()) + Utils.getFechaOficial() + ".PNG";
             url_logo = Utils.URL_IMAGE + name_logo;
 
         }
-        return new Account(id_account, 1, editTextName.getText().toString(), url_logo, name_logo,
+        return new Account(id_account, textViewName.getText().toString(), url_logo, name_logo,
                 name_before, encode, editTextDescription.getText().toString(), editTextPhone.getText().toString(),
                 editTextEmail.getText().toString(), latitud, longitud, editTextAddress.getText().toString());
     }
@@ -243,18 +275,36 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
                 .start(AccountActivity.this);
     }
 
+    public void menuSave() {
+        menu.clear();
+        getMenuInflater().inflate(R.menu.account, menu);
+        menu.getItem(0).setVisible(true);// map
+        menu.getItem(1).setVisible(true);// save
+        menu.getItem(2).setVisible(false);// edit
+    }
+
+    public void menuEdit() {
+        menu.clear();
+        getMenuInflater().inflate(R.menu.account, menu);
+        menu.getItem(0).setVisible(false);// map
+        menu.getItem(1).setVisible(false);// save
+        menu.getItem(2).setVisible(true);// edit
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.account, menu);
+        this.menu = menu;
+        menu.getItem(0).setVisible(false);// map
+        menu.getItem(1).setVisible(false);// save
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_save) {
-            if (editTextName.getText().toString().isEmpty())
-                Utils.showSnackBar(activityAccount, getString(R.string.error_name));
-            else if (imageByte == null && url_logo.isEmpty())
+        int id = item.getItemId();
+        if (id == R.id.action_save) {
+            if (imageByte == null && url_logo.isEmpty())
                 Utils.showSnackBar(activityAccount, getString(R.string.error_logo));
             else if (editTextAddress.getText().toString().isEmpty())
                 Utils.showSnackBar(activityAccount, getString(R.string.error_address));
@@ -262,21 +312,25 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
                 Utils.showSnackBar(activityAccount, getString(R.string.error_map));
             else if (editTextDescription.getText().toString().isEmpty())
                 Utils.showSnackBar(activityAccount, getString(R.string.error_description));
-            else {
-                if (id_account != 0)
-                    presenter.updateAccount(this, prepareAccount());
-                else
-                    presenter.saveAccount(this, prepareAccount());
-            }
-        } else if (item.getItemId() == R.id.action_map) {
+            else
+                presenter.updateAccount(this, prepareAccount());
+        } else if (id == R.id.action_map) {
 
             Intent intent = new Intent(this, MapActivity.class);
+            intent.putExtra("map", true);
+            intent.putExtra("name", textViewName.getText().toString());
+            if (uriExtra != null)
+                intent.putExtra("uri", uriExtra.toString());
+            intent.putExtra("phone", editTextPhone.getText().toString());
+            intent.putExtra("email", editTextEmail.getText().toString());
+            intent.putExtra("address", editTextAddress.getText().toString());
+            intent.putExtra("description", editTextDescription.getText().toString());
             intent.putExtra("latitud", latitud);
             intent.putExtra("longitud", longitud);
-            intent.putExtra("name", editTextName.getText());
-            intent.putExtra("map", true);
-            intent.putExtra("uri", uriExtra.toString());
             startActivity(intent);
+        } else if (id == R.id.action_edit) {
+            menuSave();
+            setEnable(true);
         }
         return super.onOptionsItemSelected(item);
     }

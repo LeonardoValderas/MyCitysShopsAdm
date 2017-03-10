@@ -4,14 +4,12 @@ import android.content.Context;
 
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.valdroide.mycitysshopsadm.api.APIService;
-import com.valdroide.mycitysshopsadm.entities.Account;
+import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
+import com.valdroide.mycitysshopsadm.entities.user.Account;
 import com.valdroide.mycitysshopsadm.entities.response.ResponseWS;
-import com.valdroide.mycitysshopsadm.entities.response.Result;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.account.events.AccountActivityEvent;
 import com.valdroide.mycitysshopsadm.utils.Utils;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,8 +22,6 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
     private Account account = new Account();
     ResponseWS responseWS;
     int id;
-    Utils utils = new Utils();
-
 
     public AccountActivityRepositoryImpl(EventBus eventBus, APIService service) {
         this.eventBus = eventBus;
@@ -46,70 +42,69 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
 
     }
 
-    @Override
-    public void saveAccount(Context context, final Account account) {
-  // if (utils.isNetworkAvailableNonStatic(context)) {
-        if (Utils.isNetworkAvailable(context)) {
-            try {
-                Call<Result> accountService = service.insertAccount(account.getID_SHOP_FOREIGN(),
-                        account.getSHOP_NAME(), account.getEncode(),
-                        account.getURL_LOGO(), account.getNAME_LOGO(),
-                        account.getDESCRIPTION(), account.getPHONE(), account.getEMAIL(), account.getLATITUD(),
-                        account.getLONGITUD(), account.getADDRESS());
-                accountService.enqueue(new Callback<Result>() {
-                    @Override
-                    public void onResponse(Call<Result> call, Response<Result> response) {
-                        if (response.isSuccessful()) {
-                            responseWS = response.body().getResponseWS();
-                            if (responseWS != null) {
-                                if (responseWS.getSuccess().equals("0")) {
-                                    id = responseWS.getId();
-                                    if (id != 0) {
-                                        account.setID_ACCOUNT_KEY(id);
-                                        account.setEncode("");
-                                        account.setNAME_BEFORE("");
-                                        account.save();
-                                        post(AccountActivityEvent.SAVEACCOUNT);
-                                    } else {
-                                        post(AccountActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
-                                    }
-                                } else {
-                                    post(AccountActivityEvent.ERROR, responseWS.getMessage());
-                                }
-                            } else {
-                                post(AccountActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
-                            }
-                        } else {
-                            post(AccountActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Result> call, Throwable t) {
-                        post(AccountActivityEvent.ERROR, t.getMessage());
-                    }
-                });
-            } catch (Exception e) {
-                post(AccountActivityEvent.ERROR, e.getMessage());
-            }
-        } else {
-            post(AccountActivityEvent.ERROR, Utils.ERROR_INTERNET);
-        }
-    }
+//    @Override
+//    public void saveAccount(Context context, final Account account) {
+//  // if (utils.isNetworkAvailableNonStatic(context)) {
+//        if (Utils.isNetworkAvailable(context)) {
+//            try {
+//                Call<ResultPlace> accountService = service.insertAccount(account.getID_USER_FOREIGN(),
+//                        account.getSHOP_NAME(), account.getEncode(),
+//                        account.getURL_LOGO(), account.getNAME_LOGO(),
+//                        account.getDESCRIPTION(), account.getPHONE(), account.getEMAIL(), account.getLATITUD(),
+//                        account.getLONGITUD(), account.getADDRESS());
+//                accountService.enqueue(new Callback<ResultPlace>() {
+//                    @Override
+//                    public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
+//                        if (response.isSuccessful()) {
+//                            responseWS = response.body().getResponseWS();
+//                            if (responseWS != null) {
+//                                if (responseWS.getSuccess().equals("0")) {
+//                                    id = responseWS.getId();
+//                                    if (id != 0) {
+//                                        account.setID_ACCOUNT_KEY(id);
+//                                        account.setEncode("");
+//                                        account.setNAME_BEFORE("");
+//                                        account.save();
+//                                        post(AccountActivityEvent.SAVEACCOUNT);
+//                                    } else {
+//                                        post(AccountActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
+//                                    }
+//                                } else {
+//                                    post(AccountActivityEvent.ERROR, responseWS.getMessage());
+//                                }
+//                            } else {
+//                                post(AccountActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
+//                            }
+//                        } else {
+//                            post(AccountActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<ResultPlace> call, Throwable t) {
+//                        post(AccountActivityEvent.ERROR, t.getMessage());
+//                    }
+//                });
+//            } catch (Exception e) {
+//                post(AccountActivityEvent.ERROR, e.getMessage());
+//            }
+//        } else {
+//            post(AccountActivityEvent.ERROR, Utils.ERROR_INTERNET);
+//        }
+//    }
 
     @Override
     public void updateAccount(Context context, final Account account) {
         if (isUpdate(account)) {
             if (Utils.isNetworkAvailable(context)) {
                 try {
-                    Call<Result> accountService = service.updateAccount(account.getID_ACCOUNT_KEY(), account.getID_SHOP_FOREIGN(),
-                            account.getSHOP_NAME(), account.getEncode(),
+                    Call<ResultPlace> accountService = service.updateAccount(account.getID_ACCOUNT_KEY(), account.getEncode(),
                             account.getURL_LOGO(), account.getNAME_LOGO(), account.getNAME_BEFORE(),
                             account.getDESCRIPTION(), account.getPHONE(), account.getEMAIL(), account.getLATITUD(),
                             account.getLONGITUD(), account.getADDRESS());
-                    accountService.enqueue(new Callback<Result>() {
+                    accountService.enqueue(new Callback<ResultPlace>() {
                         @Override
-                        public void onResponse(Call<Result> call, Response<Result> response) {
+                        public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
                             if (response.isSuccessful()) {
                                 responseWS = response.body().getResponseWS();
                                 if (responseWS.getSuccess().equals("0")) {
@@ -122,9 +117,8 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
                                 post(AccountActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
                             }
                         }
-
                         @Override
-                        public void onFailure(Call<Result> call, Throwable t) {
+                        public void onFailure(Call<ResultPlace> call, Throwable t) {
                             post(AccountActivityEvent.ERROR, t.getMessage());
                         }
                     });
@@ -142,9 +136,7 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
     public boolean isUpdate(Account accountValidate) {
         account = SQLite.select().from(Account.class).querySingle();
         if (accountValidate.getEncode().isEmpty()) {
-            if (accountValidate.getSHOP_NAME().compareTo(account.getSHOP_NAME()) != 0)
-                return true;
-            else if (accountValidate.getPHONE().compareTo(account.getPHONE()) != 0)
+           if (accountValidate.getPHONE().compareTo(account.getPHONE()) != 0)
                 return true;
             else if (accountValidate.getEMAIL().compareTo(account.getEMAIL()) != 0)
                 return true;
@@ -161,7 +153,6 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
         }
         return true;
     }
-
 
     public void post(int type, Account account) {
         post(type, account, null);

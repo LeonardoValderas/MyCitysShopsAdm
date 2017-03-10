@@ -2,10 +2,9 @@ package com.valdroide.mycitysshopsadm.main.account;
 
 import android.content.Context;
 
-import com.valdroide.mycitysshopsadm.entities.Account;
+import com.valdroide.mycitysshopsadm.entities.user.Account;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.account.events.AccountActivityEvent;
-import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivity;
 import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivityView;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -42,10 +41,10 @@ public class AccountActivityPresenterImpl implements AccountActivityPresenter {
         interactor.getAccount();
     }
 
-    @Override
-    public void saveAccount(Context context, Account account) {
-        interactor.saveAccount(context, account);
-    }
+//    @Override
+//    public void saveAccount(Context context, Account account) {
+//        interactor.saveAccount(context, account);
+//    }
 
     @Override
     public void updateAccount(Context context, Account account) {

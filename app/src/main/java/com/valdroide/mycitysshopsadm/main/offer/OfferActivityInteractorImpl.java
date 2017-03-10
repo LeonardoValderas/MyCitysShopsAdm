@@ -1,9 +1,7 @@
 package com.valdroide.mycitysshopsadm.main.offer;
 
 import android.content.Context;
-
-import com.valdroide.mycitysshopsadm.entities.Offer;
-
+import com.valdroide.mycitysshopsadm.entities.user.Offer;
 
 public class OfferActivityInteractorImpl implements OfferActivityInteractor {
     OfferActivityRepository repository;
@@ -13,8 +11,8 @@ public class OfferActivityInteractorImpl implements OfferActivityInteractor {
     }
 
     @Override
-    public void getOffer() {
-        repository.getOffer();
+    public void getOffer(Context context) {
+        repository.getOffer(context);
     }
 
     @Override
@@ -28,7 +26,7 @@ public class OfferActivityInteractorImpl implements OfferActivityInteractor {
     }
 
     @Override
-    public void deleteOffer(Context context, Offer offer) {
-        repository.deleteOffer(context, offer);
+    public void deleteOffer(Context context, Offer offer, boolean isDelete) {
+        repository.deleteOffer(context, offer, isDelete);
     }
 }

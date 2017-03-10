@@ -5,4 +5,5 @@ package com.valdroide.mycitysshopsadm.main.navigation;
  */
 
 public interface NavigationActivityRepository {
+    void logOut();
 }

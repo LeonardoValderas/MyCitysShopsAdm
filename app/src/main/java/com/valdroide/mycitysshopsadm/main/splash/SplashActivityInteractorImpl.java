@@ -15,13 +15,9 @@ public class SplashActivityInteractorImpl implements SplashActivityInteractor {
         repository.validateDatePlace(context);
     }
 
-//    @Override
-//    public void getDateTable() {
-//        repository.getDateTable();
-//    }
-//
-//    @Override
-//    public void getAllData(Context context) {
-//        repository.getAllData(context);
-//    }
+    @Override
+    public void validateDateUser(Context context) {
+        repository.validateDateUser(context);
+    }
+
 }

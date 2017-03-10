@@ -1,5 +1,7 @@
 package com.valdroide.mycitysshopsadm.main.place.ui;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,9 +13,11 @@ import android.widget.TextView;
 
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
+import com.valdroide.mycitysshopsadm.entities.user.MyPlace;
 import com.valdroide.mycitysshopsadm.entities.place.City;
 import com.valdroide.mycitysshopsadm.entities.place.Country;
 import com.valdroide.mycitysshopsadm.entities.place.State;
+import com.valdroide.mycitysshopsadm.main.login.ui.LoginActivity;
 import com.valdroide.mycitysshopsadm.main.place.PlaceActivityPresenter;
 import com.valdroide.mycitysshopsadm.main.place.ui.adapters.AdapterSpinnerCity;
 import com.valdroide.mycitysshopsadm.main.place.ui.adapters.AdapterSpinnerCountry;
@@ -26,6 +30,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class PlaceActivity extends AppCompatActivity implements PlaceActivityView {
 
@@ -49,7 +54,11 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
     private List<Country> countries;
     private List<State> states;
     private List<City> cities;
+    private Country country;
+    private State state;
+    private City city;
     private int id_country = 0, id_state = 0;
+    private ProgressDialog pDialog;
 
     @Inject
     PlaceActivityPresenter presenter;
@@ -67,6 +76,8 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
         ButterKnife.bind(this);
         setupInjection();
         presenter.onCreate();
+        initDialog();
+        pDialog.show();
         initAdapterSpinner();
         setOnItemSelectedCountry();
         setOnItemSelectedState();
@@ -78,6 +89,12 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
         app.getPlaceActivityComponent(this, this).inject(this);
     }
 
+    public void initDialog() {
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Procesando...");
+        pDialog.setCancelable(false);
+    }
+
     public void initAdapterSpinner() {
         spinnerCountry.setAdapter(adapterSpinnerCountry);
         spinnerState.setAdapter(adapterSpinnerState);
@@ -85,6 +102,7 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
     }
 
     public void setOnItemSelectedCountry() {
+        pDialog.show();
         spinnerCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -99,6 +117,7 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
     }
 
     public void setOnItemSelectedState() {
+        pDialog.show();
         spinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -118,6 +137,8 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
         adapterSpinnerCountry.clear();
         adapterSpinnerCountry.addAll(countries);
         adapterSpinnerCountry.notifyDataSetChanged();
+        if (pDialog.isShowing())
+            pDialog.hide();
     }
 
     @Override
@@ -126,6 +147,8 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
         adapterSpinnerState.clear();
         adapterSpinnerState.addAll(states);
         adapterSpinnerState.notifyDataSetChanged();
+        if (pDialog.isShowing())
+            pDialog.hide();
     }
 
     @Override
@@ -134,10 +157,42 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
         adapterSpinnerCity.clear();
         adapterSpinnerCity.addAll(cities);
         adapterSpinnerCity.notifyDataSetChanged();
+        if (pDialog.isShowing())
+            pDialog.hide();
     }
 
     @Override
     public void setError(String mgs) {
+        if (pDialog.isShowing())
+            pDialog.hide();
         Utils.showSnackBar(conteiner, mgs);
+    }
+
+    @OnClick(R.id.buttonInto)
+    @Override
+    public void savePlace() {
+        if (spinnerCountry.getSelectedItem() == null && spinnerState.getSelectedItem() == null && spinnerCity.getSelectedItem() == null)
+            Utils.showSnackBar(conteiner, getString(R.string.error_fill_place));
+        else {
+            pDialog.show();
+            country = (Country) spinnerCountry.getSelectedItem();
+            state = (State) spinnerState.getSelectedItem();
+            city = (City) spinnerCity.getSelectedItem();
+            MyPlace myPlace = new MyPlace();
+            myPlace.setID_PLACE_KEY(1);
+            myPlace.setID_COUNTRY_FOREIGN(country.getID_COUNTRY_KEY());
+            myPlace.setID_STATE_FOREIGN(state.getID_STATE_KEY());
+            myPlace.setID_CITY_FOREIGN(city.getID_CITY_KEY());
+
+            presenter.savePlace(this, myPlace);
+        }
+    }
+
+    @Override
+    public void saveSuccess(MyPlace place) {
+        Utils.setIdCity(this, place.getID_CITY_FOREIGN());
+        if (pDialog.isShowing())
+            pDialog.hide();
+        startActivity(new Intent(this, LoginActivity.class));
     }
 }

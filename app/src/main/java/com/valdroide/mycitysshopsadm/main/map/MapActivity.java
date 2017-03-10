@@ -25,8 +25,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
-//    @Bind(R.id.map)
-  //  SupportMapFragment mapFragment;
     @Bind(R.id.activity_map)
     RelativeLayout activityMap;
     private SupportMapFragment mapFragment;
@@ -37,10 +35,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private boolean actualizar = false;
     private double longitudExtra;
     private double latitudExtra;
-    private String longitud;
-    private String latitud;
-    private String name = "";
-    private String uriExtra;
+    private String name = "", uriExtra = "", phone = "", email = "", address = "", description = "", longitud = "", latitud = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +76,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         mapa.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             public void onMapClick(LatLng point) {
-              mapa.clear();
+                mapa.clear();
 
                 latitudExtra = point.latitude;
                 longitudExtra = point.longitude;
@@ -99,10 +94,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
         if (actualizar) {
             name = getIntent().getStringExtra("name");
-            uriExtra = getIntent().getStringExtra("uri");;
+            uriExtra = getIntent().getStringExtra("uri");
+            phone = getIntent().getStringExtra("phone");
+            email = getIntent().getStringExtra("email");
+            address = getIntent().getStringExtra("address");
+            description = getIntent().getStringExtra("description");
             longitud = getIntent().getStringExtra("longitud");
             latitud = getIntent().getStringExtra("latitud");
-            if(!longitud.isEmpty() && !latitud.isEmpty()) {
+            if (!longitud.isEmpty() && !latitud.isEmpty()) {
                 longitudExtra = Double.valueOf(longitud);
                 latitudExtra = Double.valueOf(latitud);
                 mapa.addMarker(new MarkerOptions().position(
@@ -121,13 +120,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
         return super.onOptionsItemSelected(item);
     }
+
     public void volver() {
-        Intent i = new Intent(this, AccountActivity.class);
-        i.putExtra("isMap",true);
-        i.putExtra("latitud", String.valueOf(latitudExtra));
-        i.putExtra("longitud", String.valueOf(longitudExtra));
-        i.putExtra("uri", uriExtra);
-        startActivity(i);
+        Intent intent = new Intent(this, AccountActivity.class);
+        intent.putExtra("isMap", true);
+        intent.putExtra("uri", uriExtra);
+        intent.putExtra("phone", phone);
+        intent.putExtra("email", email);
+        intent.putExtra("address", address);
+        intent.putExtra("description", description);
+        intent.putExtra("latitud", String.valueOf(latitudExtra));
+        intent.putExtra("longitud", String.valueOf(longitudExtra));
+        startActivity(intent);
     }
 
 }

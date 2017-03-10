@@ -10,6 +10,14 @@ import com.valdroide.mycitysshopsadm.main.account.di.AccountActivityComponent;
 import com.valdroide.mycitysshopsadm.main.account.di.AccountActivityModule;
 import com.valdroide.mycitysshopsadm.main.account.di.DaggerAccountActivityComponent;
 import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivityView;
+import com.valdroide.mycitysshopsadm.main.login.di.DaggerLoginActivityComponent;
+import com.valdroide.mycitysshopsadm.main.login.di.LoginActivityComponent;
+import com.valdroide.mycitysshopsadm.main.login.di.LoginActivityModule;
+import com.valdroide.mycitysshopsadm.main.login.ui.LoginActivityView;
+import com.valdroide.mycitysshopsadm.main.navigation.di.DaggerNavigationActivityComponent;
+import com.valdroide.mycitysshopsadm.main.navigation.di.NavigationActivityComponent;
+import com.valdroide.mycitysshopsadm.main.navigation.di.NavigationActivityModule;
+import com.valdroide.mycitysshopsadm.main.navigation.ui.NavigationActivityView;
 import com.valdroide.mycitysshopsadm.main.notification.di.DaggerNotificationActivityComponent;
 import com.valdroide.mycitysshopsadm.main.notification.di.NotificationActivityComponent;
 import com.valdroide.mycitysshopsadm.main.notification.di.NotificationActivityModule;
@@ -102,42 +110,21 @@ public class MyCitysShopsAdmApp extends Application {
                 .build();
     }
 
-/*
-
-    public ActivityCategoryComponent getActivityCategoryComponent(ActivityCategoryView view, Activity activity, OnItemClickListener onItemClickListener) {
-        return DaggerActivityCategoryComponent
+    public LoginActivityComponent getLoginActivityComponent(LoginActivityView view, Activity activity) {
+        return DaggerLoginActivityComponent
                 .builder()
-                .gonzalezDanielaAdmAppModule(gonzalezDanielaAdmAppModule)
+                .myCitysShopsAdmAppModule(myCitysShopsAdmAppModule)
                 .libsModule(new LibsModule(activity))
-                .activityCategoryModule(new ActivityCategoryModule(view, onItemClickListener))
+                .loginActivityModule(new LoginActivityModule(view, activity))
                 .build();
     }
 
-    public ActivitySubCategoryComponent getActivitySubCategoryComponent(ActivitySubCategoryView view, Activity activity, com.valdroide.gonzalezdanielaadm.main.subcategory.ui.adapters.OnItemClickListener onItemClickListener, Context context) {
-        return DaggerActivitySubCategoryComponent
+    public NavigationActivityComponent getNavigationActivityComponent(NavigationActivityView view, Activity activity) {
+        return DaggerNavigationActivityComponent
                 .builder()
-                .gonzalezDanielaAdmAppModule(gonzalezDanielaAdmAppModule)
+                .myCitysShopsAdmAppModule(myCitysShopsAdmAppModule)
                 .libsModule(new LibsModule(activity))
-                .activitySubCategoryModule(new ActivitySubCategoryModule(context, view, onItemClickListener))
+                .navigationActivityModule(new NavigationActivityModule(view, activity))
                 .build();
     }
-
-    public NotificationActivityComponent getNotificationActivityComponent(NotificationActivityView view, Activity activity) {
-        return DaggerNotificationActivityComponent
-                .builder()
-                .gonzalezDanielaAdmAppModule(gonzalezDanielaAdmAppModule)
-                .libsModule(new LibsModule(activity))
-                .notificationActivityModule(new NotificationActivityModule(view))
-                .build();
-    }
-
-    public SplashActivityComponent getSplashActivityComponent(SplashActivityView view, Activity activity) {
-        return DaggerSplashActivityComponent
-                .builder()
-                .gonzalezDanielaAdmAppModule(gonzalezDanielaAdmAppModule)
-                .libsModule(new LibsModule(activity))
-                .splashActivityModule(new SplashActivityModule(view))
-                .build();
-    }
-    */
 }

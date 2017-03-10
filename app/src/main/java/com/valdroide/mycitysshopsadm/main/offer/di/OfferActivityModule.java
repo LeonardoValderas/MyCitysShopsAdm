@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.valdroide.mycitysshopsadm.api.APIService;
 import com.valdroide.mycitysshopsadm.api.ShopClient;
-import com.valdroide.mycitysshopsadm.entities.Offer;
+import com.valdroide.mycitysshopsadm.entities.user.Offer;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.offer.OfferActivityInteractor;
 import com.valdroide.mycitysshopsadm.main.offer.OfferActivityInteractorImpl;

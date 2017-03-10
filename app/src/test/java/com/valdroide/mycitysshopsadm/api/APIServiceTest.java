@@ -1,9 +1,7 @@
 package com.valdroide.mycitysshopsadm.api;
 
-import android.test.mock.MockContentResolver;
-
 import com.valdroide.mycitysshopsadm.BaseTest;
-import com.valdroide.mycitysshopsadm.entities.response.Result;
+import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +12,6 @@ import org.robolectric.annotation.Config;
 import java.io.IOException;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 
@@ -54,21 +51,21 @@ public class APIServiceTest extends BaseTest {
         String longitud = "Longitud";
         String adrress = "Address";
         final boolean[] isOK = new boolean[1];
-        Call<Result> accountService = service.insertAccount(id_shop, shop_name, encode, url_logo, name_logo, description, phone, email, latitud, longitud, adrress);
-//        accountService.enqueue(new Callback<Result>() {
+        Call<ResultPlace> accountService = service.insertAccount(id_shop, shop_name, encode, url_logo, name_logo, description, phone, email, latitud, longitud, adrress);
+//        accountService.enqueue(new Callback<ResultPlace>() {
 //            @Override
-//            public void onResponse(Call<Result> call, Response<Result> response) {
+//            public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
 //                isOK[0] = response.isSuccessful();
 //            }
 //
 //            @Override
-//            public void onFailure(Call<Result> call, Throwable t) {
+//            public void onFailure(Call<ResultPlace> call, Throwable t) {
 //
 //            }
 //        });
 
 
-        Response<Result> response = accountService.execute();
+        Response<ResultPlace> response = accountService.execute();
  //       assertFalse(isOK[0]);
        // ResponseWS responseWS = response.body().getResponseWS();
         //assertNotNull(responseWS);

@@ -19,6 +19,7 @@
     <string name="description_empty">Ingrese la promo.</string>
     <string name="offer_success">Promo cargada corectamente.</string>
     <string name="offer_update">Promo actualizada correctamente.</string>
+    <string name="offer_delete">Promo eliminada correctamente.</string>
     <string name="send_notification_success">Notificación enviada.</string>
     <string name="notification_empty">Ingrese una notificación.</string>
     <string name="title_activity_login">Sign in</string>
@@ -35,6 +36,16 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="error_fill_place">Error al cargar los datos. Cierre la aplicación y vuelva a intentarlo.</string>
+    <string name="my_city_id_shared">my_city_id</string>
+    <string name="id_city">id_city</string>
+    <string name="user_id_shared">user_id_shared</string>
+    <string name="id_user">id_user</string>
 
-
+    <string name="user_empty">Ingrese el usuario.</string>
+    <string name="pass_empty">Ingrese su contraseña.</string>
+    <string name="error_id_city">Error al obtener su ubicación.</string>
+    <!-- Strings related to log -->
+    <string name="my_user_log_shared">my_user_log</string>
+    <string name="log_out_menu">Desloguear</string>
 </resources>

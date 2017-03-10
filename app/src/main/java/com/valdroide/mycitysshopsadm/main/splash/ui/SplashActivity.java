@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.main.login.ui.LoginActivity;
+import com.valdroide.mycitysshopsadm.main.navigation.ui.NavigationActivity;
 import com.valdroide.mycitysshopsadm.main.place.ui.PlaceActivity;
 import com.valdroide.mycitysshopsadm.main.splash.SplashActivityPresenter;
 
@@ -44,8 +45,8 @@ public class SplashActivity extends AppCompatActivity implements SplashActivityV
         isLogin = isLogin();
         if (!isLogin)
             presenter.validateDatePlace(this);
-        //else
-
+        else
+            presenter.validateDateUser(this);
     }
 
     public boolean isLogin() {
@@ -67,6 +68,12 @@ public class SplashActivity extends AppCompatActivity implements SplashActivityV
     public void goToPlace() {
         progressBar.setVisibility(View.INVISIBLE);
         startActivity(new Intent(this, PlaceActivity.class));
+    }
+
+    @Override
+    public void goToNav() {
+        progressBar.setVisibility(View.INVISIBLE);
+        startActivity(new Intent(this, NavigationActivity.class));
     }
 
     @Override

@@ -5,9 +5,9 @@ import com.valdroide.mycitysshopsadm.BaseTest;
 import com.valdroide.mycitysshopsadm.BuildConfig;
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.api.APIService;
-import com.valdroide.mycitysshopsadm.entities.Account;
+import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
+import com.valdroide.mycitysshopsadm.entities.user.Account;
 import com.valdroide.mycitysshopsadm.entities.response.ResponseWS;
-import com.valdroide.mycitysshopsadm.entities.response.Result;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityRepository;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityRepositoryImpl;
@@ -246,17 +246,17 @@ public class AccountActivityRepositoryTest extends BaseTest {
         assertNull(event.getAccount());
     }
 
-    private Call<Result> callSuccess(final boolean success, final String error) {
-        Call<Result> callSuccess = new Call<Result>() {
+    private Call<ResultPlace> callSuccess(final boolean success, final String error) {
+        Call<ResultPlace> callSuccess = new Call<ResultPlace>() {
             @Override
-            public Response<Result> execute() throws IOException {
-                Response<Result> result = null;
+            public Response<ResultPlace> execute() throws IOException {
+                Response<ResultPlace> result = null;
                 if (success) {
                     ResponseWS rws = new ResponseWS();
                     rws.setId(1);
                     rws.setMessage("ok");
                     rws.setSuccess("0");
-                    Result re = new Result();
+                    ResultPlace re = new ResultPlace();
                     re.setResponseWS(rws);
                     result = Response.success(re);
 
@@ -268,7 +268,7 @@ public class AccountActivityRepositoryTest extends BaseTest {
             }
 
             @Override
-            public void enqueue(Callback<Result> callback) {
+            public void enqueue(Callback<ResultPlace> callback) {
                 if (success) {
                     try {
                         callback.onResponse(this, execute());
@@ -296,7 +296,7 @@ public class AccountActivityRepositoryTest extends BaseTest {
             }
 
             @Override
-            public Call<Result> clone() {
+            public Call<ResultPlace> clone() {
                 return null;
             }
 

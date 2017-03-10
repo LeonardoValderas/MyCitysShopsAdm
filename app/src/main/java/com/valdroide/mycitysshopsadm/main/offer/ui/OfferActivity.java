@@ -11,12 +11,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
-import com.valdroide.mycitysshopsadm.entities.Offer;
+import com.valdroide.mycitysshopsadm.entities.user.Offer;
 import com.valdroide.mycitysshopsadm.main.offer.OfferActivityPresenter;
 import com.valdroide.mycitysshopsadm.main.offer.ui.adapters.OfferActivityRecyclerAdapter;
 import com.valdroide.mycitysshopsadm.main.offer.ui.adapters.OnItemClickListener;
@@ -50,7 +49,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     private ProgressDialog pDialog;
     private Offer offer;
     private Menu menu;
-    private int id_offer = 0;
+    private int id_offer = 0, quantity_offer = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +58,14 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         ButterKnife.bind(this);
 
         setupInjection();
-
         presenter.onCreate();
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("PROMO");
         initDialog();
         initRecyclerViewAdapter();
         pDialog.show();
-        presenter.getOffer();
+        presenter.getOffer(this);
     }
 
     public void initDialog() {
@@ -80,7 +79,6 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         registerForContextMenu(recyclerView);
-
     }
 
     private void setupInjection() {
@@ -95,10 +93,10 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     }
 
     public Offer fillOffer(String title, String descrip, boolean isUpdate) {
-        Offer offer = new Offer();
+        //Offer offer = new Offer();
         offer.setTITLE(title);
         offer.setOFFER(descrip);
-        offer.setID_SHOP_FOREIGN(1);
+        offer.setID_USER_FOREIGN(Utils.getIdUser(this));
         if (!isUpdate) {
             offer.setDATE_INIT(Utils.getFechaInit());
             offer.setDATE_END(Utils.getLastDateWeek());
@@ -112,6 +110,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     @Override
     public void setOffers(List<Offer> offers) {
         this.offers = offers;
+        quantity_offer = offers.size();
         adapter.setOffers(offers);
         if (pDialog.isShowing())
             pDialog.hide();
@@ -120,6 +119,9 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     @Override
     public void saveOffer(Offer offer) {
         adapter.setOffer(offer);
+        //   this.offers.add(offer);
+        updateQuantity();
+        menuAdd();
         if (pDialog.isShowing())
             pDialog.hide();
         cleanView();
@@ -129,6 +131,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     @Override
     public void updateOffer(Offer offer) {
         adapter.updateAdapter(offer);
+        menuAdd();
         if (pDialog.isShowing())
             pDialog.hide();
         cleanView();
@@ -138,8 +141,12 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     @Override
     public void deleteOffer(Offer offer) {
         adapter.removeOffer(offer);
+        this.offers.remove(offer);
+        updateQuantity();
+        menuAdd();
         if (pDialog.isShowing())
             pDialog.hide();
+        Utils.showSnackBar(conteiner, getString(R.string.offer_delete));
     }
 
     @Override
@@ -154,7 +161,12 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         editTextTitle.setText(offer.getTITLE());
         editTextDescription.setText(offer.getOFFER());
         id_offer = offer.getID_OFFER_KEY();
+        this.offer = offer;
         menuUpdate();
+    }
+
+    public void updateQuantity() {
+        quantity_offer = this.offers.size();
     }
 
     @Override
@@ -166,6 +178,8 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     public void menuAdd() {
         menu.clear();
         getMenuInflater().inflate(R.menu.offer, menu);
+        if (quantity_offer >= 3)
+            menu.getItem(2).setVisible(false);// cancel
         menu.getItem(0).setVisible(false);// cancel
         menu.getItem(1).setVisible(false);// update
     }
@@ -186,6 +200,8 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.offer, menu);
         this.menu = menu;
+        if (quantity_offer >= 3)
+            menu.getItem(2).setVisible(false);// update
         menu.getItem(0).setVisible(false);// cancel
         menu.getItem(1).setVisible(false);// update
         return super.onCreateOptionsMenu(menu);
@@ -232,7 +248,8 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_delete) {
             pDialog.show();
-            presenter.deleteOffer(this, this.offer);
+            this.offer.setDATE_EDIT(Utils.getFechaInit());
+            presenter.deleteOffer(this, this.offer, true);
         }
         return true;
     }

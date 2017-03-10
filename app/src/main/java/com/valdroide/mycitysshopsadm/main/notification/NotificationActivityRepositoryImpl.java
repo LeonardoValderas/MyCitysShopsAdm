@@ -4,9 +4,9 @@ import android.content.Context;
 
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.valdroide.mycitysshopsadm.api.APIService;
-import com.valdroide.mycitysshopsadm.entities.Shop;
+import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
+import com.valdroide.mycitysshopsadm.entities.user.Shop;
 import com.valdroide.mycitysshopsadm.entities.response.ResponseWS;
-import com.valdroide.mycitysshopsadm.entities.response.Result;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.notification.events.NotificationActivityEvent;
 import com.valdroide.mycitysshopsadm.utils.Utils;
@@ -32,11 +32,11 @@ public class NotificationActivityRepositoryImpl implements NotificationActivityR
         if (Utils.isNetworkAvailable(context)) {
             String shop_name = getTitleShop();
             try {
-                Call<Result> notificationService = service.sendNotification(shop_name,
+                Call<ResultPlace> notificationService = service.sendNotification(shop_name,
                         notification);
-                notificationService.enqueue(new Callback<Result>() {
+                notificationService.enqueue(new Callback<ResultPlace>() {
                     @Override
-                    public void onResponse(Call<Result> call, Response<Result> response) {
+                    public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
                         if (response.isSuccessful()) {
                             responseWS = response.body().getResponseWS();
                             if (responseWS != null) {
@@ -54,7 +54,7 @@ public class NotificationActivityRepositoryImpl implements NotificationActivityR
                     }
 
                     @Override
-                    public void onFailure(Call<Result> call, Throwable t) {
+                    public void onFailure(Call<ResultPlace> call, Throwable t) {
                         post(NotificationActivityEvent.ERROR, t.getMessage());
                     }
                 });
@@ -67,11 +67,15 @@ public class NotificationActivityRepositoryImpl implements NotificationActivityR
     }
 
     public String getTitleShop() {
-        shop = SQLite.select().from(Shop.class).querySingle();
-        if (shop != null)
-            return shop.getSHOP();
-        else
+        try {
+            shop = SQLite.select().from(Shop.class).querySingle();
+            if (shop != null)
+                return shop.getSHOP();
+            else
+                return "";
+        } catch (Exception e) {
             return "";
+        }
     }
 
     public void post(int type) {

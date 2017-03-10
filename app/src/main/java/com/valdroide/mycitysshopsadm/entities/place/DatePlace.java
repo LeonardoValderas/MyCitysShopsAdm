@@ -18,12 +18,20 @@ public class DatePlace extends BaseModel {
     public int ID_PLACE_KEY;
 
     @Column
-    @SerializedName("place")
-    public String PLACE;
+    @SerializedName("country_date")
+    public String COUNTRY_DATE;
 
     @Column
-    @SerializedName("date_place")
-    public String DATE;
+    @SerializedName("state_date")
+    public String STATE_DATE;
+
+    @Column
+    @SerializedName("city_date")
+    public String CITY_DATE;
+
+    @Column
+    @SerializedName("table_date")
+    public String TABLE_DATE;
 
     public DatePlace() {
     }
@@ -36,19 +44,35 @@ public class DatePlace extends BaseModel {
         this.ID_PLACE_KEY = ID_PLACE_KEY;
     }
 
-    public String getPLACE() {
-        return PLACE;
+    public String getCOUNTRY_DATE() {
+        return COUNTRY_DATE;
     }
 
-    public void setPLACE(String PLACE) {
-        this.PLACE = PLACE;
+    public void setCOUNTRY_DATE(String COUNTRY_DATE) {
+        this.COUNTRY_DATE = COUNTRY_DATE;
     }
 
-    public String getDATE() {
-        return DATE;
+    public String getSTATE_DATE() {
+        return STATE_DATE;
     }
 
-    public void setDATE(String DATE) {
-        this.DATE = DATE;
+    public void setSTATE_DATE(String STATE_DATE) {
+        this.STATE_DATE = STATE_DATE;
+    }
+
+    public String getCITY_DATE() {
+        return CITY_DATE;
+    }
+
+    public void setCITY_DATE(String CITY_DATE) {
+        this.CITY_DATE = CITY_DATE;
+    }
+
+    public String getTABLE_DATE() {
+        return TABLE_DATE;
+    }
+
+    public void setTABLE_DATE(String TABLE_DATE) {
+        this.TABLE_DATE = TABLE_DATE;
     }
 }

@@ -8,5 +8,6 @@ public interface SplashActivityPresenter {
     void onCreate();
     void onDestroy();
     void validateDatePlace(Context context);
+    void validateDateUser(Context context);
     void onEventMainThread(SplashActivityEvent event);
 }

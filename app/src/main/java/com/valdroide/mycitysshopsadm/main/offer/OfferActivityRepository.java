@@ -2,11 +2,11 @@ package com.valdroide.mycitysshopsadm.main.offer;
 
 import android.content.Context;
 
-import com.valdroide.mycitysshopsadm.entities.Offer;
+import com.valdroide.mycitysshopsadm.entities.user.Offer;
 
 public interface OfferActivityRepository {
-    void getOffer();
+    void getOffer(Context context);
     void saveOffer(Context context, Offer offer);
     void updateOffer(Context context, Offer offer);
-    void deleteOffer(Context context, Offer offer);
+    void deleteOffer(Context context, Offer offer, boolean isDelete);
 }

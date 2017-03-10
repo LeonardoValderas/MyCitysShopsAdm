@@ -3,22 +3,16 @@ package com.valdroide.mycitysshopsadm.account;
 import android.content.Context;
 
 import com.valdroide.mycitysshopsadm.BaseTest;
-import com.valdroide.mycitysshopsadm.entities.Account;
+import com.valdroide.mycitysshopsadm.entities.user.Account;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityInteractor;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityPresenter;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityPresenterImpl;
 import com.valdroide.mycitysshopsadm.main.account.events.AccountActivityEvent;
-import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivity;
 import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivityView;
 
-import org.apache.tools.ant.taskdefs.Length;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowActivity;
 
 import java.io.IOException;
 

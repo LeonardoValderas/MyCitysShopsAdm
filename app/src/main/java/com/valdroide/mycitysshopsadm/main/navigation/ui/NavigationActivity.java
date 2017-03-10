@@ -12,16 +12,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
+import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivity;
+import com.valdroide.mycitysshopsadm.main.login.ui.LoginActivity;
+import com.valdroide.mycitysshopsadm.main.navigation.NavigationActivityPresenter;
 import com.valdroide.mycitysshopsadm.main.notification.ui.NotificationActivity;
+import com.valdroide.mycitysshopsadm.main.notification.ui.NotificationActivityView;
 import com.valdroide.mycitysshopsadm.main.offer.ui.OfferActivity;
+import com.valdroide.mycitysshopsadm.utils.Utils;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class NavigationActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, NavigationActivityView {
 
 
     @Bind(R.id.toolbar)
@@ -32,22 +39,28 @@ public class NavigationActivity extends AppCompatActivity
     NavigationView navigationView;
     @Bind(R.id.drawer_layout)
     DrawerLayout drawer;
+    @Inject
+    NavigationActivityPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         ButterKnife.bind(this);
-
-
+        setupInjection();
+        presenter.onCreate();
         setSupportActionBar(toolbar);
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void setupInjection() {
+        MyCitysShopsAdmApp app = (MyCitysShopsAdmApp) getApplication();
+        app.getNavigationActivityComponent(this, this).inject(this);
     }
 
     @Override
@@ -69,9 +82,10 @@ public class NavigationActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
+        if (id == R.id.action_log_out) {
+            presenter.logOut();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -91,5 +105,25 @@ public class NavigationActivity extends AppCompatActivity
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void logOut() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void setError(String error) {
+        Utils.showSnackBar(content, error);
     }
 }

@@ -1,5 +1,6 @@
 package com.valdroide.mycitysshopsadm.main.place.events;
 
+import com.valdroide.mycitysshopsadm.entities.user.MyPlace;
 import com.valdroide.mycitysshopsadm.entities.place.City;
 import com.valdroide.mycitysshopsadm.entities.place.Country;
 import com.valdroide.mycitysshopsadm.entities.place.State;
@@ -14,10 +15,12 @@ public class PlaceActivityEvent {
     public static final int GETCOUNTRIES = 0;
     public static final int GETSTATES = 1;
     public static final int GETCITIES = 2;
-    public static final int ERROR = 3;
+    public static final int SAVE = 3;
+    public static final int ERROR = 4;
     private List<Country> countries;
     private List<State> states;
     private List<City> cities;
+    private MyPlace place;
     private String error;
 
     public int getType() {
@@ -58,5 +61,13 @@ public class PlaceActivityEvent {
 
     public void setError(String error) {
         this.error = error;
+    }
+
+    public MyPlace getPlace() {
+        return place;
+    }
+
+    public void setPlace(MyPlace place) {
+        this.place = place;
     }
 }

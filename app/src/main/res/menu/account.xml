@@ -11,4 +11,9 @@
         android:icon="@android:drawable/ic_menu_save"
         android:title=""
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_edit"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title=""
+        app:showAsAction="always" />
 </menu>

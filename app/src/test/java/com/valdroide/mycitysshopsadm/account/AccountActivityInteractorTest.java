@@ -3,14 +3,10 @@ package com.valdroide.mycitysshopsadm.account;
 import android.content.Context;
 
 import com.valdroide.mycitysshopsadm.BaseTest;
-import com.valdroide.mycitysshopsadm.entities.Account;
-import com.valdroide.mycitysshopsadm.lib.base.EventBus;
+import com.valdroide.mycitysshopsadm.entities.user.Account;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityInteractor;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityInteractorImpl;
-import com.valdroide.mycitysshopsadm.main.account.AccountActivityPresenterImpl;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityRepository;
-import com.valdroide.mycitysshopsadm.main.account.events.AccountActivityEvent;
-import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivityView;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -21,7 +17,6 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 
 /**

@@ -1,6 +1,7 @@
 package com.valdroide.mycitysshopsadm.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -12,11 +13,13 @@ import android.widget.ImageView;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.entities.place.DatePlace;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,21 +27,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by LEO on 31/1/2017.
- */
 public class Utils {
 
     public static String URL_IMAGE = "http://10.0.2.2:8080/my_citys_shops_adm/account/image_account/";
     //public static String URL_IMAGE = "http://myd.esy.es/myd/clothes/image_clothes/";
     public static String ERROR_DATA_BASE = "Error al guardar los datos.";
     public static String ERROR_INTERNET = "Verificar su conexión de Internet.";
+    public static String ERROR_OFFER_VALIDATE = "Problemas al validar sus Promos.";
     public final static String PLACE = "date_place";
     public final static String COUNTRY = "country";
     public final static String STATE = "state";
     public final static String CITY = "city";
-
-
 
     //FECHAS
     public static String getFechaInit() {
@@ -60,13 +59,27 @@ public class Utils {
             return true;
     }
 
-
     public static String getLastDateWeek() {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
         cal.add(Calendar.DATE, 7);
         return df.format(cal.getTime());
+    }
+
+    public static boolean validateExpirateOffer(String dateExperate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date strDate = null;
+        try {
+            strDate = sdf.parse(dateExperate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (strDate != null)
+            if (System.currentTimeMillis() > strDate.getTime()) {
+                return true;
+            }
+        return false;
     }
 
     public static void showSnackBar(View conteiner, String msg) {
@@ -118,47 +131,6 @@ public class Utils {
                     }
                 });
     }
-
-//    public static List<DateTable> dateTables() {
-//        return SQLite.select().from(DateTable.class).queryList();
-//    }
-
-//    public static void switchTable() {
-//        for (int i = 0; i < 4; i++) {
-//            DateTable dt;
-//            switch (i) {
-//                case 0:
-//                    dt = new DateTable(0, Utils.CATEGORY, "12345678");
-//                    dt.save();
-//                    break;
-//                case 1:
-//                    dt = new DateTable(0, Utils.SUBCATEGORY, "12345678");
-//                    dt.save();
-//                    break;
-//                case 2:
-//                    dt = new DateTable(0, Utils.CLOTHES, "12345678");
-//                    dt.save();
-//                    break;
-//                case 3:
-//                    dt = new DateTable(0, Utils.TABLES, "12345678");
-//                    dt.save();
-//                    break;
-//            }
-//        }
-//    }
-
-//    public static void updateDateTable(DateTable dateTable) {
-//        SQLite.update(DateTable.class)
-//                .set(DateTable_Table.DATE.eq(dateTable.getDATE()))
-//                .where(DateTable_Table.TABLENAME.is(dateTable.getTABLENAME()))
-//                .async()
-//                .execute();
-//        SQLite.update(DateTable.class)
-//                .set(DateTable_Table.DATE.eq(dateTable.getDATE()))
-//                .where(DateTable_Table.TABLENAME.is(Utils.TABLES))
-//                .async()
-//                .execute();
-//    }
 
     public static boolean isNetworkAvailable(Context context) {
         int[] networkTypes = {ConnectivityManager.TYPE_MOBILE,
@@ -265,5 +237,44 @@ public class Utils {
             }
         }
         return sb.toString();
+    }
+
+    public static void setIdCity(Context context, int id) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.my_city_id_shared), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(context.getString(R.string.id_city), id);
+        editor.commit();
+    }
+
+    public static int getIdCity(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.my_city_id_shared), Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(context.getString(R.string.id_city), 0);
+    }
+
+    public static void resetIdCity(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.my_city_id_shared), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(context.getString(R.string.id_city), 0);
+        editor.commit();
+    }
+
+
+    public static void setIdUser(Context context, int id) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.user_id_shared), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(context.getString(R.string.id_user), id);
+        editor.commit();
+    }
+
+    public static int getIdUser(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.user_id_shared), Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(context.getString(R.string.id_user), 0);
+    }
+
+    public static void resetIdUser(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.user_id_shared), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(context.getString(R.string.id_user), 0);
+        editor.commit();
     }
 }
