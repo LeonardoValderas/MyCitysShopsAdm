@@ -47,7 +47,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     OfferActivityPresenter presenter;
 
     private ProgressDialog pDialog;
-    private Offer offer;
+    private Offer offer = new Offer();
     private Menu menu;
     private int id_offer = 0, quantity_offer = 0;
 

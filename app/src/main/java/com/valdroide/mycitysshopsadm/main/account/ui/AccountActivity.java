@@ -98,7 +98,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
             editTextDescription.setText(getIntent().getStringExtra("description"));
             latitud = getIntent().getStringExtra("latitud");
             longitud = getIntent().getStringExtra("longitud");
-
+            setEnable(true);
         }
     }
 
@@ -295,8 +295,13 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.account, menu);
         this.menu = menu;
-        menu.getItem(0).setVisible(false);// map
-        menu.getItem(1).setVisible(false);// save
+        if(isMap){
+            menuSave();
+        }
+        else {
+            menu.getItem(0).setVisible(false);// map
+            menu.getItem(1).setVisible(false);// save
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

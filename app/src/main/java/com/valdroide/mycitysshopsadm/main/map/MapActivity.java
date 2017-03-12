@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivity;
+import com.valdroide.mycitysshopsadm.utils.Utils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,8 +35,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public static double lonBache = -71.296729134343434;
     private Handler touchScreem;
     private boolean actualizar = false;
-    private double longitudExtra;
-    private double latitudExtra;
+    private double longitudExtra = 0.00;
+    private double latitudExtra = 0.00;
     private String name = "", uriExtra = "", phone = "", email = "", address = "", description = "", longitud = "", latitud = "";
 
     @Override
@@ -42,7 +44,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("MI UBICACIÓN");
 
         init();
@@ -111,11 +113,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.map, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == android.R.id.home) {
-            volver();
+        if (id == R.id.action_map) {
+            if (latitudExtra != 0.00 && latitudExtra != 0.00)
+                volver();
+            else
+                Utils.showSnackBar(activityMap, getString(R.string.error_map));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -133,5 +145,4 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         intent.putExtra("longitud", String.valueOf(longitudExtra));
         startActivity(intent);
     }
-
 }

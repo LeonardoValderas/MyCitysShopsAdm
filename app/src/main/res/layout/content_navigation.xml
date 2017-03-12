@@ -12,9 +12,5 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.valdroide.mycitysshopsadm.main.navigation.ui.NavigationActivity"
     tools:showIn="@layout/app_bar_navigation">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+<!--Here add main content-->
 </RelativeLayout>

@@ -333,7 +333,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                 if (responseWS.getSuccess().equals("0")) {
                                     post(SplashActivityEvent.GOTONAV);
                                 } else {
-                                    post(SplashActivityEvent.ERROR, responseWS.getMessage());
+                                    post(SplashActivityEvent.GOTOLOG);
                                 }
                             } else {
                                 post(SplashActivityEvent.ERROR, Utils.ERROR_DATA_BASE);

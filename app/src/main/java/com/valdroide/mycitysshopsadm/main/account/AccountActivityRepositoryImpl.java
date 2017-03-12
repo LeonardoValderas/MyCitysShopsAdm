@@ -98,10 +98,10 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
         if (isUpdate(account)) {
             if (Utils.isNetworkAvailable(context)) {
                 try {
-                    Call<ResultPlace> accountService = service.updateAccount(account.getID_ACCOUNT_KEY(), account.getEncode(),
+                    Call<ResultPlace> accountService = service.updateAccount(Utils.getIdUser(context), account.getID_ACCOUNT_KEY(), account.getEncode(),
                             account.getURL_LOGO(), account.getNAME_LOGO(), account.getNAME_BEFORE(),
                             account.getDESCRIPTION(), account.getPHONE(), account.getEMAIL(), account.getLATITUD(),
-                            account.getLONGITUD(), account.getADDRESS());
+                            account.getLONGITUD(), account.getADDRESS(),Utils.getFechaInit());
                     accountService.enqueue(new Callback<ResultPlace>() {
                         @Override
                         public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {

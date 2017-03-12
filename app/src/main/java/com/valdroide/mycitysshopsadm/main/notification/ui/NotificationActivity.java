@@ -21,8 +21,6 @@ import static android.R.attr.onClick;
 
 public class NotificationActivity extends AppCompatActivity implements NotificationActivityView {
 
-    //    @Bind(R.id.editTextTitle)
-//    EditText editTextTitle;
     @Bind(R.id.editTextNotification)
     EditText editTextNotification;
     @Bind(R.id.buttonSend)

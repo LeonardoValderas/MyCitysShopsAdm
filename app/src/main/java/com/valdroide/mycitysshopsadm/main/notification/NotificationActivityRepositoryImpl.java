@@ -5,7 +5,8 @@ import android.content.Context;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.valdroide.mycitysshopsadm.api.APIService;
 import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
-import com.valdroide.mycitysshopsadm.entities.user.Shop;
+import com.valdroide.mycitysshopsadm.entities.user.Account;
+import com.valdroide.mycitysshopsadm.entities.user.Account_Table;
 import com.valdroide.mycitysshopsadm.entities.response.ResponseWS;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.notification.events.NotificationActivityEvent;
@@ -20,7 +21,6 @@ public class NotificationActivityRepositoryImpl implements NotificationActivityR
     private EventBus eventBus;
     private APIService service;
     ResponseWS responseWS;
-    private Shop shop;
 
     public NotificationActivityRepositoryImpl(EventBus eventBus, APIService service) {
         this.eventBus = eventBus;
@@ -31,46 +31,51 @@ public class NotificationActivityRepositoryImpl implements NotificationActivityR
     public void sendNotification(Context context, String notification) {
         if (Utils.isNetworkAvailable(context)) {
             String shop_name = getTitleShop();
-            try {
-                Call<ResultPlace> notificationService = service.sendNotification(shop_name,
-                        notification);
-                notificationService.enqueue(new Callback<ResultPlace>() {
-                    @Override
-                    public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
-                        if (response.isSuccessful()) {
-                            responseWS = response.body().getResponseWS();
-                            if (responseWS != null) {
-                                if (responseWS.getSuccess().equals("0")) {
-                                    post(NotificationActivityEvent.SEND);
+            if (!shop_name.isEmpty()) {
+                try {
+                    Call<ResultPlace> notificationService = service.sendNotification(Utils.getIdUser(context), shop_name,
+                            notification, Utils.getFechaInit());
+                    notificationService.enqueue(new Callback<ResultPlace>() {
+                        @Override
+                        public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
+                            if (response.isSuccessful()) {
+                                responseWS = response.body().getResponseWS();
+                                if (responseWS != null) {
+                                    if (responseWS.getSuccess().equals("0")) {
+
+                                        post(NotificationActivityEvent.SEND);
+                                    } else {
+                                        post(NotificationActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
+                                    }
                                 } else {
-                                    post(NotificationActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
+                                    post(NotificationActivityEvent.ERROR, responseWS.getMessage());
                                 }
                             } else {
-                                post(NotificationActivityEvent.ERROR, responseWS.getMessage());
+                                post(NotificationActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
                             }
-                        } else {
-                            post(NotificationActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResultPlace> call, Throwable t) {
-                        post(NotificationActivityEvent.ERROR, t.getMessage());
-                    }
-                });
-            } catch (Exception e) {
-                post(NotificationActivityEvent.ERROR, e.getMessage());
+                        @Override
+                        public void onFailure(Call<ResultPlace> call, Throwable t) {
+                            post(NotificationActivityEvent.ERROR, t.getMessage());
+                        }
+                    });
+                } catch (Exception e) {
+                    post(NotificationActivityEvent.ERROR, e.getMessage());
+                }
+            } else {
+                post(NotificationActivityEvent.ERROR, Utils.ERROR_INTERNET);
             }
         } else {
-            post(NotificationActivityEvent.ERROR, Utils.ERROR_INTERNET);
+            post(NotificationActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
         }
     }
 
     public String getTitleShop() {
         try {
-            shop = SQLite.select().from(Shop.class).querySingle();
-            if (shop != null)
-                return shop.getSHOP();
+            String name = SQLite.select(Account_Table.SHOP_NAME).from(Account.class).getQuery();
+            if (name != null)
+                return name;
             else
                 return "";
         } catch (Exception e) {

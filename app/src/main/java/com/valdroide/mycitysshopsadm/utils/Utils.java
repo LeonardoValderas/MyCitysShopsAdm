@@ -31,13 +31,10 @@ public class Utils {
 
     public static String URL_IMAGE = "http://10.0.2.2:8080/my_citys_shops_adm/account/image_account/";
     //public static String URL_IMAGE = "http://myd.esy.es/myd/clothes/image_clothes/";
+
     public static String ERROR_DATA_BASE = "Error al guardar los datos.";
     public static String ERROR_INTERNET = "Verificar su conexión de Internet.";
     public static String ERROR_OFFER_VALIDATE = "Problemas al validar sus Promos.";
-    public final static String PLACE = "date_place";
-    public final static String COUNTRY = "country";
-    public final static String STATE = "state";
-    public final static String CITY = "city";
 
     //FECHAS
     public static String getFechaInit() {
@@ -64,6 +61,13 @@ public class Utils {
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
         cal.add(Calendar.DATE, 7);
+        return df.format(cal.getTime());
+    }
+
+    public static String getLastDateMonth() {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        cal.set(Calendar.DATE, Calendar.getInstance().getActualMaximum(Calendar.DATE));
         return df.format(cal.getTime());
     }
 

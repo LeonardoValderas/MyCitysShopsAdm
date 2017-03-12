@@ -28,10 +28,10 @@ public interface APIService {
 //                                    @Field("latitud") String latitud, @Field("longitud") String longitud, @Field("adrress") String adrress);
     @FormUrlEncoded
     @POST("account/updateAccount.php")
-    Call<ResultPlace> updateAccount(@Field("id_account") int id_account, @Field("encode") String encode,
+    Call<ResultPlace> updateAccount(@Field("id_user_foreign") int id_user, @Field("id_account") int id_account, @Field("encode") String encode,
                                     @Field("url_logo") String url_logo, @Field("name_logo") String name_logo, @Field("name_before") String name_before,
                                     @Field("description") String description, @Field("phone") String phone, @Field("email") String email,
-                                    @Field("latitud") String latitud, @Field("longitud") String longitud, @Field("adrress") String adrress);
+                                    @Field("latitud") String latitud, @Field("longitud") String longitud, @Field("adrress") String adrress, @Field("date_init") String date_init);
     //OFFER
     @FormUrlEncoded
     @POST("offer/insertOffer.php")
@@ -50,7 +50,7 @@ public interface APIService {
     //NOTIFICATION
     @FormUrlEncoded
     @POST("fcm/sendNotification.php")
-    Call<ResultPlace> sendNotification(@Field("title") String title, @Field("message") String message);
+    Call<ResultPlace> sendNotification(@Field("id_user_foreign") int id_user, @Field("title") String title, @Field("message") String message, @Field("date_init") String date_init);
 
     //SPLASH PLACE
     @FormUrlEncoded
