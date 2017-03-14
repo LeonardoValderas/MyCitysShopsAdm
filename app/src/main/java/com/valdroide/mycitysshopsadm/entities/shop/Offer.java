@@ -1,4 +1,4 @@
-package com.valdroide.mycitysshopsadm.entities.user;
+package com.valdroide.mycitysshopsadm.entities.shop;
 
 import com.google.gson.annotations.SerializedName;
 import com.raizlabs.android.dbflow.annotation.Column;
@@ -6,7 +6,6 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 import com.valdroide.mycitysshopsadm.db.ShopDatabase;
-
 
 @Table(database = ShopDatabase.class)
 public class Offer extends BaseModel {
@@ -18,9 +17,9 @@ public class Offer extends BaseModel {
     public int ID_OFFER_KEY;
 
     @Column
-    @SerializedName("id_user_foreign")
+    @SerializedName("id_shop_foreign")
   //  @ForeignKey(references = {@ForeignKeyReference(columnName = "id_shop_foreign", columnType = Integer.class, foreignKeyColumnName = "ID_SHOP_KEY")}, tableClass = Shop.class, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE, onUpdate = ForeignKeyAction.CASCADE)
-    public int ID_USER_FOREIGN;
+    public int ID_SHOP_FOREIGN;
 
     @Column
     @SerializedName("title")
@@ -92,12 +91,12 @@ public class Offer extends BaseModel {
         this.DATE_END = DATE_END;
     }
 
-    public int getID_USER_FOREIGN() {
-        return ID_USER_FOREIGN;
+    public int getID_SHOP_FOREIGN() {
+        return ID_SHOP_FOREIGN;
     }
 
-    public void setID_USER_FOREIGN(int ID_USER_FOREIGN) {
-        this.ID_USER_FOREIGN = ID_USER_FOREIGN;
+    public void setID_SHOP_FOREIGN(int ID_SHOP_FOREIGN) {
+        this.ID_SHOP_FOREIGN = ID_SHOP_FOREIGN;
     }
 
 }

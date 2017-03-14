@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
-import com.valdroide.mycitysshopsadm.entities.user.MyPlace;
+import com.valdroide.mycitysshopsadm.entities.shop.MyPlace;
 import com.valdroide.mycitysshopsadm.entities.place.City;
 import com.valdroide.mycitysshopsadm.entities.place.Country;
 import com.valdroide.mycitysshopsadm.entities.place.State;

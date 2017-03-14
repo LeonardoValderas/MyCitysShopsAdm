@@ -10,11 +10,9 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.valdroide.mycitysshopsadm.R;
-import com.valdroide.mycitysshopsadm.entities.place.DatePlace;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -24,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Utils {
@@ -263,22 +260,22 @@ public class Utils {
     }
 
 
-    public static void setIdUser(Context context, int id) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.user_id_shared), Context.MODE_PRIVATE);
+    public static void setIdShop(Context context, int id) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.shop_id_shared), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(context.getString(R.string.id_user), id);
+        editor.putInt(context.getString(R.string.id_shop), id);
         editor.commit();
     }
 
-    public static int getIdUser(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.user_id_shared), Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(context.getString(R.string.id_user), 0);
+    public static int getIdShop(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.shop_id_shared), Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(context.getString(R.string.id_shop), 0);
     }
 
-    public static void resetIdUser(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.user_id_shared), Context.MODE_PRIVATE);
+    public static void resetIdShop(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.shop_id_shared), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(context.getString(R.string.id_user), 0);
+        editor.putInt(context.getString(R.string.id_shop), 0);
         editor.commit();
     }
 }

@@ -4,5 +4,5 @@ import android.content.Context;
 
 public interface SplashActivityInteractor {
     void validateDatePlace(Context context);
-    void validateDateUser(Context context);
+    void validateDateShop(Context context);
 }

@@ -1,5 +1,6 @@
-package com.valdroide.mycitysshopsadm.entities.user;
+package com.valdroide.mycitysshopsadm.entities.shop;
 
+import com.google.gson.annotations.SerializedName;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
@@ -12,18 +13,28 @@ public class Shop extends BaseModel {
 
     @Column
     @PrimaryKey
+    @SerializedName("id")
     public int ID_SHOP_KEY;
-
     @Column
+    @SerializedName("shop")
     public String SHOP;
-
     @Column
+    @SerializedName("id_account")
     public int ID_ACCOUNT_FOREIGN;
-
     @Column
-    public int ID_USER_FOREIGN;
-
+    @SerializedName("user")
+    public String USER;
     @Column
+    @SerializedName("pass")
+    public String PASS;
+    @Column
+    @SerializedName("id_city")
+    public int ID_CITY_FOREIGN;
+    @Column
+    @SerializedName("id_cat_sub")
+    public int ID_CAT_SUB_FOREIGN;
+    @Column
+    @SerializedName("is_active")
     public int ISACTIVE;
 
     public int getID_SHOP_KEY() {
@@ -58,11 +69,35 @@ public class Shop extends BaseModel {
         this.ID_ACCOUNT_FOREIGN = ID_ACCOUNT_FOREIGN;
     }
 
-    public int getID_USER_FOREIGN() {
-        return ID_USER_FOREIGN;
+    public String getUSER() {
+        return USER;
     }
 
-    public void setID_USER_FOREIGN(int ID_USER_FOREIGN) {
-        this.ID_USER_FOREIGN = ID_USER_FOREIGN;
+    public void setUSER(String USER) {
+        this.USER = USER;
+    }
+
+    public String getPASS() {
+        return PASS;
+    }
+
+    public void setPASS(String PASS) {
+        this.PASS = PASS;
+    }
+
+    public int getID_CITY_FOREIGN() {
+        return ID_CITY_FOREIGN;
+    }
+
+    public void setID_CITY_FOREIGN(int ID_CITY_FOREIGN) {
+        this.ID_CITY_FOREIGN = ID_CITY_FOREIGN;
+    }
+
+    public int getID_CAT_SUB_FOREIGN() {
+        return ID_CAT_SUB_FOREIGN;
+    }
+
+    public void setID_CAT_SUB_FOREIGN(int ID_CAT_SUB_FOREIGN) {
+        this.ID_CAT_SUB_FOREIGN = ID_CAT_SUB_FOREIGN;
     }
 }

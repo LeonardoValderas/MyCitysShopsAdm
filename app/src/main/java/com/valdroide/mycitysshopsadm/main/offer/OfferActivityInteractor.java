@@ -2,7 +2,7 @@ package com.valdroide.mycitysshopsadm.main.offer;
 
 import android.content.Context;
 
-import com.valdroide.mycitysshopsadm.entities.user.Offer;
+import com.valdroide.mycitysshopsadm.entities.shop.Offer;
 
 /**
  * Created by LEO on 20/2/2017.

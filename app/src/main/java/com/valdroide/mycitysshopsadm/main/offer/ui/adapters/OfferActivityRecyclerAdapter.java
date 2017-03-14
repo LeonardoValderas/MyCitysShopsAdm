@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.valdroide.mycitysshopsadm.R;
-import com.valdroide.mycitysshopsadm.entities.user.Offer;
+import com.valdroide.mycitysshopsadm.entities.shop.Offer;
 
 import java.util.List;
 
@@ -24,7 +24,6 @@ public class OfferActivityRecyclerAdapter extends RecyclerView.Adapter<OfferActi
     public OfferActivityRecyclerAdapter(List<Offer> offersList, OnItemClickListener onItemClickListener) {
         this.offersList = offersList;
         this.onItemClickListener = onItemClickListener;
-
     }
 
     @Override
@@ -35,7 +34,7 @@ public class OfferActivityRecyclerAdapter extends RecyclerView.Adapter<OfferActi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Offer offer = offersList.get(position);
+        Offer offer = this.offersList.get(position);
         if (offer != null) {
             holder.textViewTitle.setText(offer.getTITLE());
             holder.textViewDescription.setText(offer.getOFFER());
@@ -47,12 +46,12 @@ public class OfferActivityRecyclerAdapter extends RecyclerView.Adapter<OfferActi
 
     @Override
     public int getItemCount() {
-        return offersList.size();
+        return this.offersList.size();
     }
 
     public void removeOffer(Offer offer) {
         this.offersList.remove(offer);
-        notifyDataSetChanged();
+       notifyDataSetChanged();
     }
 
     public void setOffers(List<Offer> offers) {
@@ -61,7 +60,7 @@ public class OfferActivityRecyclerAdapter extends RecyclerView.Adapter<OfferActi
     }
 
     public void setOffer(Offer offer) {
-        this.offersList.add(0, offer);
+        this.offersList.add(offer);
         notifyDataSetChanged();
     }
 

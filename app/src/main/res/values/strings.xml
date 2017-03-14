@@ -39,8 +39,8 @@
     <string name="error_fill_place">Error al cargar los datos. Cierre la aplicación y vuelva a intentarlo.</string>
     <string name="my_city_id_shared">my_city_id</string>
     <string name="id_city">id_city</string>
-    <string name="user_id_shared">user_id_shared</string>
-    <string name="id_user">id_user</string>
+    <string name="shop_id_shared">shop_id_shared</string>
+    <string name="id_shop">id_shop</string>
 
     <string name="user_empty">Ingrese el usuario.</string>
     <string name="pass_empty">Ingrese su contraseña.</string>

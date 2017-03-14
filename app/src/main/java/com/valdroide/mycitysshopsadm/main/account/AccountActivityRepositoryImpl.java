@@ -5,8 +5,9 @@ import android.content.Context;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.valdroide.mycitysshopsadm.api.APIService;
 import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
-import com.valdroide.mycitysshopsadm.entities.user.Account;
+import com.valdroide.mycitysshopsadm.entities.shop.Account;
 import com.valdroide.mycitysshopsadm.entities.response.ResponseWS;
+import com.valdroide.mycitysshopsadm.entities.shop.DateShop;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.account.events.AccountActivityEvent;
 import com.valdroide.mycitysshopsadm.utils.Utils;
@@ -20,8 +21,8 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
     private EventBus eventBus;
     private APIService service;
     private Account account = new Account();
-    ResponseWS responseWS;
-    int id;
+    private ResponseWS responseWS;
+    private DateShop dateShop;
 
     public AccountActivityRepositoryImpl(EventBus eventBus, APIService service) {
         this.eventBus = eventBus;
@@ -47,7 +48,7 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
 //  // if (utils.isNetworkAvailableNonStatic(context)) {
 //        if (Utils.isNetworkAvailable(context)) {
 //            try {
-//                Call<ResultPlace> accountService = service.insertAccount(account.getID_USER_FOREIGN(),
+//                Call<ResultPlace> accountService = service.insertAccount(account.getID_SHOP_FOREIGN(),
 //                        account.getSHOP_NAME(), account.getEncode(),
 //                        account.getURL_LOGO(), account.getNAME_LOGO(),
 //                        account.getDESCRIPTION(), account.getPHONE(), account.getEMAIL(), account.getLATITUD(),
@@ -98,10 +99,11 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
         if (isUpdate(account)) {
             if (Utils.isNetworkAvailable(context)) {
                 try {
-                    Call<ResultPlace> accountService = service.updateAccount(Utils.getIdUser(context), account.getID_ACCOUNT_KEY(), account.getEncode(),
+                    final String date_edit = Utils.getFechaOficial();
+                    Call<ResultPlace> accountService = service.updateAccount(Utils.getIdShop(context), account.getID_ACCOUNT_KEY(), account.getEncode(),
                             account.getURL_LOGO(), account.getNAME_LOGO(), account.getNAME_BEFORE(),
                             account.getDESCRIPTION(), account.getPHONE(), account.getEMAIL(), account.getLATITUD(),
-                            account.getLONGITUD(), account.getADDRESS(),Utils.getFechaInit());
+                            account.getLONGITUD(), account.getADDRESS(), date_edit);
                     accountService.enqueue(new Callback<ResultPlace>() {
                         @Override
                         public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
@@ -109,6 +111,8 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
                                 responseWS = response.body().getResponseWS();
                                 if (responseWS.getSuccess().equals("0")) {
                                     account.update();
+                                    getDateShop(date_edit);
+                                    dateShop.update();
                                     post(AccountActivityEvent.UPDATEACCOUNT);
                                 } else {
                                     post(AccountActivityEvent.ERROR, responseWS.getMessage());
@@ -117,6 +121,7 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
                                 post(AccountActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
                             }
                         }
+
                         @Override
                         public void onFailure(Call<ResultPlace> call, Throwable t) {
                             post(AccountActivityEvent.ERROR, t.getMessage());
@@ -136,7 +141,7 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
     public boolean isUpdate(Account accountValidate) {
         account = SQLite.select().from(Account.class).querySingle();
         if (accountValidate.getEncode().isEmpty()) {
-           if (accountValidate.getPHONE().compareTo(account.getPHONE()) != 0)
+            if (accountValidate.getPHONE().compareTo(account.getPHONE()) != 0)
                 return true;
             else if (accountValidate.getEMAIL().compareTo(account.getEMAIL()) != 0)
                 return true;
@@ -152,6 +157,12 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
                 return false;
         }
         return true;
+    }
+
+    public void getDateShop(String date_edit) {
+        dateShop = SQLite.select().from(DateShop.class).querySingle();
+        dateShop.setACCOUNT_DATE(date_edit);
+        dateShop.setDATE_USER_DATE(date_edit);
     }
 
     public void post(int type, Account account) {

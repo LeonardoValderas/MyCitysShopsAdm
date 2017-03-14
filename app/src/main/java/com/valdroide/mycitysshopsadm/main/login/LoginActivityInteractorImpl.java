@@ -2,8 +2,6 @@ package com.valdroide.mycitysshopsadm.main.login;
 
 import android.content.Context;
 
-import com.valdroide.mycitysshopsadm.entities.user.User;
-
 public class LoginActivityInteractorImpl implements LoginActivityInteractor {
 
     private LoginActivityRepository repository;
@@ -13,8 +11,8 @@ public class LoginActivityInteractorImpl implements LoginActivityInteractor {
     }
 
     @Override
-    public void validateLogin(Context context,  User user) {
-        repository.validateLogin(context, user);
+    public void validateLogin(Context context, String user, String pass, int id_city) {
+        repository.validateLogin(context, user, pass, id_city);
     }
 
     @Override

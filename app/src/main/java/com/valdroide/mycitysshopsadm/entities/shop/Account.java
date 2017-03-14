@@ -1,4 +1,4 @@
-package com.valdroide.mycitysshopsadm.entities.user;
+package com.valdroide.mycitysshopsadm.entities.shop;
 
 import com.google.gson.annotations.SerializedName;
 import com.raizlabs.android.dbflow.annotation.Column;
@@ -7,20 +7,13 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 import com.valdroide.mycitysshopsadm.db.ShopDatabase;
 
-
 @Table(database = ShopDatabase.class)
 public class Account extends BaseModel {
 
-    // @PrimaryKey(autoincrement = true)
     @Column
     @PrimaryKey
     @SerializedName("id")
     public int ID_ACCOUNT_KEY;
-
-//    @Column
-//    @SerializedName("id_shop_foreign")
-//  //  @ForeignKey(references = {@ForeignKeyReference(columnName = "id_shop_foreign", columnType = Integer.class, foreignKeyColumnName = "ID_SHOP_KEY")}, tableClass = Shop.class, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE, onUpdate = ForeignKeyAction.CASCADE)
-//    public int ID_USER_FOREIGN;
 
     @Column
     @SerializedName("shop_name")
@@ -63,25 +56,6 @@ public class Account extends BaseModel {
 
     public Account() {
     }
-
-//    public Account(int ID_ACCOUNT_KEY, int ID_USER_FOREIGN, String SHOP_NAME, String URL_LOGO, String NAME_LOGO,
-//                   String NAME_BEFORE, String encode, String DESCRIPTION, String PHONE, String EMAIL, String LATITUD, String LONGITUD,
-//                   String ADDRESS) {
-//
-//        this.ID_ACCOUNT_KEY = ID_ACCOUNT_KEY;
-//        //this.ID_USER_FOREIGN = ID_USER_FOREIGN;
-//        this.SHOP_NAME = SHOP_NAME;
-//        this.URL_LOGO = URL_LOGO;
-//        this.NAME_LOGO = NAME_LOGO;
-//        this.DESCRIPTION = DESCRIPTION;
-//        this.PHONE = PHONE;
-//        this.EMAIL = EMAIL;
-//        this.LATITUD = LATITUD;
-//        this.LONGITUD = LONGITUD;
-//        this.ADDRESS = ADDRESS;
-//        Encode = encode;
-//        this.NAME_BEFORE = NAME_BEFORE;
-//    }
 
     public Account(int ID_ACCOUNT_KEY, String SHOP_NAME, String URL_LOGO, String NAME_LOGO,
                    String NAME_BEFORE, String encode, String DESCRIPTION, String PHONE, String EMAIL, String LATITUD, String LONGITUD,
@@ -197,12 +171,4 @@ public class Account extends BaseModel {
     public void setNAME_BEFORE(String NAME_BEFORE) {
         this.NAME_BEFORE = NAME_BEFORE;
     }
-
-//    public int getID_USER_FOREIGN() {
-//        return ID_USER_FOREIGN;
-//    }
-//
-//    public void setID_USER_FOREIGN(int ID_USER_FOREIGN) {
-//        this.ID_USER_FOREIGN = ID_USER_FOREIGN;
-//    }
 }

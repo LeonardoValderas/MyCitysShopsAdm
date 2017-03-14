@@ -2,7 +2,7 @@ package com.valdroide.mycitysshopsadm.main.place;
 
 import android.content.Context;
 
-import com.valdroide.mycitysshopsadm.entities.user.MyPlace;
+import com.valdroide.mycitysshopsadm.entities.shop.MyPlace;
 
 public interface PlaceActivityInteractor {
     void getCountries();

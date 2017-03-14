@@ -1,11 +1,10 @@
-package com.valdroide.mycitysshopsadm.entities.user;
+package com.valdroide.mycitysshopsadm.entities.shop;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 import com.valdroide.mycitysshopsadm.db.ShopDatabase;
-
 
 @Table(database = ShopDatabase.class)
 public class MyPlace extends BaseModel {

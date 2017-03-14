@@ -5,9 +5,9 @@ import android.content.Context;
 import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.valdroide.mycitysshopsadm.api.APIService;
 import com.valdroide.mycitysshopsadm.entities.response.ResponseWS;
-import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
-import com.valdroide.mycitysshopsadm.entities.user.MyPlace;
-import com.valdroide.mycitysshopsadm.entities.user.User;
+import com.valdroide.mycitysshopsadm.entities.response.ResultShop;
+import com.valdroide.mycitysshopsadm.entities.shop.MyPlace;
+import com.valdroide.mycitysshopsadm.entities.shop.Shop;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.login.events.LoginActivityEvent;
 import com.valdroide.mycitysshopsadm.utils.Utils;
@@ -27,27 +27,22 @@ public class LoginActivityRepositoryImpl implements LoginActivityRepository {
     }
 
     @Override
-    public void validateLogin(final Context context, final User user) {
+    public void validateLogin(final Context context, String user, String pass, int id_city) {
         if (Utils.isNetworkAvailable(context)) {
             try {
-                Call<ResultPlace> loginService = service.validateLogin(user.getUSER(),
-                        user.getPASS(), user.getID_CITY_FOREIGN());
-                loginService.enqueue(new Callback<ResultPlace>() {
+                Call<ResultShop> loginService = service.validateLogin(user,
+                        pass, id_city);
+                loginService.enqueue(new Callback<ResultShop>() {
                     @Override
-                    public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
+                    public void onResponse(Call<ResultShop> call, Response<ResultShop> response) {
                         if (response.isSuccessful()) {
                             responseWS = response.body().getResponseWS();
                             if (responseWS != null) {
                                 if (responseWS.getSuccess().equals("0")) {
-                                    int id = responseWS.getId();
-                                    if (id != 0) {
-                                        user.setID_USER_KEY(id);
-                                        user.save();
-                                        Utils.setIdUser(context, id);
-                                        post(LoginActivityEvent.LOGIN);
-                                    } else {
-                                        post(LoginActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
-                                    }
+                                    Shop shop = response.body().getShop();
+                                    shop.save();
+                                    Utils.setIdShop(context, shop.getID_SHOP_KEY());
+                                    post(LoginActivityEvent.LOGIN);
                                 } else {
                                     post(LoginActivityEvent.ERROR, responseWS.getMessage());
                                 }
@@ -60,7 +55,7 @@ public class LoginActivityRepositoryImpl implements LoginActivityRepository {
                     }
 
                     @Override
-                    public void onFailure(Call<ResultPlace> call, Throwable t) {
+                    public void onFailure(Call<ResultShop> call, Throwable t) {
                         post(LoginActivityEvent.ERROR, t.getMessage());
                     }
                 });

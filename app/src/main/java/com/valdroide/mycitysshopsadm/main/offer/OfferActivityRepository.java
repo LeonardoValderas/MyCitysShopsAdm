@@ -2,7 +2,7 @@ package com.valdroide.mycitysshopsadm.main.offer;
 
 import android.content.Context;
 
-import com.valdroide.mycitysshopsadm.entities.user.Offer;
+import com.valdroide.mycitysshopsadm.entities.shop.Offer;
 
 public interface OfferActivityRepository {
     void getOffer(Context context);

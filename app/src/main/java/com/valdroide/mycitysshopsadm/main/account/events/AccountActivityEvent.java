@@ -1,6 +1,6 @@
 package com.valdroide.mycitysshopsadm.main.account.events;
 
-import com.valdroide.mycitysshopsadm.entities.user.Account;
+import com.valdroide.mycitysshopsadm.entities.shop.Account;
 
 public class AccountActivityEvent {
     private int type;

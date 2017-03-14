@@ -2,7 +2,7 @@ package com.valdroide.mycitysshopsadm.main.offer;
 
 import android.content.Context;
 
-import com.valdroide.mycitysshopsadm.entities.user.Offer;
+import com.valdroide.mycitysshopsadm.entities.shop.Offer;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.offer.events.OfferActivityEvent;
 import com.valdroide.mycitysshopsadm.main.offer.ui.OfferActivityView;

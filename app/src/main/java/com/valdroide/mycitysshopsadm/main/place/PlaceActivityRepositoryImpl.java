@@ -8,7 +8,7 @@ import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.valdroide.mycitysshopsadm.api.APIService;
-import com.valdroide.mycitysshopsadm.entities.user.MyPlace;
+import com.valdroide.mycitysshopsadm.entities.shop.MyPlace;
 import com.valdroide.mycitysshopsadm.entities.place.City;
 import com.valdroide.mycitysshopsadm.entities.place.Country;
 import com.valdroide.mycitysshopsadm.entities.place.State;

@@ -1,6 +1,6 @@
 package com.valdroide.mycitysshopsadm.main.offer.events;
 
-import com.valdroide.mycitysshopsadm.entities.user.Offer;
+import com.valdroide.mycitysshopsadm.entities.shop.Offer;
 
 import java.util.List;
 

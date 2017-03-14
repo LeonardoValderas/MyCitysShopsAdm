@@ -1,7 +1,7 @@
 package com.valdroide.mycitysshopsadm.main.account;
 
 import android.content.Context;
-import com.valdroide.mycitysshopsadm.entities.user.Account;
+import com.valdroide.mycitysshopsadm.entities.shop.Account;
 
 public class AccountActivityInteractorImpl implements AccountActivityInteractor {
     AccountActivityRepository repository;

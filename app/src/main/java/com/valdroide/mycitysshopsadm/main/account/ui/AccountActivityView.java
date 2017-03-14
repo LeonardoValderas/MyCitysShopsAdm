@@ -1,6 +1,6 @@
 package com.valdroide.mycitysshopsadm.main.account.ui;
 
-import com.valdroide.mycitysshopsadm.entities.user.Account;
+import com.valdroide.mycitysshopsadm.entities.shop.Account;
 
 /**
  * Created by LEO on 20/2/2017.

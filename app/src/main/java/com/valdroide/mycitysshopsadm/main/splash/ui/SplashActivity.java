@@ -46,7 +46,7 @@ public class SplashActivity extends AppCompatActivity implements SplashActivityV
         if (!isLogin)
             presenter.validateDatePlace(this);
         else
-            presenter.validateDateUser(this);
+            presenter.validateDateShop(this);
     }
 
     public boolean isLogin() {

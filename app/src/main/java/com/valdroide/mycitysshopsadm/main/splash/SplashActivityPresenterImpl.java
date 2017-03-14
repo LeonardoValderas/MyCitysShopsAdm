@@ -37,8 +37,8 @@ public class SplashActivityPresenterImpl implements SplashActivityPresenter {
     }
 
     @Override
-    public void validateDateUser(Context context) {
-        interactor.validateDateUser(context);
+    public void validateDateShop(Context context) {
+        interactor.validateDateShop(context);
     }
 
     @Override

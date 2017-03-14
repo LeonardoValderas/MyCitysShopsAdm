@@ -6,7 +6,7 @@ import com.valdroide.mycitysshopsadm.BuildConfig;
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.api.APIService;
 import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
-import com.valdroide.mycitysshopsadm.entities.user.Account;
+import com.valdroide.mycitysshopsadm.entities.shop.Account;
 import com.valdroide.mycitysshopsadm.entities.response.ResponseWS;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityRepository;

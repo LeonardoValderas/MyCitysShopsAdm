@@ -2,7 +2,7 @@ package com.valdroide.mycitysshopsadm.main.place;
 
 import android.content.Context;
 
-import com.valdroide.mycitysshopsadm.entities.user.MyPlace;
+import com.valdroide.mycitysshopsadm.entities.shop.MyPlace;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.place.events.PlaceActivityEvent;
 import com.valdroide.mycitysshopsadm.main.place.ui.PlaceActivityView;

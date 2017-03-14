@@ -1,4 +1,4 @@
-package com.valdroide.mycitysshopsadm.entities.user;
+package com.valdroide.mycitysshopsadm.entities.shop;
 
 import com.google.gson.annotations.SerializedName;
 import com.raizlabs.android.dbflow.annotation.Column;
@@ -18,9 +18,9 @@ public class Notification extends BaseModel {
     public int ID_NOTIFICATION_KEY;
 
     @Column
-    @SerializedName("id_user_foreign")
+    @SerializedName("id_shop")
   //  @ForeignKey(references = {@ForeignKeyReference(columnName = "id_shop_foreign", columnType = Integer.class, foreignKeyColumnName = "ID_SHOP_KEY")}, tableClass = Shop.class, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE, onUpdate = ForeignKeyAction.CASCADE)
-    public int ID_USER_FOREIGN;
+    public int ID_SHOP_FOREIGN;
 
     @Column
     @SerializedName("date_end")
@@ -37,12 +37,12 @@ public class Notification extends BaseModel {
         this.ID_NOTIFICATION_KEY = ID_NOTIFICATION_KEY;
     }
 
-    public int getID_USER_FOREIGN() {
-        return ID_USER_FOREIGN;
+    public int getID_SHOP_FOREIGN() {
+        return ID_SHOP_FOREIGN;
     }
 
-    public void setID_USER_FOREIGN(int ID_USER_FOREIGN) {
-        this.ID_USER_FOREIGN = ID_USER_FOREIGN;
+    public void setID_SHOP_FOREIGN(int ID_SHOP_FOREIGN) {
+        this.ID_SHOP_FOREIGN = ID_SHOP_FOREIGN;
     }
 
     public String getDATE_END() {

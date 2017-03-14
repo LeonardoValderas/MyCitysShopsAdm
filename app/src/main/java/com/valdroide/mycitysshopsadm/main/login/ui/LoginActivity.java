@@ -9,7 +9,6 @@ import android.widget.RelativeLayout;
 
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
-import com.valdroide.mycitysshopsadm.entities.user.User;
 import com.valdroide.mycitysshopsadm.main.login.LoginActivityPresenter;
 import com.valdroide.mycitysshopsadm.main.place.ui.PlaceActivity;
 import com.valdroide.mycitysshopsadm.main.splash.ui.SplashActivity;
@@ -60,11 +59,7 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
         else if (Utils.getIdCity(this) == 0) {
             Utils.showSnackBar(conteiner, getString(R.string.error_id_city));
         } else {
-            User user = new User();
-            user.setUSER(editTextUser.getText().toString());
-            user.setPASS(editTextPass.getText().toString());
-            user.setID_CITY_FOREIGN(Utils.getIdCity(this));
-            presenter.validateLogin(this, user);
+            presenter.validateLogin(this, editTextUser.getText().toString(), editTextPass.getText().toString(), Utils.getIdCity(this));
         }
     }
 

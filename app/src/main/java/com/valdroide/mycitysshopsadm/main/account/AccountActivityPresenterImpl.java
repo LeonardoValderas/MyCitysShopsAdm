@@ -2,7 +2,7 @@ package com.valdroide.mycitysshopsadm.main.account;
 
 import android.content.Context;
 
-import com.valdroide.mycitysshopsadm.entities.user.Account;
+import com.valdroide.mycitysshopsadm.entities.shop.Account;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.account.events.AccountActivityEvent;
 import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivityView;

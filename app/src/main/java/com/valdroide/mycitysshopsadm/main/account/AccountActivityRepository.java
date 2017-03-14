@@ -2,7 +2,7 @@ package com.valdroide.mycitysshopsadm.main.account;
 
 import android.content.Context;
 
-import com.valdroide.mycitysshopsadm.entities.user.Account;
+import com.valdroide.mycitysshopsadm.entities.shop.Account;
 
 /**
  * Created by LEO on 20/2/2017.

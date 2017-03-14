@@ -1,6 +1,7 @@
 package com.valdroide.mycitysshopsadm.api;
 
 import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
+import com.valdroide.mycitysshopsadm.entities.response.ResultShop;
 import com.valdroide.mycitysshopsadm.entities.response.ResultUser;
 
 import retrofit2.Call;
@@ -28,29 +29,29 @@ public interface APIService {
 //                                    @Field("latitud") String latitud, @Field("longitud") String longitud, @Field("adrress") String adrress);
     @FormUrlEncoded
     @POST("account/updateAccount.php")
-    Call<ResultPlace> updateAccount(@Field("id_user_foreign") int id_user, @Field("id_account") int id_account, @Field("encode") String encode,
+    Call<ResultPlace> updateAccount(@Field("id_shop_foreign") int id_shop, @Field("id_account") int id_account, @Field("encode") String encode,
                                     @Field("url_logo") String url_logo, @Field("name_logo") String name_logo, @Field("name_before") String name_before,
                                     @Field("description") String description, @Field("phone") String phone, @Field("email") String email,
                                     @Field("latitud") String latitud, @Field("longitud") String longitud, @Field("adrress") String adrress, @Field("date_init") String date_init);
     //OFFER
     @FormUrlEncoded
     @POST("offer/insertOffer.php")
-    Call<ResultPlace> insertOffer(@Field("id_user_foreign") int id_user, @Field("title") String title, @Field("offer") String offer,
-                                  @Field("date_init") String date_init, @Field("date_end") String date_end);
+    Call<ResultPlace> insertOffer(@Field("id_shop_foreign") int id_shop, @Field("title") String title, @Field("offer") String offer,
+                                  @Field("date_init") String date_init, @Field("date_end") String date_end, @Field("date_update") String date_update);
 
     @FormUrlEncoded
     @POST("offer/updateOffer.php")
-    Call<ResultPlace> updateOffer(@Field("id_offer") int id_offer, @Field("id_user_foreign") int id_user, @Field("title") String title, @Field("offer") String offer,
-                                  @Field("date_edit") String date_edit);
+    Call<ResultPlace> updateOffer(@Field("id_offer") int id_offer, @Field("id_shop_foreign") int id_shop, @Field("title") String title, @Field("offer") String offer,
+                                  @Field("date_edit") String date_edit, @Field("date_update") String date_update);
 
     @FormUrlEncoded
     @POST("offer/deleteOffer.php")
-    Call<ResultPlace> deleteOffer(@Field("id_offer") int id_offer, @Field("id_user_foreign") int id_user, @Field("date_edit") String date_edit);
+    Call<ResultPlace> deleteOffer(@Field("id_offer") int id_offer, @Field("id_shop_foreign") int id_shop, @Field("date_edit") String date_edit, @Field("date_update") String date_update);
 
     //NOTIFICATION
     @FormUrlEncoded
     @POST("fcm/sendNotification.php")
-    Call<ResultPlace> sendNotification(@Field("id_user_foreign") int id_user, @Field("title") String title, @Field("message") String message, @Field("date_init") String date_init);
+    Call<ResultPlace> sendNotification(@Field("id_shop_foreign") int id_shop, @Field("title") String title, @Field("message") String message, @Field("date_init") String date_init);
 
     //SPLASH PLACE
     @FormUrlEncoded
@@ -61,17 +62,17 @@ public interface APIService {
     Call<ResultPlace> getPlace();
     //SPLASH USER
     @FormUrlEncoded
-    @POST("splash_user/validateDateUser.php")
-    Call<ResultUser> validateDateUser(@Field("id_user") int id_user, @Field("date_account") String date_account, @Field("date_offer") String date_offer, @Field("date_user_date") String date_user_date);
+    @POST("splash_user/validateDateShop.php")
+    Call<ResultUser> validateDateShop(@Field("id_shop") int id_shop, @Field("date_account") String date_account, @Field("date_offer") String date_offer, @Field("date_notification") String date_notification, @Field("date_user_date") String date_user_date);
 
     @FormUrlEncoded
-    @POST("splash_user/getUser.php")
-    Call<ResultUser> getUser(@Field("id_user") int id_user);
+    @POST("splash_user/getShopData.php")
+    Call<ResultUser> getShopData(@Field("id_shop") int id_shop);
 
     //LOGIN
     @FormUrlEncoded
     @POST("login/validateLogin.php")
-    Call<ResultPlace> validateLogin(@Field("user") String user, @Field("pass") String pass, @Field("id_city") int id_city);
+    Call<ResultShop> validateLogin(@Field("user") String user, @Field("pass") String pass, @Field("id_city") int id_city);
 
     /*
     @GET("md")

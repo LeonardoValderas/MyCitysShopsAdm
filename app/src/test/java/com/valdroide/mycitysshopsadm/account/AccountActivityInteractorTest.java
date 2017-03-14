@@ -3,7 +3,7 @@ package com.valdroide.mycitysshopsadm.account;
 import android.content.Context;
 
 import com.valdroide.mycitysshopsadm.BaseTest;
-import com.valdroide.mycitysshopsadm.entities.user.Account;
+import com.valdroide.mycitysshopsadm.entities.shop.Account;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityInteractor;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityInteractorImpl;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityRepository;

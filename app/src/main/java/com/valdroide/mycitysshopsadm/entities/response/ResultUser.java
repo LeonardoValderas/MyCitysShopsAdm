@@ -2,19 +2,12 @@ package com.valdroide.mycitysshopsadm.entities.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.valdroide.mycitysshopsadm.entities.place.City;
-import com.valdroide.mycitysshopsadm.entities.place.Country;
-import com.valdroide.mycitysshopsadm.entities.place.DatePlace;
-import com.valdroide.mycitysshopsadm.entities.place.State;
-import com.valdroide.mycitysshopsadm.entities.user.Account;
-import com.valdroide.mycitysshopsadm.entities.user.DateUser;
-import com.valdroide.mycitysshopsadm.entities.user.Offer;
+import com.valdroide.mycitysshopsadm.entities.shop.Account;
+import com.valdroide.mycitysshopsadm.entities.shop.DateShop;
+import com.valdroide.mycitysshopsadm.entities.shop.Notification;
+import com.valdroide.mycitysshopsadm.entities.shop.Offer;
 
 import java.util.List;
-
-/**
- * Created by LEO on 6/2/2017.
- */
 
 public class ResultUser {
     @SerializedName("responseWS")
@@ -22,13 +15,16 @@ public class ResultUser {
     ResponseWS responseWS;
     @SerializedName("date_user")
     @Expose
-    DateUser dateUser;
+    DateShop dateUser;
     @SerializedName("account")
     @Expose
     Account account;
     @SerializedName("offer")
     @Expose
     List<Offer> offers;
+    @SerializedName("notification")
+    @Expose
+    Notification notification;
 
     public ResponseWS getResponseWS() {
         return responseWS;
@@ -38,27 +34,32 @@ public class ResultUser {
         this.responseWS = responseWS;
     }
 
-    public DateUser getDateUser() {
+    public DateShop getDateUser() {
         return dateUser;
     }
 
-    public void setDateUser(DateUser dateUser) {
+    public void setDateUser(DateShop dateUser) {
         this.dateUser = dateUser;
     }
 
     public Account getAccount() {
         return account;
     }
-
     public void setAccount(Account account) {
         this.account = account;
     }
-
     public List<Offer> getOffers() {
         return offers;
     }
-
     public void setOffer(List<Offer> offers) {
         this.offers = offers;
+    }
+
+    public Notification getNotification() {
+        return notification;
+    }
+
+    public void setNotification(Notification notification) {
+        this.notification = notification;
     }
 }

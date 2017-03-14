@@ -6,13 +6,8 @@ import com.valdroide.mycitysshopsadm.entities.place.City;
 import com.valdroide.mycitysshopsadm.entities.place.Country;
 import com.valdroide.mycitysshopsadm.entities.place.DatePlace;
 import com.valdroide.mycitysshopsadm.entities.place.State;
-import com.valdroide.mycitysshopsadm.entities.user.DateUser;
 
 import java.util.List;
-
-/**
- * Created by LEO on 6/2/2017.
- */
 
 public class ResultPlace {
     @SerializedName("responseWS")

@@ -5,7 +5,8 @@ import android.content.Context;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.valdroide.mycitysshopsadm.api.APIService;
 import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
-import com.valdroide.mycitysshopsadm.entities.user.Offer;
+import com.valdroide.mycitysshopsadm.entities.shop.DateShop;
+import com.valdroide.mycitysshopsadm.entities.shop.Offer;
 import com.valdroide.mycitysshopsadm.entities.response.ResponseWS;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.account.events.AccountActivityEvent;
@@ -25,6 +26,8 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
     private List<Offer> offers;
     private ResponseWS responseWS;
     int id;
+    private DateShop dateShop;
+
 
     public OfferActivityRepositoryImpl(EventBus eventBus, APIService service) {
         this.eventBus = eventBus;
@@ -65,9 +68,10 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
     public void saveOffer(Context context, final Offer offer) {
         if (Utils.isNetworkAvailable(context)) {
             try {
-                Call<ResultPlace> offerService = service.insertOffer(offer.getID_USER_FOREIGN(),
+                final String date_update = Utils.getFechaOficial();
+                Call<ResultPlace> offerService = service.insertOffer(offer.getID_SHOP_FOREIGN(),
                         offer.getTITLE(), offer.getOFFER(),
-                        offer.getDATE_INIT(), offer.getDATE_END());
+                        offer.getDATE_INIT(), offer.getDATE_END(), date_update);
                 offerService.enqueue(new Callback<ResultPlace>() {
                     @Override
                     public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
@@ -79,6 +83,8 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
                                     if (id != 0) {
                                         offer.setID_OFFER_KEY(id);
                                         offer.save();
+                                        getDateShop(date_update);
+                                        dateShop.update();
                                         post(OfferActivityEvent.SAVEOFFER, offer);
                                     } else {
                                         post(OfferActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
@@ -111,9 +117,10 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
     public void updateOffer(Context context, final Offer offer) {
         if (Utils.isNetworkAvailable(context)) {
             try {
-                Call<ResultPlace> offerService = service.updateOffer(offer.getID_OFFER_KEY(), offer.getID_USER_FOREIGN(),
+                final String date_update = Utils.getFechaOficial();
+                Call<ResultPlace> offerService = service.updateOffer(offer.getID_OFFER_KEY(), offer.getID_SHOP_FOREIGN(),
                         offer.getTITLE(), offer.getOFFER(),
-                        offer.getDATE_EDIT());
+                        offer.getDATE_EDIT(), date_update);
                 offerService.enqueue(new Callback<ResultPlace>() {
                     @Override
                     public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
@@ -121,6 +128,8 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
                             responseWS = response.body().getResponseWS();
                             if (responseWS.getSuccess().equals("0")) {
                                 offer.update();
+                                getDateShop(date_update);
+                                dateShop.update();
                                 post(OfferActivityEvent.UPDATEOFFER, offer);
                             } else {
                                 post(OfferActivityEvent.ERROR, responseWS.getMessage());
@@ -147,7 +156,9 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
     public void deleteOffer(Context context, final Offer offer, final boolean isDelete) {
         if (Utils.isNetworkAvailable(context)) {
             try {
-                Call<ResultPlace> offerService = service.deleteOffer(offer.getID_OFFER_KEY(), offer.getID_USER_FOREIGN(), offer.getDATE_EDIT());
+                final String date_update = Utils.getFechaOficial();
+                Call<ResultPlace> offerService = service.deleteOffer(offer.getID_OFFER_KEY(), offer.getID_SHOP_FOREIGN(),
+                        offer.getDATE_EDIT(), date_update);
                 offerService.enqueue(new Callback<ResultPlace>() {
                     @Override
                     public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
@@ -155,6 +166,8 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
                             responseWS = response.body().getResponseWS();
                             if (responseWS.getSuccess().equals("0")) {
                                 offer.delete();
+                                getDateShop(date_update);
+                                dateShop.update();
                                 if (isDelete)
                                     post(OfferActivityEvent.DELETEOFFER, offer);
                             } else {
@@ -180,6 +193,12 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
 
     public boolean validateExpirateOffer(String dateEnd) {
         return Utils.validateExpirateOffer(dateEnd);
+    }
+
+    public void getDateShop(String date_edit) {
+        dateShop = SQLite.select().from(DateShop.class).querySingle();
+        dateShop.setOFFER_DATE(date_edit);
+        dateShop.setDATE_USER_DATE(date_edit);
     }
 
     public void post(int type) {

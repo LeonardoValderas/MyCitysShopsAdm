@@ -16,8 +16,8 @@ public class SplashActivityInteractorImpl implements SplashActivityInteractor {
     }
 
     @Override
-    public void validateDateUser(Context context) {
-        repository.validateDateUser(context);
+    public void validateDateShop(Context context) {
+        repository.validateDateShop(context);
     }
 
 }

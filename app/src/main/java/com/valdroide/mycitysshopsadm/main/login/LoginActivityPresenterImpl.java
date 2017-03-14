@@ -2,7 +2,6 @@ package com.valdroide.mycitysshopsadm.main.login;
 
 import android.content.Context;
 
-import com.valdroide.mycitysshopsadm.entities.user.User;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.login.events.LoginActivityEvent;
 import com.valdroide.mycitysshopsadm.main.login.ui.LoginActivityView;
@@ -38,8 +37,8 @@ public class LoginActivityPresenterImpl implements LoginActivityPresenter {
     }
 
     @Override
-    public void validateLogin(Context context, User user) {
-        interactor.validateLogin(context, user);
+    public void validateLogin(Context context, String user, String pass, int id_city) {
+        interactor.validateLogin(context, user, pass, id_city);
     }
 
     @Override

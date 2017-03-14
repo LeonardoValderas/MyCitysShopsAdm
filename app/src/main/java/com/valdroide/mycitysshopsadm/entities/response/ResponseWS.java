@@ -3,10 +3,6 @@ package com.valdroide.mycitysshopsadm.entities.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by LEO on 9/2/2017.
- */
-
 public class ResponseWS {
     @SerializedName("id")
     @Expose

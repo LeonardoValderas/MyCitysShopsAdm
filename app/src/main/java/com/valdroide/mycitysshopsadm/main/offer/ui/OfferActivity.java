@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
-import com.valdroide.mycitysshopsadm.entities.user.Offer;
+import com.valdroide.mycitysshopsadm.entities.shop.Offer;
 import com.valdroide.mycitysshopsadm.main.offer.OfferActivityPresenter;
 import com.valdroide.mycitysshopsadm.main.offer.ui.adapters.OfferActivityRecyclerAdapter;
 import com.valdroide.mycitysshopsadm.main.offer.ui.adapters.OnItemClickListener;
@@ -47,7 +47,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     OfferActivityPresenter presenter;
 
     private ProgressDialog pDialog;
-    private Offer offer = new Offer();
+    private Offer offer;
     private Menu menu;
     private int id_offer = 0, quantity_offer = 0;
 
@@ -62,6 +62,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("PROMO");
+        offer = new Offer();
         initDialog();
         initRecyclerViewAdapter();
         pDialog.show();
@@ -90,13 +91,13 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         editTextTitle.setText("");
         editTextDescription.setText("");
         id_offer = 0;
+        offer = new Offer();
     }
 
     public Offer fillOffer(String title, String descrip, boolean isUpdate) {
-        //Offer offer = new Offer();
         offer.setTITLE(title);
         offer.setOFFER(descrip);
-        offer.setID_USER_FOREIGN(Utils.getIdUser(this));
+        offer.setID_SHOP_FOREIGN(Utils.getIdShop(this));
         if (!isUpdate) {
             offer.setDATE_INIT(Utils.getFechaInit());
             offer.setDATE_END(Utils.getLastDateWeek());
@@ -113,17 +114,16 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         quantity_offer = offers.size();
         adapter.setOffers(offers);
         if (pDialog.isShowing())
-            pDialog.hide();
+            pDialog.dismiss();
     }
 
     @Override
     public void saveOffer(Offer offer) {
         adapter.setOffer(offer);
-        //   this.offers.add(offer);
         updateQuantity();
         menuAdd();
         if (pDialog.isShowing())
-            pDialog.hide();
+            pDialog.dismiss();
         cleanView();
         Utils.showSnackBar(conteiner, getString(R.string.offer_success));
     }
@@ -133,7 +133,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         adapter.updateAdapter(offer);
         menuAdd();
         if (pDialog.isShowing())
-            pDialog.hide();
+            pDialog.dismiss();
         cleanView();
         Utils.showSnackBar(conteiner, getString(R.string.offer_update));
     }
@@ -152,12 +152,14 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     @Override
     public void error(String msg) {
         if (pDialog.isShowing())
-            pDialog.hide();
+            pDialog.dismiss();
         Utils.showSnackBar(conteiner, msg);
     }
 
     @Override
     public void onClick(View view, int position, Offer offer) {
+        if (!editTextTitle.isEnabled() || !editTextDescription.isEnabled())
+            setEnable(true);
         editTextTitle.setText(offer.getTITLE());
         editTextDescription.setText(offer.getOFFER());
         id_offer = offer.getID_OFFER_KEY();
@@ -178,10 +180,26 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     public void menuAdd() {
         menu.clear();
         getMenuInflater().inflate(R.menu.offer, menu);
-        if (quantity_offer >= 3)
-            menu.getItem(2).setVisible(false);// cancel
+        if (quantity_offer >= 3) {
+            hideAllMenu(menu);
+            if (editTextTitle.isEnabled() || editTextDescription.isEnabled())
+                setEnable(false);
+        } else {
+            hideUpdateMenu(menu);
+            if (!editTextTitle.isEnabled() || !editTextDescription.isEnabled())
+                setEnable(true);
+        }
+    }
+
+    public void hideUpdateMenu(Menu menu) {
         menu.getItem(0).setVisible(false);// cancel
         menu.getItem(1).setVisible(false);// update
+    }
+
+    public void hideAllMenu(Menu menu) {
+        menu.getItem(0).setVisible(false);// cancel
+        menu.getItem(1).setVisible(false);// update
+        menu.getItem(2).setVisible(false);// add
     }
 
     public void menuUpdate() {
@@ -190,9 +208,19 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         menu.getItem(2).setVisible(false);// add
     }
 
+    public void setEnable(boolean isEnable) {
+        editTextTitle.setEnabled(isEnable);
+        editTextTitle.setFocusable(isEnable);
+        editTextTitle.setFocusableInTouchMode(isEnable);
+        editTextDescription.setEnabled(isEnable);
+        editTextDescription.setFocusable(isEnable);
+        editTextDescription.setFocusableInTouchMode(isEnable);
+    }
+
     @Override
     public void onDestroy() {
         presenter.onDestroy();
+        pDialog.dismiss();
         super.onDestroy();
     }
 
@@ -200,10 +228,14 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.offer, menu);
         this.menu = menu;
-        if (quantity_offer >= 3)
-            menu.getItem(2).setVisible(false);// update
-        menu.getItem(0).setVisible(false);// cancel
-        menu.getItem(1).setVisible(false);// update
+        if (quantity_offer >= 3) {
+            hideAllMenu(menu);
+            if (editTextTitle.isEnabled() || editTextDescription.isEnabled())
+                setEnable(false);
+        } else {
+            hideUpdateMenu(menu);
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 

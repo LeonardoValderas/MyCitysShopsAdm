@@ -1,7 +1,8 @@
 package com.valdroide.mycitysshopsadm.main.navigation;
 
 import com.raizlabs.android.dbflow.sql.language.Delete;
-import com.valdroide.mycitysshopsadm.entities.user.User;
+import com.valdroide.mycitysshopsadm.entities.shop.DateShop;
+import com.valdroide.mycitysshopsadm.entities.shop.Shop;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.navigation.events.NavigationActivityEvent;
 
@@ -15,7 +16,7 @@ public class NavigationActivityRepositoryImpl implements NavigationActivityRepos
     @Override
     public void logOut() {
         try {
-            Delete.table(User.class);
+      //      Delete.table(DateShop.class);
             post(NavigationActivityEvent.LOGOUT);
         } catch (Exception e) {
             post(NavigationActivityEvent.ERROR, e.getMessage());

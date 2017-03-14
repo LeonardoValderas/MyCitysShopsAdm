@@ -2,7 +2,6 @@ package com.valdroide.mycitysshopsadm.main.account.ui;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,8 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -27,7 +24,7 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
-import com.valdroide.mycitysshopsadm.entities.user.Account;
+import com.valdroide.mycitysshopsadm.entities.shop.Account;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityPresenter;
 import com.valdroide.mycitysshopsadm.main.map.MapActivity;
 import com.valdroide.mycitysshopsadm.utils.Utils;
@@ -141,7 +138,8 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
 
     @Override
     public void error(String mgs) {
-        pDialog.hide();
+        if (pDialog.isShowing())
+            pDialog.dismiss();
         Utils.showSnackBar(activityAccount, mgs);
     }
 
@@ -175,7 +173,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         longitud = account.getLONGITUD() == null ? "" : account.getLONGITUD();
         editTextDescription.setText(account.getDESCRIPTION());
         if (pDialog.isShowing())
-            pDialog.hide();
+            pDialog.dismiss();
     }
 
     public Account prepareAccount() {
@@ -295,10 +293,9 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.account, menu);
         this.menu = menu;
-        if(isMap){
+        if (isMap) {
             menuSave();
-        }
-        else {
+        } else {
             menu.getItem(0).setVisible(false);// map
             menu.getItem(1).setVisible(false);// save
         }
