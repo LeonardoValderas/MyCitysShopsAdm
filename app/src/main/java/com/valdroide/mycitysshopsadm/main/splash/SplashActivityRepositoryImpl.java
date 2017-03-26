@@ -23,6 +23,7 @@ import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.splash.events.SplashActivityEvent;
 import com.valdroide.mycitysshopsadm.utils.Utils;
 
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -199,8 +200,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
         try {
             dateShop = SQLite.select().from(DateShop.class).querySingle();
             if (dateShop != null) {
-                validateDateShop(context, dateShop.getID_SHOP_FOREIGN(), dateShop.getDATE_USER_DATE(), dateShop.getACCOUNT_DATE(),
-                        dateShop.getOFFER_DATE(),dateShop.getNOTIFICATION_DATE());
+                validateDateShop(context, dateShop);
             } else { // traemos los datos sin validar fechas
                 shop = SQLite.select().from(Shop.class).querySingle();
                 getShopData(context, shop.getID_SHOP_KEY());
@@ -210,10 +210,12 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
         }
     }
 
-    public void validateDateShop(final Context context, int id_shop, String date, String acount, String offer, String notification_s) {
+    public void validateDateShop(final Context context, final DateShop dateShop) {
         if (Utils.isNetworkAvailable(context)) {
             try {
-                Call<ResultUser> validateDateShop = service.validateDateShop(id_shop, acount, offer, notification_s, date);
+                Call<ResultUser> validateDateShop = service.validateDateShop(dateShop.getID_SHOP_FOREIGN(),
+                        dateShop.getACCOUNT_DATE(), dateShop.getOFFER_DATE(),dateShop.getNOTIFICATION_DATE(),
+                        dateShop.getDATE_SHOP_DATE());
                 validateDateShop.enqueue(new Callback<ResultUser>() {
                     @Override
                     public void onResponse(Call<ResultUser> call, Response<ResultUser> response) {
@@ -221,7 +223,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                             responseWS = response.body().getResponseWS();
                             if (responseWS != null) {
                                 if (responseWS.getSuccess().equals("0")) {
-                                    dateUserWS = response.body().getDateUser();
+                                    dateUserWS = response.body().getDateShop();
                                     if (dateUserWS != null) {
                                         Delete.table(DateShop.class);
                                         dateUserWS.save();
@@ -230,6 +232,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                     if (account != null) {
                                         Delete.table(Account.class);
                                         account.save();
+                                        Utils.setIdFollow(context, account.getFOLLOW());
                                     }
 
                                     offers = response.body().getOffers();
@@ -281,7 +284,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                             responseWS = response.body().getResponseWS();
                             if (responseWS != null) {
                                 if (responseWS.getSuccess().equals("0")) {
-                                    dateUserWS = response.body().getDateUser();
+                                    dateUserWS = response.body().getDateShop();
                                     if (dateUserWS != null) {
                                         Delete.table(DateShop.class);
                                         dateUserWS.save();
@@ -290,6 +293,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                     if (account != null) {
                                         Delete.table(Account.class);
                                         account.save();
+                                        Utils.setIdFollow(context, account.getFOLLOW());
                                     }
                                     offers = response.body().getOffers();
                                     if (offers != null) {

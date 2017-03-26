@@ -13,9 +13,9 @@ public class ResultUser {
     @SerializedName("responseWS")
     @Expose
     ResponseWS responseWS;
-    @SerializedName("date_user")
+    @SerializedName("date_shop")
     @Expose
-    DateShop dateUser;
+    DateShop dateShop;
     @SerializedName("account")
     @Expose
     Account account;
@@ -34,12 +34,12 @@ public class ResultUser {
         this.responseWS = responseWS;
     }
 
-    public DateShop getDateUser() {
-        return dateUser;
+    public DateShop getDateShop() {
+        return dateShop;
     }
 
-    public void setDateUser(DateShop dateUser) {
-        this.dateUser = dateUser;
+    public void setDateShop(DateShop dateShop) {
+        this.dateShop = dateShop;
     }
 
     public Account getAccount() {

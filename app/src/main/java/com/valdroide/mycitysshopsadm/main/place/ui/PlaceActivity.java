@@ -171,7 +171,8 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
     @OnClick(R.id.buttonInto)
     @Override
     public void savePlace() {
-        if (spinnerCountry.getSelectedItem() == null && spinnerState.getSelectedItem() == null && spinnerCity.getSelectedItem() == null)
+        if (spinnerCountry.getSelectedItem() == null && spinnerState.getSelectedItem() == null &&
+                spinnerCity.getSelectedItem() == null)
             Utils.showSnackBar(conteiner, getString(R.string.error_fill_place));
         else {
             pDialog.show();

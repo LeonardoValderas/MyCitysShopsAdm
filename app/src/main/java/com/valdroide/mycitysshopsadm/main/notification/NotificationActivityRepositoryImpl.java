@@ -90,7 +90,7 @@ public class NotificationActivityRepositoryImpl implements NotificationActivityR
     public void getDateShop(String date_edit) {
         dateShop = SQLite.select().from(DateShop.class).querySingle();
         dateShop.setNOTIFICATION_DATE(date_edit);
-        dateShop.setDATE_USER_DATE(date_edit);
+        dateShop.setDATE_SHOP_DATE(date_edit);
     }
 
 

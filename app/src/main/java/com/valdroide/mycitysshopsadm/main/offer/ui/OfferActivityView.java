@@ -8,5 +8,6 @@ public interface OfferActivityView {
     void saveOffer(Offer offer);
     void updateOffer(Offer offer);
     void deleteOffer(Offer offer);
+    void switchOffer(Offer offer);
     void error(String msg);
 }

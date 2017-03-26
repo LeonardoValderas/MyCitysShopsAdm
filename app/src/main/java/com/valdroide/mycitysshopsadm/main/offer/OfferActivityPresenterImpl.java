@@ -52,6 +52,11 @@ public class OfferActivityPresenterImpl implements OfferActivityPresenter {
     }
 
     @Override
+    public void switchOffer(Context context, Offer offer) {
+        interactor.switchOffer(context, offer);
+    }
+
+    @Override
     public void deleteOffer(Context context, Offer offer, boolean isDelete) {
         interactor.deleteOffer(context, offer, isDelete);
     }
@@ -72,6 +77,9 @@ public class OfferActivityPresenterImpl implements OfferActivityPresenter {
                     break;
                 case OfferActivityEvent.DELETEOFFER:
                     view.deleteOffer(event.getOffer());
+                    break;
+                case OfferActivityEvent.SWITCHOFFER:
+                    view.switchOffer(event.getOffer());
                     break;
                 case OfferActivityEvent.ERROR:
                     view.error(event.getError());

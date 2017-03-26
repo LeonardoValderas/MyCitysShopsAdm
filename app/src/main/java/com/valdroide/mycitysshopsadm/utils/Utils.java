@@ -23,10 +23,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Utils {
 
     public static String URL_IMAGE = "http://10.0.2.2:8080/my_citys_shops_adm/account/image_account/";
+    public static String URL_IMAGE_OFFER = "http://10.0.2.2:8080/my_citys_shops_adm/offer/image_offer/";
     //public static String URL_IMAGE = "http://myd.esy.es/myd/clothes/image_clothes/";
 
     public static String ERROR_DATA_BASE = "Error al guardar los datos.";
@@ -43,6 +45,12 @@ public class Utils {
     public static String getFechaOficial() {
         Date dateOficial = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        return sdf.format(dateOficial);
+    }
+
+    public static String getFechaOficialSeparate() {
+        Date dateOficial = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(dateOficial);
     }
 
@@ -81,6 +89,13 @@ public class Utils {
                 return true;
             }
         return false;
+    }
+
+    public static int randomNumber() {
+        int min = 0;
+        int max = 10;
+        Random r = new Random();
+        return r.nextInt(max - min + 1) + min;
     }
 
     public static void showSnackBar(View conteiner, String msg) {
@@ -277,5 +292,17 @@ public class Utils {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(context.getString(R.string.id_shop), 0);
         editor.commit();
+    }
+
+    public static void setIdFollow(Context context, int id) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.my_follow_id_shared), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(context.getString(R.string.id_follow), id);
+        editor.commit();
+    }
+
+    public static int getIdFollow(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.my_follow_id_shared), Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(context.getString(R.string.id_follow), 0);
     }
 }

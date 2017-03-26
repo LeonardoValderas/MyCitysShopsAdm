@@ -12,6 +12,7 @@ public interface OfferActivityPresenter {
     void getOffer(Context context);
     void saveOffer(Context context, Offer offer);
     void updateOffer(Context context, Offer offer);
+    void switchOffer(Context context, Offer offer);
     void deleteOffer(Context context, Offer offer, boolean isDelete);
     void onEventMainThread(OfferActivityEvent event);
 }

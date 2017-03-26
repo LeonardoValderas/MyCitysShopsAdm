@@ -53,9 +53,23 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
     EditText editTextDescription;
     @Bind(R.id.activity_account)
     RelativeLayout activityAccount;
+    @Bind(R.id.editTextWhatsaap)
+    EditText editTextWhatsaap;
+    @Bind(R.id.editTextWeb)
+    EditText editTextWeb;
+    @Bind(R.id.editTextFace)
+    EditText editTextFace;
+    @Bind(R.id.editTextInsta)
+    EditText editTextInsta;
+    @Bind(R.id.editTextTwitter)
+    EditText editTextTwitter;
+    @Bind(R.id.editTextSnap)
+    EditText editTextSnap;
 
     public static final int PERMISSION_GALERY = 1;
     public static final int GALERY = 1;
+    @Bind(R.id.editTextWorking)
+    EditText editTextWorking;
     private byte[] imageByte;
     private String latitud = "", longitud = "", name_before = "", name_logo = "", url_logo = "", encode = "";
     private int id_account = 0;
@@ -66,7 +80,6 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
 
     @Inject
     AccountActivityPresenter presenter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,13 +102,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
             if (uriExtra != null)
                 assignImage(uriExtra);
 
-            editTextPhone.setText(getIntent().getStringExtra("phone"));
-            editTextEmail.setText(getIntent().getStringExtra("email"));
-            editTextAddress.setText(getIntent().getStringExtra("address"));
-            editTextDescription.setText(getIntent().getStringExtra("description"));
-            latitud = getIntent().getStringExtra("latitud");
-            longitud = getIntent().getStringExtra("longitud");
-            setEnable(true);
+            fillExtraData();
         }
     }
 
@@ -107,18 +114,41 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
 
     public void setEnable(boolean isEnable) {
         imageViewLogo.setEnabled(isEnable);
-        editTextPhone.setEnabled(isEnable);
-        editTextPhone.setFocusable(isEnable);
-        editTextPhone.setFocusableInTouchMode(isEnable);
-        editTextEmail.setEnabled(isEnable);
-        editTextEmail.setFocusable(isEnable);
-        editTextEmail.setFocusableInTouchMode(isEnable);
-        editTextAddress.setEnabled(isEnable);
-        editTextAddress.setFocusable(isEnable);
-        editTextAddress.setFocusableInTouchMode(isEnable);
-        editTextDescription.setEnabled(isEnable);
-        editTextDescription.setFocusable(isEnable);
-        editTextDescription.setFocusableInTouchMode(isEnable);
+
+        setAttributeEdit(editTextPhone, isEnable);
+        setAttributeEdit(editTextWhatsaap, isEnable);
+        setAttributeEdit(editTextEmail, isEnable);
+        setAttributeEdit(editTextWeb, isEnable);
+        setAttributeEdit(editTextFace, isEnable);
+        setAttributeEdit(editTextInsta, isEnable);
+        setAttributeEdit(editTextTwitter, isEnable);
+        setAttributeEdit(editTextSnap, isEnable);
+        setAttributeEdit(editTextDescription, isEnable);
+        setAttributeEdit(editTextAddress, isEnable);
+        setAttributeEdit(editTextWorking, isEnable);
+    }
+
+    public void fillExtraData() {
+        editTextPhone.setText(getIntent().getStringExtra("phone"));
+        editTextWhatsaap.setText(getIntent().getStringExtra("whatsaap"));
+        editTextEmail.setText(getIntent().getStringExtra("email"));
+        editTextWeb.setText(getIntent().getStringExtra("web"));
+        editTextFace.setText(getIntent().getStringExtra("facebook"));
+        editTextInsta.setText(getIntent().getStringExtra("instagram"));
+        editTextTwitter.setText(getIntent().getStringExtra("twitter"));
+        editTextSnap.setText(getIntent().getStringExtra("snapchat"));
+        editTextAddress.setText(getIntent().getStringExtra("address"));
+        editTextDescription.setText(getIntent().getStringExtra("description"));
+        editTextWorking.setText(getIntent().getStringExtra("working"));
+        latitud = getIntent().getStringExtra("latitud");
+        longitud = getIntent().getStringExtra("longitud");
+        setEnable(true);
+    }
+
+    public void setAttributeEdit(EditText editText, boolean isEnable) {
+        editText.setEnabled(isEnable);
+        editText.setFocusable(isEnable);
+        editText.setFocusableInTouchMode(isEnable);
     }
 
     @Override
@@ -167,11 +197,19 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         name_before = name_logo;
         url_logo = account.getURL_LOGO() == null ? "" : account.getURL_LOGO();
         editTextPhone.setText(account.getPHONE());
+        editTextWhatsaap.setText(account.getWHATSAAP());
         editTextEmail.setText(account.getEMAIL());
+        editTextWeb.setText(account.getWEB());
+        editTextFace.setText(account.getFACEBOOK());
+        editTextInsta.setText(account.getINSTAGRAM());
+        editTextTwitter.setText(account.getTWITTER());
+        editTextSnap.setText(account.getSNAPCHAT());
+        editTextDescription.setText(account.getDESCRIPTION());
         editTextAddress.setText(account.getADDRESS());
+        editTextWorking.setText(account.getWORKING_HOURS());
         latitud = account.getLATITUD() == null ? "" : account.getLATITUD();
         longitud = account.getLONGITUD() == null ? "" : account.getLONGITUD();
-        editTextDescription.setText(account.getDESCRIPTION());
+
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
@@ -189,9 +227,15 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
             url_logo = Utils.URL_IMAGE + name_logo;
 
         }
+
         return new Account(id_account, textViewName.getText().toString(), url_logo, name_logo,
-                name_before, encode, editTextDescription.getText().toString(), editTextPhone.getText().toString(),
-                editTextEmail.getText().toString(), latitud, longitud, editTextAddress.getText().toString());
+                name_before, encode, Utils.removeAccents(editTextDescription.getText().toString()),
+                Utils.removeAccents(editTextWorking.getText().toString()),
+                editTextPhone.getText().toString(), Utils.removeAccents(editTextEmail.getText().toString()),
+                Utils.removeAccents(editTextWeb.getText().toString()), Utils.removeAccents(editTextWhatsaap.getText().toString()),
+                Utils.removeAccents(editTextFace.getText().toString()), Utils.removeAccents(editTextInsta.getText().toString()),
+                Utils.removeAccents(editTextTwitter.getText().toString()), Utils.removeAccents(editTextSnap.getText().toString()),
+                latitud, longitud, Utils.removeAccents(editTextAddress.getText().toString()), Utils.getFechaOficialSeparate());
     }
 
     private void checkForPermission() {
@@ -314,6 +358,8 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
                 Utils.showSnackBar(activityAccount, getString(R.string.error_map));
             else if (editTextDescription.getText().toString().isEmpty())
                 Utils.showSnackBar(activityAccount, getString(R.string.error_description));
+            else if (editTextWorking.getText().toString().isEmpty())
+                Utils.showSnackBar(activityAccount, getString(R.string.error_working));
             else
                 presenter.updateAccount(this, prepareAccount());
         } else if (id == R.id.action_map) {

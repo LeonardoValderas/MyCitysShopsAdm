@@ -12,7 +12,9 @@
     <string name="error_logo">Seleccione un logo.</string>
     <string name="error_address">Ingrese una dirección.</string>
     <string name="error_map">Seleccione un punto en el mapa.</string>
-    <string name="error_description">Ingrese una descripción</string>
+    <string name="error_description">Ingrese una descripción.</string>
+    <string name="error_working">Ingrese su horario de atención.</string>
+    <string name="error_image">Seleccione una imagen.</string>
     <!--Deb-->
     <string name="google_maps_key">AIzaSyAWfQFYnINp_aoysUJlg1vvcb5h7HwGhyU</string>
     <string name="title_empty">Ingrese un titulo.</string>
@@ -41,6 +43,8 @@
     <string name="id_city">id_city</string>
     <string name="shop_id_shared">shop_id_shared</string>
     <string name="id_shop">id_shop</string>
+    <string name="my_follow_id_shared">my_follow_id</string>
+    <string name="id_follow">id_follow</string>
 
     <string name="user_empty">Ingrese el usuario.</string>
     <string name="pass_empty">Ingrese su contraseña.</string>
@@ -48,4 +52,6 @@
     <!-- Strings related to log -->
     <string name="my_user_log_shared">my_user_log</string>
     <string name="log_out_menu">Desloguear</string>
+    <string name="offer_unable">Promo Desactivada</string>
+    <string name="offer_able">Promo activada</string>
 </resources>

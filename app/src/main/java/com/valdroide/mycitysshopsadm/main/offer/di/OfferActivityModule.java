@@ -1,6 +1,7 @@
 package com.valdroide.mycitysshopsadm.main.offer.di;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.valdroide.mycitysshopsadm.api.APIService;
 import com.valdroide.mycitysshopsadm.api.ShopClient;
@@ -70,8 +71,8 @@ public class OfferActivityModule {
 
     @Provides
     @Singleton
-    OfferActivityRecyclerAdapter provideOfferActivityRecyclerAdapter(List<Offer> offersList, OnItemClickListener onItemClickListener) {
-        return new OfferActivityRecyclerAdapter(offersList, onItemClickListener);
+    OfferActivityRecyclerAdapter provideOfferActivityRecyclerAdapter(List<Offer> offersList, OnItemClickListener onItemClickListener, Context context) {
+        return new OfferActivityRecyclerAdapter(offersList, onItemClickListener, context);
     }
 
     @Provides

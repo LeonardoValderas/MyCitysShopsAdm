@@ -6,5 +6,6 @@ import com.valdroide.mycitysshopsadm.entities.shop.Offer;
 
 public interface OnItemClickListener {
     void onClick(View view, int position, Offer offer);
-    void onLongClick(View view, int position, Offer offer);
+    void onClickSwitch( int position, Offer offer);
+ //   void onLongClick(View view, int position, Offer offer);
 }

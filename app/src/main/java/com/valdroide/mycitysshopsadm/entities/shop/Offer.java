@@ -10,7 +10,6 @@ import com.valdroide.mycitysshopsadm.db.ShopDatabase;
 @Table(database = ShopDatabase.class)
 public class Offer extends BaseModel {
 
-    // @PrimaryKey(autoincrement = true)
     @Column
     @PrimaryKey
     @SerializedName("id")
@@ -18,7 +17,6 @@ public class Offer extends BaseModel {
 
     @Column
     @SerializedName("id_shop_foreign")
-  //  @ForeignKey(references = {@ForeignKeyReference(columnName = "id_shop_foreign", columnType = Integer.class, foreignKeyColumnName = "ID_SHOP_KEY")}, tableClass = Shop.class, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE, onUpdate = ForeignKeyAction.CASCADE)
     public int ID_SHOP_FOREIGN;
 
     @Column
@@ -30,17 +28,39 @@ public class Offer extends BaseModel {
     public String OFFER;
 
     @Column
-    @SerializedName("date_init")
-    public String DATE_INIT;
+    @SerializedName("url_image")
+    public String URL_IMAGE;
     @Column
-    @SerializedName("date_edit")
-    public String DATE_EDIT;
+    @SerializedName("name_image")
+    public String NAME_IMAGE;
 
     @Column
-    @SerializedName("date_end")
-    public String DATE_END;
+    @SerializedName("date_unique")
+    public String DATE_UNIQUE;
+
+    @Column
+    @SerializedName("is_active")
+    public int IS_ACTIVE;
+
+    public String Encode;
+
+    public String NAME_BEFORE;
 
     public Offer() {
+    }
+
+    public Offer(int ID_OFFER_KEY, int ID_SHOP_FOREIGN, String TITLE, String OFFER, String URL_IMAGE,
+                 String NAME_IMAGE, int IS_ACTIVE, String DATE_UNIQUE, String Encode, String NAME_BEFORE) {
+        this.ID_OFFER_KEY = ID_OFFER_KEY;
+        this.ID_SHOP_FOREIGN = ID_SHOP_FOREIGN;
+        this.TITLE = TITLE;
+        this.OFFER = OFFER;
+        this.URL_IMAGE = URL_IMAGE;
+        this.NAME_IMAGE = NAME_IMAGE;
+        this.IS_ACTIVE = IS_ACTIVE;
+        this.DATE_UNIQUE = DATE_UNIQUE;
+        this.Encode = Encode;
+        this.NAME_BEFORE = NAME_BEFORE;
     }
 
     public int getID_OFFER_KEY() {
@@ -67,30 +87,6 @@ public class Offer extends BaseModel {
         this.OFFER = OFFER;
     }
 
-    public String getDATE_INIT() {
-        return DATE_INIT;
-    }
-
-    public void setDATE_INIT(String DATE_INIT) {
-        this.DATE_INIT = DATE_INIT;
-    }
-
-    public String getDATE_EDIT() {
-        return DATE_EDIT;
-    }
-
-    public void setDATE_EDIT(String DATE_EDIT) {
-        this.DATE_EDIT = DATE_EDIT;
-    }
-
-    public String getDATE_END() {
-        return DATE_END;
-    }
-
-    public void setDATE_END(String DATE_END) {
-        this.DATE_END = DATE_END;
-    }
-
     public int getID_SHOP_FOREIGN() {
         return ID_SHOP_FOREIGN;
     }
@@ -99,4 +95,51 @@ public class Offer extends BaseModel {
         this.ID_SHOP_FOREIGN = ID_SHOP_FOREIGN;
     }
 
+    public String getURL_IMAGE() {
+        return URL_IMAGE;
+    }
+
+    public void setURL_IMAGE(String URL_IMAGE) {
+        this.URL_IMAGE = URL_IMAGE;
+    }
+
+    public String getNAME_IMAGE() {
+        return NAME_IMAGE;
+    }
+
+    public void setNAME_IMAGE(String NAME_IMAGE) {
+        this.NAME_IMAGE = NAME_IMAGE;
+    }
+
+    public String getDATE_UNIQUE() {
+        return DATE_UNIQUE;
+    }
+
+    public void setDATE_UNIQUE(String DATE_UNIQUE) {
+        this.DATE_UNIQUE = DATE_UNIQUE;
+    }
+
+    public String getEncode() {
+        return Encode;
+    }
+
+    public void setEncode(String encode) {
+        Encode = encode;
+    }
+
+    public String getNAME_BEFORE() {
+        return NAME_BEFORE;
+    }
+
+    public void setNAME_BEFORE(String NAME_BEFORE) {
+        this.NAME_BEFORE = NAME_BEFORE;
+    }
+
+    public int getIS_ACTIVE() {
+        return IS_ACTIVE;
+    }
+
+    public void setIS_ACTIVE(int IS_ACTIVE) {
+        this.IS_ACTIVE = IS_ACTIVE;
+    }
 }

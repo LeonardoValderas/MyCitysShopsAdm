@@ -59,7 +59,8 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
         else if (Utils.getIdCity(this) == 0) {
             Utils.showSnackBar(conteiner, getString(R.string.error_id_city));
         } else {
-            presenter.validateLogin(this, editTextUser.getText().toString(), editTextPass.getText().toString(), Utils.getIdCity(this));
+            presenter.validateLogin(this, editTextUser.getText().toString(),
+                    editTextPass.getText().toString(), Utils.getIdCity(this));
         }
     }
 

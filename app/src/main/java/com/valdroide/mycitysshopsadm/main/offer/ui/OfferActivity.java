@@ -1,18 +1,31 @@
 package com.valdroide.mycitysshopsadm.main.offer.ui;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.entities.shop.Offer;
@@ -21,12 +34,14 @@ import com.valdroide.mycitysshopsadm.main.offer.ui.adapters.OfferActivityRecycle
 import com.valdroide.mycitysshopsadm.main.offer.ui.adapters.OnItemClickListener;
 import com.valdroide.mycitysshopsadm.utils.Utils;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class OfferActivity extends AppCompatActivity implements OnItemClickListener, OfferActivityView {
 
@@ -39,6 +54,8 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     RecyclerView recyclerView;
     @Bind(R.id.conteiner)
     LinearLayout conteiner;
+    @Bind(R.id.imageViewImage)
+    ImageView imageViewImage;
 
     private List<Offer> offers;
     @Inject
@@ -47,9 +64,14 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     OfferActivityPresenter presenter;
 
     private ProgressDialog pDialog;
-    private Offer offer;
     private Menu menu;
-    private int id_offer = 0, quantity_offer = 0;
+    private int id_offer = 0, quantity_offer = 0, position = 0;
+    public static final int PERMISSION_GALERY = 1;
+    public static final int GALERY = 1;
+    private byte[] imageByte;
+    private String encode = "", name_image = "", url_image = "", name_before = "";
+    private int is_active;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +84,6 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("PROMO");
-        offer = new Offer();
         initDialog();
         initRecyclerViewAdapter();
         pDialog.show();
@@ -87,25 +108,122 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         app.getOfferActivityComponent(this, this, this).inject(this);
     }
 
+    //  @Override
+    @OnClick(R.id.imageViewImage)
+    public void getPhoto() {
+        if (!Utils.oldPhones())
+            checkForPermission();
+
+        if (hasPermission())
+            ImageDialogLogo();
+    }
+
+    private void checkForPermission() {
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_GALERY);
+        }
+    }
+
+    private boolean hasPermission() {
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return permissionCheck == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_GALERY)
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                ImageDialogLogo();
+            }
+    }
+
+    public void ImageDialogLogo() {
+        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(
+                this);
+        myAlertDialog.setTitle("Galeria");
+        myAlertDialog.setMessage("Seleccione una foto.");
+
+        myAlertDialog.setPositiveButton("Galeria",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Intent pickIntent = new Intent(
+                                Intent.ACTION_GET_CONTENT, null);
+                        pickIntent.setType("image/*");
+                        pickIntent.putExtra(
+                                "return-data", true);
+                        startActivityForResult(
+                                pickIntent,
+                                GALERY);
+                    }
+                });
+        myAlertDialog.show();
+    }
+
+    public void assignImage(Uri uri) {
+        Utils.setPicasso(this, uri.toString(), android.R.drawable.ic_menu_crop, imageViewImage);
+        try {
+            imageByte = Utils.readBytes(uri, this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GALERY) {
+            Uri imageUri = CropImage.getPickImageResultUri(this, data);
+            startCropImageActivity(imageUri);
+        }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+            if (resultCode == RESULT_OK) {
+                assignImage(result.getUri());
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                if (!result.getError().toString().contains("ENOENT"))
+                    Utils.showSnackBar(conteiner, "Error al asignar imagen: " + result.getError());
+            }
+        }
+    }
+
+    private void startCropImageActivity(Uri imageUri) {
+        CropImage.activity(imageUri)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setMultiTouchEnabled(true)
+                .start(OfferActivity.this);
+    }
+
     public void cleanView() {
         editTextTitle.setText("");
         editTextDescription.setText("");
         id_offer = 0;
-        offer = new Offer();
+        encode = "";
+        name_image = "";
+        url_image = "";
+        name_before = "";
+        imageByte = null;
+        imageViewImage.setImageResource(android.R.drawable.ic_menu_crop);
     }
 
-    public Offer fillOffer(String title, String descrip, boolean isUpdate) {
-        offer.setTITLE(title);
-        offer.setOFFER(descrip);
-        offer.setID_SHOP_FOREIGN(Utils.getIdShop(this));
-        if (!isUpdate) {
-            offer.setDATE_INIT(Utils.getFechaInit());
-            offer.setDATE_END(Utils.getLastDateWeek());
-        } else {
-            offer.setID_OFFER_KEY(id_offer);
-            offer.setDATE_EDIT(Utils.getFechaInit());
+    public Offer fillOffer(String title, String descrip) {
+        pDialog.show();
+
+        if (imageByte != null) {
+            try {
+                encode = Base64.encodeToString(imageByte,
+                        Base64.DEFAULT);
+            } catch (Exception e) {
+                encode = "";
+            }
+            name_image = Utils.randomNumber() + Utils.getFechaOficial() + ".PNG";
+            url_image = Utils.URL_IMAGE_OFFER + name_image;
         }
-        return offer;
+
+        return new Offer(id_offer, Utils.getIdShop(this), title, descrip, url_image,
+                name_image, is_active, Utils.getFechaOficialSeparate(), encode, name_before);
     }
 
     @Override
@@ -130,7 +248,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
 
     @Override
     public void updateOffer(Offer offer) {
-        adapter.updateAdapter(offer);
+        adapter.updateAdapter(offer, position);
         menuAdd();
         if (pDialog.isShowing())
             pDialog.dismiss();
@@ -150,6 +268,14 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     }
 
     @Override
+    public void switchOffer(Offer offer) {
+        adapter.updateAdapter(offer, position);
+        if (pDialog.isShowing())
+            pDialog.hide();
+        Utils.showSnackBar(conteiner, getString(R.string.offer_update));
+    }
+
+    @Override
     public void error(String msg) {
         if (pDialog.isShowing())
             pDialog.dismiss();
@@ -163,19 +289,30 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         editTextTitle.setText(offer.getTITLE());
         editTextDescription.setText(offer.getOFFER());
         id_offer = offer.getID_OFFER_KEY();
-        this.offer = offer;
+        name_image = offer.getNAME_IMAGE();
+        name_before = name_image;
+        url_image = offer.getURL_IMAGE();
+        is_active = offer.getIS_ACTIVE();
+        Utils.setPicasso(this, url_image, android.R.drawable.ic_menu_crop, imageViewImage);
+        this.position = position;
         menuUpdate();
+    }
+
+    @Override
+    public void onClickSwitch(int position, Offer offer) {
+        pDialog.show();
+        this.position = position;
+        presenter.switchOffer(this, offer);
     }
 
     public void updateQuantity() {
         quantity_offer = this.offers.size();
     }
 
-    @Override
-    public void onLongClick(View view, int position, Offer offer) {
-        openContextMenu(view);
-        this.offer = offer;
-    }
+//    @Override
+//    public void onLongClick(View view, int position, Offer offer) {
+//        openContextMenu(view);
+//    }
 
     public void menuAdd() {
         menu.clear();
@@ -243,24 +380,29 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add) {
-            if (editTextTitle.getText().toString().isEmpty())
+            if (imageByte == null)
+                Utils.showSnackBar(conteiner, getString(R.string.error_image));
+            else if (editTextTitle.getText().toString().isEmpty())
                 Utils.showSnackBar(conteiner, getString(R.string.title_empty));
             else if (editTextDescription.getText().toString().isEmpty())
                 Utils.showSnackBar(conteiner, getString(R.string.description_empty));
             else {
                 pDialog.show();
+                is_active = 1;
                 presenter.saveOffer(this, fillOffer(Utils.removeAccents(editTextTitle.getText().toString()),
-                        Utils.removeAccents(editTextDescription.getText().toString()), false));
+                        Utils.removeAccents(editTextDescription.getText().toString())));
             }
         } else if (id == R.id.action_update) {
-            if (editTextTitle.getText().toString().isEmpty())
+            if (imageByte == null && url_image.isEmpty())
+                Utils.showSnackBar(conteiner, getString(R.string.error_image));
+            else if (editTextTitle.getText().toString().isEmpty())
                 Utils.showSnackBar(conteiner, getString(R.string.title_empty));
             else if (editTextDescription.getText().toString().isEmpty())
                 Utils.showSnackBar(conteiner, getString(R.string.description_empty));
             else {
                 pDialog.show();
                 presenter.updateOffer(this, fillOffer(Utils.removeAccents(editTextTitle.getText().toString()),
-                        Utils.removeAccents(editTextDescription.getText().toString()), true));
+                        Utils.removeAccents(editTextDescription.getText().toString())));
             }
         } else if (id == R.id.action_cancel) {
             cleanView();
@@ -279,9 +421,9 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_delete) {
-            pDialog.show();
-            this.offer.setDATE_EDIT(Utils.getFechaInit());
-            presenter.deleteOffer(this, this.offer, true);
+//            pDialog.show();
+//            this.offer.setDATE_EDIT(Utils.getFechaInit());
+//            presenter.deleteOffer(this, this.offer, true);
         }
         return true;
     }

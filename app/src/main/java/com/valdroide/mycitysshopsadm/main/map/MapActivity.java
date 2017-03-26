@@ -37,7 +37,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private boolean actualizar = false;
     private double longitudExtra = 0.00;
     private double latitudExtra = 0.00;
-    private String name = "", uriExtra = "", phone = "", email = "", address = "", description = "", longitud = "", latitud = "";
+    private String name = "", uriExtra = "", phone = "", whatsapp = "", email = "", web = "", face = "", insta = "",
+            twitter = "", snap = "", working = "", description = "", longitud = "", latitud = "", address = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +99,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             name = getIntent().getStringExtra("name");
             uriExtra = getIntent().getStringExtra("uri");
             phone = getIntent().getStringExtra("phone");
+            web = getIntent().getStringExtra("web");
             email = getIntent().getStringExtra("email");
             address = getIntent().getStringExtra("address");
+            whatsapp = getIntent().getStringExtra("whatsaap");
+            insta = getIntent().getStringExtra("instagram");
+            twitter = getIntent().getStringExtra("twitter");
+            snap = getIntent().getStringExtra("snapchat");
+            working = getIntent().getStringExtra("working");
             description = getIntent().getStringExtra("description");
             longitud = getIntent().getStringExtra("longitud");
             latitud = getIntent().getStringExtra("latitud");
@@ -138,6 +145,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         intent.putExtra("isMap", true);
         intent.putExtra("uri", uriExtra);
         intent.putExtra("phone", phone);
+        intent.putExtra("whatsaap", whatsapp);
+        intent.putExtra("web", web);
+        intent.putExtra("facebook", face);
+        intent.putExtra("instagram", insta);
+        intent.putExtra("twitter", twitter);
+        intent.putExtra("snapchat", snap);
+        intent.putExtra("working", working);
         intent.putExtra("email", email);
         intent.putExtra("address", address);
         intent.putExtra("description", description);

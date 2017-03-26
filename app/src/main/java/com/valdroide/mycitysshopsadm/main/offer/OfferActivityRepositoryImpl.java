@@ -38,27 +38,28 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
     public void getOffer(Context context) {
         try {
             offers = SQLite.select().from(Offer.class).queryList();
-            if (offers.size() > 0) {
-                String dateEnd = offers.get(0).getDATE_END();
-                if (dateEnd != null) {
-                    if (!dateEnd.isEmpty()) {
-                        if (validateExpirateOffer(dateEnd)) {
-                            for (Offer offer : offers) {
-                                deleteOffer(context, offer, false);
-                            }
-                            post(OfferActivityEvent.GETOFFER, new ArrayList<Offer>());
-                        } else {
+            if(offers != null) {
+//            if (offers.size() > 0) {
+//                String dateEnd = offers.get(0).getDATE_END();
+//                if (dateEnd != null) {
+//                    if (!dateEnd.isEmpty()) {
+//                        if (validateExpirateOffer(dateEnd)) {
+//                            for (Offer offer : offers) {
+//                                deleteOffer(context, offer, false);
+//                            }
+//                            post(OfferActivityEvent.GETOFFER, new ArrayList<Offer>());
+//                        } else {
                             post(OfferActivityEvent.GETOFFER, offers);
-                        }
+               //         }
                     } else {
-                        post(OfferActivityEvent.ERROR, Utils.ERROR_OFFER_VALIDATE);
+                        post(OfferActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
                     }
-                } else {
-                    post(OfferActivityEvent.ERROR, Utils.ERROR_OFFER_VALIDATE);
-                }
-            } else {
-                post(OfferActivityEvent.GETOFFER, offers);
-            }
+//                } else {
+//                    post(OfferActivityEvent.ERROR, Utils.ERROR_OFFER_VALIDATE);
+//                }
+//            } else {
+//                post(OfferActivityEvent.GETOFFER, offers);
+//            }
         } catch (Exception e) {
             post(AccountActivityEvent.ERROR, e.getMessage());
         }
@@ -68,10 +69,9 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
     public void saveOffer(Context context, final Offer offer) {
         if (Utils.isNetworkAvailable(context)) {
             try {
-                final String date_update = Utils.getFechaOficial();
-                Call<ResultPlace> offerService = service.insertOffer(offer.getID_SHOP_FOREIGN(),
+                Call<ResultPlace> offerService = service.insertOffer(offer.getID_SHOP_FOREIGN(), Utils.getIdCity(context),
                         offer.getTITLE(), offer.getOFFER(),
-                        offer.getDATE_INIT(), offer.getDATE_END(), date_update);
+                        offer.getURL_IMAGE(), offer.getNAME_IMAGE(), offer.getDATE_UNIQUE(), offer.getEncode());
                 offerService.enqueue(new Callback<ResultPlace>() {
                     @Override
                     public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
@@ -83,7 +83,7 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
                                     if (id != 0) {
                                         offer.setID_OFFER_KEY(id);
                                         offer.save();
-                                        getDateShop(date_update);
+                                        getDateShop(offer.getDATE_UNIQUE());
                                         dateShop.update();
                                         post(OfferActivityEvent.SAVEOFFER, offer);
                                     } else {
@@ -117,10 +117,10 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
     public void updateOffer(Context context, final Offer offer) {
         if (Utils.isNetworkAvailable(context)) {
             try {
-                final String date_update = Utils.getFechaOficial();
                 Call<ResultPlace> offerService = service.updateOffer(offer.getID_OFFER_KEY(), offer.getID_SHOP_FOREIGN(),
-                        offer.getTITLE(), offer.getOFFER(),
-                        offer.getDATE_EDIT(), date_update);
+                        Utils.getIdCity(context), offer.getTITLE(), offer.getOFFER(), offer.getURL_IMAGE(),
+                        offer.getNAME_IMAGE(), offer.getIS_ACTIVE(), offer.getDATE_UNIQUE(), offer.getEncode(),
+                        offer.getNAME_BEFORE());
                 offerService.enqueue(new Callback<ResultPlace>() {
                     @Override
                     public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
@@ -128,9 +128,46 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
                             responseWS = response.body().getResponseWS();
                             if (responseWS.getSuccess().equals("0")) {
                                 offer.update();
-                                getDateShop(date_update);
+                                getDateShop(offer.getDATE_UNIQUE());
                                 dateShop.update();
                                 post(OfferActivityEvent.UPDATEOFFER, offer);
+                            } else {
+                                post(OfferActivityEvent.ERROR, responseWS.getMessage());
+                            }
+                        } else {
+                            post(OfferActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResultPlace> call, Throwable t) {
+                        post(OfferActivityEvent.ERROR, t.getMessage());
+                    }
+                });
+            } catch (Exception e) {
+                post(OfferActivityEvent.ERROR, e.getMessage());
+            }
+        } else {
+            post(OfferActivityEvent.ERROR, Utils.ERROR_INTERNET);
+        }
+    }
+
+    @Override
+    public void switchOffer(Context context, final Offer offer) {
+        if (Utils.isNetworkAvailable(context)) {
+            try {
+                Call<ResultPlace> offerService = service.switchOffer(offer.getID_OFFER_KEY(), offer.getID_SHOP_FOREIGN(),
+                        Utils.getIdCity(context), offer.getIS_ACTIVE(), offer.getDATE_UNIQUE());
+                offerService.enqueue(new Callback<ResultPlace>() {
+                    @Override
+                    public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
+                        if (response.isSuccessful()) {
+                            responseWS = response.body().getResponseWS();
+                            if (responseWS.getSuccess().equals("0")) {
+                                offer.update();
+                                getDateShop(offer.getDATE_UNIQUE());
+                                dateShop.update();
+                                post(OfferActivityEvent.SWITCHOFFER, offer);
                             } else {
                                 post(OfferActivityEvent.ERROR, responseWS.getMessage());
                             }
@@ -156,33 +193,33 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
     public void deleteOffer(Context context, final Offer offer, final boolean isDelete) {
         if (Utils.isNetworkAvailable(context)) {
             try {
-                final String date_update = Utils.getFechaOficial();
-                Call<ResultPlace> offerService = service.deleteOffer(offer.getID_OFFER_KEY(), offer.getID_SHOP_FOREIGN(),
-                        offer.getDATE_EDIT(), date_update);
-                offerService.enqueue(new Callback<ResultPlace>() {
-                    @Override
-                    public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
-                        if (response.isSuccessful()) {
-                            responseWS = response.body().getResponseWS();
-                            if (responseWS.getSuccess().equals("0")) {
-                                offer.delete();
-                                getDateShop(date_update);
-                                dateShop.update();
-                                if (isDelete)
-                                    post(OfferActivityEvent.DELETEOFFER, offer);
-                            } else {
-                                post(OfferActivityEvent.ERROR, responseWS.getMessage());
-                            }
-                        } else {
-                            post(OfferActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResultPlace> call, Throwable t) {
-                        post(OfferActivityEvent.ERROR, t.getMessage());
-                    }
-                });
+//                final String date_update = Utils.getFechaOficial();
+//                Call<ResultPlace> offerService = service.deleteOffer(offer.getID_OFFER_KEY(), offer.getID_SHOP_FOREIGN(),
+//                        offer.getDATE_EDIT(), date_update);
+//                offerService.enqueue(new Callback<ResultPlace>() {
+//                    @Override
+//                    public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
+//                        if (response.isSuccessful()) {
+//                            responseWS = response.body().getResponseWS();
+//                            if (responseWS.getSuccess().equals("0")) {
+//                                offer.delete();
+//                                getDateShop(date_update);
+//                                dateShop.update();
+//                                if (isDelete)
+//                                    post(OfferActivityEvent.DELETEOFFER, offer);
+//                            } else {
+//                                post(OfferActivityEvent.ERROR, responseWS.getMessage());
+//                            }
+//                        } else {
+//                            post(OfferActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<ResultPlace> call, Throwable t) {
+//                        post(OfferActivityEvent.ERROR, t.getMessage());
+//                    }
+//                });
             } catch (Exception e) {
                 post(OfferActivityEvent.ERROR, e.getMessage());
             }
@@ -198,7 +235,7 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
     public void getDateShop(String date_edit) {
         dateShop = SQLite.select().from(DateShop.class).querySingle();
         dateShop.setOFFER_DATE(date_edit);
-        dateShop.setDATE_USER_DATE(date_edit);
+        dateShop.setDATE_SHOP_DATE(date_edit);
     }
 
     public void post(int type) {

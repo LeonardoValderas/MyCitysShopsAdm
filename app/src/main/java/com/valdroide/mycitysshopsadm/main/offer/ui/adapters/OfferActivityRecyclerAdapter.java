@@ -1,14 +1,19 @@
 package com.valdroide.mycitysshopsadm.main.offer.ui.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.entities.shop.Offer;
+import com.valdroide.mycitysshopsadm.utils.Utils;
 
 import java.util.List;
 
@@ -20,10 +25,12 @@ public class OfferActivityRecyclerAdapter extends RecyclerView.Adapter<OfferActi
 
     private List<Offer> offersList;
     private OnItemClickListener onItemClickListener;
+    private Context context;
 
-    public OfferActivityRecyclerAdapter(List<Offer> offersList, OnItemClickListener onItemClickListener) {
+    public OfferActivityRecyclerAdapter(List<Offer> offersList, OnItemClickListener onItemClickListener, Context context) {
         this.offersList = offersList;
         this.onItemClickListener = onItemClickListener;
+        this.context = context;
     }
 
     @Override
@@ -36,10 +43,12 @@ public class OfferActivityRecyclerAdapter extends RecyclerView.Adapter<OfferActi
     public void onBindViewHolder(ViewHolder holder, int position) {
         Offer offer = this.offersList.get(position);
         if (offer != null) {
+            Utils.setPicasso(context, offer.getURL_IMAGE(), android.R.drawable.ic_menu_crop, holder.imageViewImage);
             holder.textViewTitle.setText(offer.getTITLE());
             holder.textViewDescription.setText(offer.getOFFER());
-            //    holder.textViewDateInit.setText(offer.getDATE_INIT());
-            holder.textViewDateEnd.setText(offer.getDATE_END());
+            holder.switchOffer.setChecked(offer.getIS_ACTIVE() == 0 ? false : true);
+            if (offer.getIS_ACTIVE() != 1)
+                holder.switchOffer.setText(R.string.offer_unable);
             holder.setOnItemClickListener(onItemClickListener, position, offer);
         }
     }
@@ -50,8 +59,8 @@ public class OfferActivityRecyclerAdapter extends RecyclerView.Adapter<OfferActi
     }
 
     public void removeOffer(Offer offer) {
-        this.offersList.remove(offer);
-       notifyDataSetChanged();
+        offersList.remove(offer);
+        notifyDataSetChanged();
     }
 
     public void setOffers(List<Offer> offers) {
@@ -60,19 +69,13 @@ public class OfferActivityRecyclerAdapter extends RecyclerView.Adapter<OfferActi
     }
 
     public void setOffer(Offer offer) {
-        this.offersList.add(offer);
+        offersList.add(0, offer);
         notifyDataSetChanged();
     }
 
-    public void updateAdapter(Offer offer) {
-        for (int i = 0; i < this.offersList.size(); i++) {
-            if (this.offersList.get(i).getID_OFFER_KEY() == offer.getID_OFFER_KEY()) {
-                this.offersList.get(i).setDATE_EDIT(offer.getDATE_EDIT());
-                this.offersList.get(i).setTITLE(offer.getTITLE());
-                this.offersList.get(i).setOFFER(offer.getOFFER());
-                break;
-            }
-        }
+    public void updateAdapter(Offer offer, int position) {
+        offersList.remove(position);
+        offersList.add(position, offer);
         notifyDataSetChanged();
     }
 
@@ -81,16 +84,12 @@ public class OfferActivityRecyclerAdapter extends RecyclerView.Adapter<OfferActi
         TextView textViewTitle;
         @Bind(R.id.textViewDescription)
         TextView textViewDescription;
-        @Bind(R.id.textViewDateInit)
-        TextView textViewDateInit;
-        @Bind(R.id.textViewDateEnd)
-        TextView textViewDateEnd;
         @Bind(R.id.linearConteiner)
         LinearLayout linearConteiner;
-//        @Bind(R.id.imageButtonClose)
-//        ImageButton imageButtonClose;
-//        @Bind(R.id.linearCloseButton)
-//        LinearLayout linearCloseButton;
+        @Bind(R.id.imageViewImage)
+        ImageView imageViewImage;
+        @Bind(R.id.switchOffer)
+        Switch switchOffer;
 
         public ViewHolder(View view) {
             super(view);
@@ -105,13 +104,21 @@ public class OfferActivityRecyclerAdapter extends RecyclerView.Adapter<OfferActi
                 }
             });
 
-            linearConteiner.setOnLongClickListener(new View.OnLongClickListener() {
+            switchOffer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public boolean onLongClick(View v) {
-                    listener.onLongClick(v, position, offer);
-                    return true;
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    int isactive = isChecked ? 1 : 0;
+                    offer.setIS_ACTIVE(isactive);
+                    listener.onClickSwitch(position, offer);
                 }
             });
+//            linearConteiner.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+//                    listener.onLongClick(v, position, offer);
+//                    return true;
+//                }
+//            });
         }
     }
 }

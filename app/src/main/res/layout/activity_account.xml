@@ -49,7 +49,27 @@
                     android:id="@+id/editTextPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_phone"
+                    android:drawablePadding="5dp"
                     android:hint="Ingrese Número de Contacto.(Opcional)"
+                    android:inputType="phone"
+                    android:maxLength="20" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextWhatsaapHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextPhoneHint"
+                android:layout_marginTop="5dp">
+
+                <EditText
+                    android:id="@+id/editTextWhatsaap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/ic_whatsapp"
+                    android:hint="Ingrese Número de Whatsaap.(Opcional)"
                     android:inputType="phone"
                     android:maxLength="20" />
             </android.support.design.widget.TextInputLayout>
@@ -58,45 +78,152 @@
                 android:id="@+id/editTextEmailHint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextPhoneHint">
+                android:layout_below="@+id/editTextWhatsaapHint">
 
                 <EditText
                     android:id="@+id/editTextEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/ic_mail"
                     android:hint="Ingrese Email de Contacto.(Opcional)"
                     android:inputType="textEmailAddress"
                     android:maxLength="30" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/editTextAddressHint"
+                android:id="@+id/editTextWebHint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextEmailHint">
 
                 <EditText
-                    android:id="@+id/editTextAddress"
+                    android:id="@+id/editTextWeb"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ingrese la Dirección del Comercio."
-                    android:maxLength="30" />
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/ic_internet"
+                    android:hint="Ingrese su Web.(Opcional)"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="200" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextFaceHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextWebHint">
+
+                <EditText
+                    android:id="@+id/editTextFace"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/ic_facebook"
+                    android:hint="Ingrese su Facebook.(Opcional)"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="200" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextInstaHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextFaceHint">
+
+                <EditText
+                    android:id="@+id/editTextInsta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/ic_instagram"
+                    android:hint="Ingrese su Instagram.(Opcional)"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="200" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextTwitterHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextInstaHint">
+
+                <EditText
+                    android:id="@+id/editTextTwitter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/ic_twitter"
+                    android:hint="Ingrese su Twitter.(Opcional)"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="200" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextSnapHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextTwitterHint">
+
+                <EditText
+                    android:id="@+id/editTextSnap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/ic_snapchat"
+                    android:hint="Ingrese su Snapchat.(Opcional)"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="200" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/editTextDescriptionHint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextAddressHint">
+                android:layout_below="@+id/editTextSnapHint">
 
                 <EditText
                     android:id="@+id/editTextDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/ic_description"
                     android:hint="Ingrese una Descripción del Comercio."
-                    android:lines="3"
                     android:maxLength="200" />
             </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextAddressHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextDescriptionHint">
+
+                <EditText
+                    android:id="@+id/editTextAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/ic_address"
+                    android:hint="Ingrese la Dirección del Comercio."
+                    android:maxLength="40" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextWorkingHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextAddressHint">
+
+                <EditText
+                    android:id="@+id/editTextWorking"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/ic_working_hours"
+                    android:hint="Ingrese su horario de atención."
+                    android:maxLength="100" />
+            </android.support.design.widget.TextInputLayout>
+
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

@@ -96,14 +96,17 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
 
     @Override
     public void updateAccount(Context context, final Account account) {
-        if (isUpdate(account)) {
+    //    if (isUpdate(account)) {
             if (Utils.isNetworkAvailable(context)) {
                 try {
-                    final String date_edit = Utils.getFechaOficial();
-                    Call<ResultPlace> accountService = service.updateAccount(Utils.getIdShop(context), account.getID_ACCOUNT_KEY(), account.getEncode(),
-                            account.getURL_LOGO(), account.getNAME_LOGO(), account.getNAME_BEFORE(),
-                            account.getDESCRIPTION(), account.getPHONE(), account.getEMAIL(), account.getLATITUD(),
-                            account.getLONGITUD(), account.getADDRESS(), date_edit);
+                //    final String date_edit = Utils.getFechaOficialSeparate();
+                    Call<ResultPlace> accountService = service.updateAccount(Utils.getIdShop(context), Utils.getIdCity(context),
+                            account.getID_ACCOUNT_KEY(), account.getEncode(), account.getURL_LOGO(),
+                            account.getNAME_LOGO(), account.getNAME_BEFORE(), account.getDESCRIPTION(),
+                            account.getWORKING_HOURS(), account.getPHONE(), account.getEMAIL(),
+                            account.getWEB(), account.getWHATSAAP(), account.getFACEBOOK(), account.getINSTAGRAM(),
+                            account.getTWITTER(), account.getSNAPCHAT(), account.getLATITUD(), account.getLONGITUD(),
+                            account.getADDRESS(), account.getDATE_UNIQUE());
                     accountService.enqueue(new Callback<ResultPlace>() {
                         @Override
                         public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
@@ -111,7 +114,7 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
                                 responseWS = response.body().getResponseWS();
                                 if (responseWS.getSuccess().equals("0")) {
                                     account.update();
-                                    getDateShop(date_edit);
+                                    getDateShop(account.getDATE_UNIQUE());
                                     dateShop.update();
                                     post(AccountActivityEvent.UPDATEACCOUNT);
                                 } else {
@@ -133,9 +136,11 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
             } else {
                 post(AccountActivityEvent.ERROR, Utils.ERROR_INTERNET);
             }
-        } else {
-            post(AccountActivityEvent.UPDATEACCOUNT);
-        }
+      //  }
+
+//        else {
+//            post(AccountActivityEvent.UPDATEACCOUNT);
+//        }
     }
 
     public boolean isUpdate(Account accountValidate) {
@@ -162,7 +167,7 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
     public void getDateShop(String date_edit) {
         dateShop = SQLite.select().from(DateShop.class).querySingle();
         dateShop.setACCOUNT_DATE(date_edit);
-        dateShop.setDATE_USER_DATE(date_edit);
+        dateShop.setDATE_SHOP_DATE(date_edit);
     }
 
     public void post(int type, Account account) {

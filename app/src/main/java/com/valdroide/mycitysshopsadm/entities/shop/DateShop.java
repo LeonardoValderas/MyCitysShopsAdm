@@ -14,7 +14,7 @@ public class DateShop extends BaseModel {
     @Column
     @PrimaryKey
     @SerializedName("id")
-    public int ID_DATE_USER_KEY;
+    public int ID_DATE_SHOP_KEY;
 
     @Column
     @SerializedName("id_shop")
@@ -32,18 +32,18 @@ public class DateShop extends BaseModel {
     public String NOTIFICATION_DATE;
 
     @Column
-    @SerializedName("date_user_date")
-    public String DATE_USER_DATE;
+    @SerializedName("date_shop_date")
+    public String DATE_SHOP_DATE;
 
     public DateShop() {
     }
 
-    public int getID_DATE_USER_KEY() {
-        return ID_DATE_USER_KEY;
+    public int getID_DATE_SHOP_KEY() {
+        return ID_DATE_SHOP_KEY;
     }
 
-    public void setID_DATE_USER_KEY(int ID_DATE_USER_KEY) {
-        this.ID_DATE_USER_KEY = ID_DATE_USER_KEY;
+    public void setID_DATE_SHOP_KEY(int ID_DATE_SHOP_KEY) {
+        this.ID_DATE_SHOP_KEY = ID_DATE_SHOP_KEY;
     }
 
     public int getID_SHOP_FOREIGN() {
@@ -70,12 +70,12 @@ public class DateShop extends BaseModel {
         this.OFFER_DATE = OFFER_DATE;
     }
 
-    public String getDATE_USER_DATE() {
-        return DATE_USER_DATE;
+    public String getDATE_SHOP_DATE() {
+        return DATE_SHOP_DATE;
     }
 
-    public void setDATE_USER_DATE(String DATE_USER_DATE) {
-        this.DATE_USER_DATE = DATE_USER_DATE;
+    public void setDATE_SHOP_DATE(String DATE_SHOP_DATE) {
+        this.DATE_SHOP_DATE = DATE_SHOP_DATE;
     }
 
     public String getNOTIFICATION_DATE() {

@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
@@ -18,7 +19,6 @@ import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivity;
 import com.valdroide.mycitysshopsadm.main.login.ui.LoginActivity;
 import com.valdroide.mycitysshopsadm.main.navigation.NavigationActivityPresenter;
 import com.valdroide.mycitysshopsadm.main.notification.ui.NotificationActivity;
-import com.valdroide.mycitysshopsadm.main.notification.ui.NotificationActivityView;
 import com.valdroide.mycitysshopsadm.main.offer.ui.OfferActivity;
 import com.valdroide.mycitysshopsadm.utils.Utils;
 
@@ -41,6 +41,8 @@ public class NavigationActivity extends AppCompatActivity
     DrawerLayout drawer;
     @Inject
     NavigationActivityPresenter presenter;
+    @Bind(R.id.textViewFollow)
+    TextView textViewFollow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class NavigationActivity extends AppCompatActivity
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+        textViewFollow.setText(String.valueOf(Utils.getIdFollow(this)));
     }
 
     private void setupInjection() {
