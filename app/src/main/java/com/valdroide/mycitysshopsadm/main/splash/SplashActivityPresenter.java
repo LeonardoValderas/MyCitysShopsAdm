@@ -9,5 +9,6 @@ public interface SplashActivityPresenter {
     void onDestroy();
     void validateDatePlace(Context context);
     void validateDateShop(Context context);
+    void sendEmail(Context context, String comment);
     void onEventMainThread(SplashActivityEvent event);
 }

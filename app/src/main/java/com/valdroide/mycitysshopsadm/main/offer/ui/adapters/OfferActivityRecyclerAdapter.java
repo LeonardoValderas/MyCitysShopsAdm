@@ -58,13 +58,8 @@ public class OfferActivityRecyclerAdapter extends RecyclerView.Adapter<OfferActi
         return this.offersList.size();
     }
 
-    public void removeOffer(Offer offer) {
-        offersList.remove(offer);
-        notifyDataSetChanged();
-    }
-
     public void setOffers(List<Offer> offers) {
-        this.offersList = offers;
+        offersList = offers;
         notifyDataSetChanged();
     }
 
@@ -112,13 +107,6 @@ public class OfferActivityRecyclerAdapter extends RecyclerView.Adapter<OfferActi
                     listener.onClickSwitch(position, offer);
                 }
             });
-//            linearConteiner.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    listener.onLongClick(v, position, offer);
-//                    return true;
-//                }
-//            });
         }
     }
 }

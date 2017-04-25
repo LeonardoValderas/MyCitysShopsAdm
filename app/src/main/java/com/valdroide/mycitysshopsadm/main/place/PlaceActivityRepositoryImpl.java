@@ -7,7 +7,7 @@ import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
-import com.valdroide.mycitysshopsadm.api.APIService;
+import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.entities.shop.MyPlace;
 import com.valdroide.mycitysshopsadm.entities.place.City;
 import com.valdroide.mycitysshopsadm.entities.place.Country;
@@ -23,64 +23,82 @@ public class PlaceActivityRepositoryImpl implements PlaceActivityRepository {
     private List<Country> countries;
     private List<State> states;
     private List<City> cities;
-    private APIService service;
 
-    public PlaceActivityRepositoryImpl(EventBus eventBus, APIService service) {
+    public PlaceActivityRepositoryImpl(EventBus eventBus) {
         this.eventBus = eventBus;
-        this.service = service;
     }
 
     @Override
-    public void getCountries() {
+    public void getCountries(Context context) {
         try {
+            Utils.writelogFile(context, "Metodo getCountries y Se trae countries(Place, Repository)");
             countries = SQLite.select().from(Country.class).where().orderBy(new NameAlias("COUNTRY"), true).queryList();
-            if (countries != null)
+            if (countries != null) {
+                Utils.writelogFile(context, "countries != null y post GETCOUNTRIES (Place, Repository)");
                 post(PlaceActivityEvent.GETCOUNTRIES, countries);
-            else
-                post(PlaceActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
+            } else {
+                Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Place, Repository)");
+                post(PlaceActivityEvent.ERROR, context.getString(R.string.error_data_base));
+            }
         } catch (Exception e) {
+            Utils.writelogFile(context, " catch error " + e.getMessage() + "(Splash, Repository)");
             post(PlaceActivityEvent.ERROR, e.getMessage());
         }
     }
 
     @Override
-    public void getStateForCountry(int id_country) {
+    public void getStateForCountry(Context context, int id_country) {
+        Utils.writelogFile(context, "Metodo getStateForCountry y Se arma  conditionGroup, id_country = " + id_country + "(Place, Repository)");
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(new NameAlias("ID_COUNTRY_FOREIGN")).is(id_country));
         try {
+            Utils.writelogFile(context, "traer states(Place, Repository)");
             states = SQLite.select().from(State.class).where(conditionGroup).orderBy(new NameAlias("STATE"), true).queryList();
-
-            if (states != null)
+            if (states != null) {
+                Utils.writelogFile(context, "states != null y post GETSTATES(Place, Repository)");
                 post(PlaceActivityEvent.GETSTATES, states, true);
-            else
-                post(PlaceActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
+            } else {
+                Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Place, Repository)");
+                post(PlaceActivityEvent.ERROR, context.getString(R.string.error_data_base));
+            }
         } catch (Exception e) {
+            Utils.writelogFile(context, " catch error " + e.getMessage() + "(Splash, Repository)");
             post(PlaceActivityEvent.ERROR, e.getMessage());
         }
     }
 
     @Override
-    public void getCitiesForState(int id_state) {
+    public void getCitiesForState(Context context, int id_state) {
+        Utils.writelogFile(context, "Metodo getCitiesForState y Se arma conditionGroup, id_state = " + id_state + "(Place, Repository)");
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(new NameAlias("ID_STATE_FOREIGN")).is(id_state));
         try {
+            Utils.writelogFile(context, "traer cities(Place, Repository)");
             cities = SQLite.select().from(City.class).where(conditionGroup).orderBy(new NameAlias("CITY"), true).queryList();
-            if (cities != null)
+            if (cities != null) {
+                Utils.writelogFile(context, "cities != null y post GETCITIES(Place, Repository)");
                 post(PlaceActivityEvent.GETCITIES, 0, cities);
-            else
-                post(PlaceActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
+            } else {
+                Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Place, Repository)");
+                post(PlaceActivityEvent.ERROR, context.getString(R.string.error_data_base));
+            }
         } catch (Exception e) {
+            Utils.writelogFile(context, " catch error " + e.getMessage() + "(Splash, Repository)");
             post(PlaceActivityEvent.ERROR, e.getMessage());
         }
     }
 
     @Override
     public void savePlace(Context context, final MyPlace place) {
+        Utils.writelogFile(context, "Metodo savePlace y save place(Place, Repository)");
         try {
             place.save();
+            Utils.writelogFile(context, "save place ok y setIdCity shared(Place, Repository)");
             Utils.setIdCity(context, place.getID_CITY_FOREIGN());
+            Utils.writelogFile(context, "setIdCity shared ok y post SAVE(Place, Repository)");
             post(PlaceActivityEvent.SAVE, place);
         } catch (Exception e) {
+            Utils.writelogFile(context, " catch error " + e.getMessage() + "(Splash, Repository)");
             post(PlaceActivityEvent.ERROR, e.getMessage());
         }
     }

@@ -2,10 +2,6 @@ package com.valdroide.mycitysshopsadm.main.account.ui;
 
 import com.valdroide.mycitysshopsadm.entities.shop.Account;
 
-/**
- * Created by LEO on 20/2/2017.
- */
-
 public interface AccountActivityView {
     void getPhoto();
     void error(String mgs);

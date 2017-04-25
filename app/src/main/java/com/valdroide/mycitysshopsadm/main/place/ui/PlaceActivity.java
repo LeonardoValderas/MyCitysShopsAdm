@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.entities.shop.MyPlace;
@@ -73,15 +72,24 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place);
+        Utils.writelogFile(this, "Se inicia ButterKnife(Place)");
         ButterKnife.bind(this);
+        Utils.writelogFile(this, "Se inicia Injection(Place)");
         setupInjection();
+        Utils.writelogFile(this, "Se inicia presenter Oncreate(Place)");
         presenter.onCreate();
+        Utils.writelogFile(this, "Se inicia Dialog(Place)");
         initDialog();
+        Utils.writelogFile(this, "Se show Dialog(Place)");
         pDialog.show();
+        Utils.writelogFile(this, "Se inicia AdapterSpinner(Place)");
         initAdapterSpinner();
+        Utils.writelogFile(this, "Se inicia setOnItemSelectedCountry(Place)");
         setOnItemSelectedCountry();
+        Utils.writelogFile(this, "Se inicia setOnItemSelectedState(Place)");
         setOnItemSelectedState();
-        presenter.getCountries();
+        Utils.writelogFile(this, "Se presenter.getCountries()(Place)");
+        presenter.getCountries(this);
     }
 
     private void setupInjection() {
@@ -91,109 +99,184 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
 
     public void initDialog() {
         pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Procesando...");
+        pDialog.setMessage(getString(R.string.processing));
         pDialog.setCancelable(false);
     }
 
     public void initAdapterSpinner() {
-        spinnerCountry.setAdapter(adapterSpinnerCountry);
-        spinnerState.setAdapter(adapterSpinnerState);
-        spinnerCity.setAdapter(adapterSpinnerCity);
+        try {
+            spinnerCountry.setAdapter(adapterSpinnerCountry);
+            spinnerState.setAdapter(adapterSpinnerState);
+            spinnerCity.setAdapter(adapterSpinnerCity);
+        } catch (Exception e) {
+            Utils.writelogFile(this, "initAdapterSpinner error: " + e.getMessage() + "(Place)");
+            setError(e.getMessage());
+        }
     }
 
     public void setOnItemSelectedCountry() {
-        pDialog.show();
-        spinnerCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                id_country = countries.get(position).getID_COUNTRY_KEY();
-                presenter.getStateForCountry(id_country);
-            }
+        try {
+            spinnerCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    id_country = countries.get(position).getID_COUNTRY_KEY();
+                    presenter.getStateForCountry(PlaceActivity.this, id_country);
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+        } catch (Exception e) {
+            Utils.writelogFile(this, "setOnItemSelectedCountry error: " + e.getMessage() + "(Place)");
+            setError(e.getMessage());
+        }
     }
 
     public void setOnItemSelectedState() {
-        pDialog.show();
-        spinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                id_state = states.get(position).getID_STATE_KEY();
-                presenter.getCitiesForState(id_state);
-            }
+        try {
+            spinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    id_state = states.get(position).getID_STATE_KEY();
+                    presenter.getCitiesForState(PlaceActivity.this, id_state);
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+        } catch (Exception e) {
+            Utils.writelogFile(this, "setOnItemSelectedState error: " + e.getMessage() + "(Place)");
+            setError(e.getMessage());
+        }
     }
 
     @Override
     public void setCountry(List<Country> countries) {
+        Utils.writelogFile(this, "Metodo setCountry se obtiene " + countries.size() + " Countries(Place)");
         this.countries = countries;
-        adapterSpinnerCountry.clear();
-        adapterSpinnerCountry.addAll(countries);
-        adapterSpinnerCountry.notifyDataSetChanged();
+        Utils.writelogFile(this, "clear, addall, and notify adapterCountry(Place)");
+        try {
+            adapterSpinnerCountry.clear();
+            adapterSpinnerCountry.addAll(countries);
+            adapterSpinnerCountry.notifyDataSetChanged();
+        } catch (Exception e) {
+            Utils.writelogFile(this, "setCountry error: " + e.getMessage() + "(Place)");
+            setError(e.getMessage());
+        }
+        Utils.writelogFile(this, "dialog dismiss(Place)");
         if (pDialog.isShowing())
-            pDialog.hide();
+            pDialog.dismiss();
     }
 
     @Override
     public void setState(List<State> states) {
+        Utils.writelogFile(this, "Metodo setState se obtiene " + states.size() + " States(Place)");
         this.states = states;
-        adapterSpinnerState.clear();
-        adapterSpinnerState.addAll(states);
-        adapterSpinnerState.notifyDataSetChanged();
+        Utils.writelogFile(this, "clear, addall, and notify adapterState(Place)");
+        try {
+            adapterSpinnerState.clear();
+            adapterSpinnerState.addAll(states);
+            adapterSpinnerState.notifyDataSetChanged();
+            adapterSpinnerState.setStates(states);
+        } catch (Exception e) {
+            Utils.writelogFile(this, "setState error: " + e.getMessage() + "(Place)");
+            setError(e.getMessage());
+        }
+        Utils.writelogFile(this, "id_state get(0) de la lista(Place)");
+        id_state = states.get(0).getID_STATE_KEY();
+        Utils.writelogFile(this, " presenter.getCitiesForState(id_state)(Place)");
+        presenter.getCitiesForState(PlaceActivity.this, id_state);
+        Utils.writelogFile(this, "dialog dismiss(Place)");
         if (pDialog.isShowing())
-            pDialog.hide();
+            pDialog.dismiss();
     }
 
     @Override
     public void setCity(List<City> cities) {
+        Utils.writelogFile(this, "Metodo setCity se obtiene " + cities.size() + " cities(Place)");
         this.cities = cities;
-        adapterSpinnerCity.clear();
-        adapterSpinnerCity.addAll(cities);
-        adapterSpinnerCity.notifyDataSetChanged();
+        Utils.writelogFile(this, "clear, addall, and notify adapterCity(Place)");
+        try {
+            adapterSpinnerCity.clear();
+            adapterSpinnerCity.addAll(cities);
+            adapterSpinnerCity.notifyDataSetChanged();
+        } catch (Exception e) {
+            Utils.writelogFile(this, "setCity error: " + e.getMessage() + "(Place)");
+            setError(e.getMessage());
+        }
+        Utils.writelogFile(this, "dialog dismiss(Place)");
         if (pDialog.isShowing())
-            pDialog.hide();
+            pDialog.dismiss();
     }
 
     @Override
     public void setError(String mgs) {
+        Utils.writelogFile(this, "Error, dialog dismiss: " + mgs + "(Place)");
         if (pDialog.isShowing())
-            pDialog.hide();
+            pDialog.dismiss();
         Utils.showSnackBar(conteiner, mgs);
     }
 
     @OnClick(R.id.buttonInto)
     @Override
     public void savePlace() {
+        Utils.writelogFile(this, "Metodo savePlace on click buttonInto(Place)");
         if (spinnerCountry.getSelectedItem() == null && spinnerState.getSelectedItem() == null &&
-                spinnerCity.getSelectedItem() == null)
+                spinnerCity.getSelectedItem() == null) {
+            Utils.writelogFile(this, "Spinner null(Place)");
             Utils.showSnackBar(conteiner, getString(R.string.error_fill_place));
-        else {
+        } else {
+            Utils.writelogFile(this, "dialog show(Place)");
             pDialog.show();
-            country = (Country) spinnerCountry.getSelectedItem();
-            state = (State) spinnerState.getSelectedItem();
-            city = (City) spinnerCity.getSelectedItem();
-            MyPlace myPlace = new MyPlace();
-            myPlace.setID_PLACE_KEY(1);
-            myPlace.setID_COUNTRY_FOREIGN(country.getID_COUNTRY_KEY());
-            myPlace.setID_STATE_FOREIGN(state.getID_STATE_KEY());
-            myPlace.setID_CITY_FOREIGN(city.getID_CITY_KEY());
-
+            Utils.writelogFile(this, "cast country spinner(Place)");
+            MyPlace myPlace = null;
+            try {
+                country = (Country) spinnerCountry.getSelectedItem();
+                state = (State) spinnerState.getSelectedItem();
+                city = (City) spinnerCity.getSelectedItem();
+                Utils.writelogFile(this, "create and fill MyPlace object(Place)");
+                myPlace = new MyPlace();
+                myPlace.setID_PLACE_KEY(1);
+                myPlace.setID_COUNTRY_FOREIGN(country.getID_COUNTRY_KEY());
+                myPlace.setID_STATE_FOREIGN(state.getID_STATE_KEY());
+                myPlace.setID_CITY_FOREIGN(city.getID_CITY_KEY());
+            } catch (Exception e) {
+                Utils.writelogFile(this, "setCity error: " + e.getMessage() + "(Place)");
+                setError(e.getMessage());
+            }
+            Utils.writelogFile(this, "call presenter.savePlace(this, myPlace)(Place)");
             presenter.savePlace(this, myPlace);
         }
     }
 
     @Override
     public void saveSuccess(MyPlace place) {
-        Utils.setIdCity(this, place.getID_CITY_FOREIGN());
-        if (pDialog.isShowing())
-            pDialog.hide();
-        startActivity(new Intent(this, LoginActivity.class));
+        Utils.writelogFile(this, "Metodo saveSuccess(Place)");
+        try {
+            if (place != null) {
+                Utils.writelogFile(this, "place != null y setIdCity shared(Place)");
+                Utils.setIdCity(this, place.getID_CITY_FOREIGN());
+                Utils.writelogFile(this, "dialog dismiss(Place)");
+                if (pDialog.isShowing())
+                    pDialog.dismiss();
+                Utils.writelogFile(this, "Intent Login(Place)");
+                startActivity(new Intent(this, LoginActivity.class));
+            } else {
+                Utils.writelogFile(this, "place == null(Place)");
+                setError("Error al guardar la ciudad.");
+            }
+        } catch (Exception e) {
+            Utils.writelogFile(this, "saveSuccess " + e.getMessage() + "(Place)");
+            setError(e.getMessage());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        Utils.writelogFile(this, "Ondestroy(Place)");
+        pDialog.dismiss();
+        super.onDestroy();
     }
 }

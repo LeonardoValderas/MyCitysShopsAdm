@@ -3,6 +3,7 @@ package com.valdroide.mycitysshopsadm.main.account;
 import android.content.Context;
 
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.api.APIService;
 import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
 import com.valdroide.mycitysshopsadm.entities.shop.Account;
@@ -30,144 +31,98 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
     }
 
     @Override
-    public void getAccount() {
+    public void getAccount(Context context) {
+        Utils.writelogFile(context, "getAccount() (Account- Repository)");
         try {
             account = SQLite.select().from(Account.class).querySingle();
-            if (account == null)
+            if (account == null) {
+                Utils.writelogFile(context, "account == null es decir que no hay cargado nada y post GETACCOUNT (Account- Repository)");
                 account = new Account();
+            }
 
             post(AccountActivityEvent.GETACCOUNT, account);
         } catch (Exception e) {
+            Utils.writelogFile(context, "account catch error " + e.getMessage() + " (Account- Repository)");
             post(AccountActivityEvent.ERROR, e.getMessage());
         }
-
     }
 
-//    @Override
-//    public void saveAccount(Context context, final Account account) {
-//  // if (utils.isNetworkAvailableNonStatic(context)) {
-//        if (Utils.isNetworkAvailable(context)) {
-//            try {
-//                Call<ResultPlace> accountService = service.insertAccount(account.getID_SHOP_FOREIGN(),
-//                        account.getSHOP_NAME(), account.getEncode(),
-//                        account.getURL_LOGO(), account.getNAME_LOGO(),
-//                        account.getDESCRIPTION(), account.getPHONE(), account.getEMAIL(), account.getLATITUD(),
-//                        account.getLONGITUD(), account.getADDRESS());
-//                accountService.enqueue(new Callback<ResultPlace>() {
-//                    @Override
-//                    public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
-//                        if (response.isSuccessful()) {
-//                            responseWS = response.body().getResponseWS();
-//                            if (responseWS != null) {
-//                                if (responseWS.getSuccess().equals("0")) {
-//                                    id = responseWS.getId();
-//                                    if (id != 0) {
-//                                        account.setID_ACCOUNT_KEY(id);
-//                                        account.setEncode("");
-//                                        account.setNAME_BEFORE("");
-//                                        account.save();
-//                                        post(AccountActivityEvent.SAVEACCOUNT);
-//                                    } else {
-//                                        post(AccountActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
-//                                    }
-//                                } else {
-//                                    post(AccountActivityEvent.ERROR, responseWS.getMessage());
-//                                }
-//                            } else {
-//                                post(AccountActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
-//                            }
-//                        } else {
-//                            post(AccountActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<ResultPlace> call, Throwable t) {
-//                        post(AccountActivityEvent.ERROR, t.getMessage());
-//                    }
-//                });
-//            } catch (Exception e) {
-//                post(AccountActivityEvent.ERROR, e.getMessage());
-//            }
-//        } else {
-//            post(AccountActivityEvent.ERROR, Utils.ERROR_INTERNET);
-//        }
-//    }
-
     @Override
-    public void updateAccount(Context context, final Account account) {
-    //    if (isUpdate(account)) {
-            if (Utils.isNetworkAvailable(context)) {
-                try {
-                //    final String date_edit = Utils.getFechaOficialSeparate();
-                    Call<ResultPlace> accountService = service.updateAccount(Utils.getIdShop(context), Utils.getIdCity(context),
-                            account.getID_ACCOUNT_KEY(), account.getEncode(), account.getURL_LOGO(),
-                            account.getNAME_LOGO(), account.getNAME_BEFORE(), account.getDESCRIPTION(),
-                            account.getWORKING_HOURS(), account.getPHONE(), account.getEMAIL(),
-                            account.getWEB(), account.getWHATSAAP(), account.getFACEBOOK(), account.getINSTAGRAM(),
-                            account.getTWITTER(), account.getSNAPCHAT(), account.getLATITUD(), account.getLONGITUD(),
-                            account.getADDRESS(), account.getDATE_UNIQUE());
-                    accountService.enqueue(new Callback<ResultPlace>() {
-                        @Override
-                        public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
-                            if (response.isSuccessful()) {
-                                responseWS = response.body().getResponseWS();
+    public void updateAccount(final Context context, final Account account) {
+        Utils.writelogFile(context, "Metodo updateAccount y Se valida conexion a internet(Account, Repository)");
+        if (Utils.isNetworkAvailable(context)) {
+            try {
+                Utils.writelogFile(context, "Call updateAccount(Splash, Repository)");
+                Call<ResultPlace> accountService = service.updateAccount(Utils.getIdShop(context), Utils.getIdCity(context),
+                        account.getID_ACCOUNT_KEY(), account.getEncode(), account.getURL_LOGO(),
+                        account.getNAME_LOGO(), account.getNAME_BEFORE(), account.getDESCRIPTION(),
+                        account.getWORKING_HOURS(), account.getPHONE(), account.getEMAIL(),
+                        account.getWEB(), account.getWHATSAAP(), account.getFACEBOOK(), account.getINSTAGRAM(),
+                        account.getTWITTER(), account.getSNAPCHAT(), account.getLATITUD(), account.getLONGITUD(),
+                        account.getADDRESS(), account.getDATE_UNIQUE());
+                accountService.enqueue(new Callback<ResultPlace>() {
+                    @Override
+                    public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
+                        if (response.isSuccessful()) {
+                            Utils.writelogFile(context, "Response Successful y get ResponseWS(Account, Repository)");
+                            responseWS = response.body().getResponseWS();
+                            if (responseWS != null) {
+                                Utils.writelogFile(context, "ResponseWS != null y valida getSuccess(Account, Repository)");
                                 if (responseWS.getSuccess().equals("0")) {
+                                    Utils.writelogFile(context, "getSuccess = 0 y account.update()(Account, Repository)");
                                     account.update();
-                                    getDateShop(account.getDATE_UNIQUE());
+                                    Utils.writelogFile(context, "account.update() ok y getDateShop(Account, Repository)");
+                                    getDateShop(context, account.getDATE_UNIQUE());
+                                    Utils.writelogFile(context, "dateShop.update()(Account, Repository)");
                                     dateShop.update();
+                                    Utils.writelogFile(context, "dateShop.update() ok y post UPDATEACCOUNT (Account, Repository)");
                                     post(AccountActivityEvent.UPDATEACCOUNT);
                                 } else {
+                                    Utils.writelogFile(context, " getSuccess = error " + responseWS.getMessage() + "(Account, Repository)");
                                     post(AccountActivityEvent.ERROR, responseWS.getMessage());
                                 }
                             } else {
-                                post(AccountActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
+                                Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Account, Repository)");
+                                post(AccountActivityEvent.ERROR, context.getString(R.string.error_data_base));
                             }
+                        } else {
+                            Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Account, Repository)");
+                            post(AccountActivityEvent.ERROR, context.getString(R.string.error_data_base));
                         }
+                    }
 
-                        @Override
-                        public void onFailure(Call<ResultPlace> call, Throwable t) {
-                            post(AccountActivityEvent.ERROR, t.getMessage());
-                        }
-                    });
-                } catch (Exception e) {
-                    post(AccountActivityEvent.ERROR, e.getMessage());
-                }
-            } else {
-                post(AccountActivityEvent.ERROR, Utils.ERROR_INTERNET);
+                    @Override
+                    public void onFailure(Call<ResultPlace> call, Throwable t) {
+                        Utils.writelogFile(context, " Call error " + t.getMessage() + "(Account, Repository)");
+                        post(AccountActivityEvent.ERROR, t.getMessage());
+                    }
+                });
+            } catch (Exception e) {
+                Utils.writelogFile(context, " catch error " + e.getMessage() + "(Account, Repository)");
+                post(AccountActivityEvent.ERROR, e.getMessage());
             }
-      //  }
-
-//        else {
-//            post(AccountActivityEvent.UPDATEACCOUNT);
-//        }
-    }
-
-    public boolean isUpdate(Account accountValidate) {
-        account = SQLite.select().from(Account.class).querySingle();
-        if (accountValidate.getEncode().isEmpty()) {
-            if (accountValidate.getPHONE().compareTo(account.getPHONE()) != 0)
-                return true;
-            else if (accountValidate.getEMAIL().compareTo(account.getEMAIL()) != 0)
-                return true;
-            else if (accountValidate.getADDRESS().compareTo(account.getADDRESS()) != 0)
-                return true;
-            else if (accountValidate.getLATITUD().compareTo(account.getLATITUD()) != 0)
-                return true;
-            else if (accountValidate.getLONGITUD().compareTo(account.getLONGITUD()) != 0)
-                return true;
-            else if (accountValidate.getDESCRIPTION().compareTo(account.getDESCRIPTION()) != 0)
-                return true;
-            else
-                return false;
+        } else {
+            Utils.writelogFile(context, " Internet error " + context.getString(R.string.error_internet) + "(Account, Repository)");
+            post(AccountActivityEvent.ERROR, context.getString(R.string.error_internet));
         }
-        return true;
     }
 
-    public void getDateShop(String date_edit) {
-        dateShop = SQLite.select().from(DateShop.class).querySingle();
-        dateShop.setACCOUNT_DATE(date_edit);
-        dateShop.setDATE_SHOP_DATE(date_edit);
+    private void getDateShop(Context context, String date_edit) {
+        try {
+            Utils.writelogFile(context, "getDateShop y get DateShop(Account, Repository)");
+            dateShop = SQLite.select().from(DateShop.class).querySingle();
+            if (dateShop != null) {
+                Utils.writelogFile(context, "dateShop != null y set setACCOUNT_DATE, setDATE_SHOP_DATE(Account, Repository)");
+                dateShop.setACCOUNT_DATE(date_edit);
+                dateShop.setDATE_SHOP_DATE(date_edit);
+            } else {
+                Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Account, Repository)");
+                post(AccountActivityEvent.ERROR, context.getString(R.string.error_data_base));
+            }
+        } catch (Exception e) {
+            Utils.writelogFile(context, " Call error " + e.getMessage() + "(Account, Repository)");
+            post(AccountActivityEvent.ERROR, e.getMessage());
+        }
     }
 
     public void post(int type, Account account) {

@@ -6,6 +6,7 @@ import com.valdroide.mycitysshopsadm.entities.shop.Account;
 import com.valdroide.mycitysshopsadm.entities.shop.DateShop;
 import com.valdroide.mycitysshopsadm.entities.shop.Notification;
 import com.valdroide.mycitysshopsadm.entities.shop.Offer;
+import com.valdroide.mycitysshopsadm.entities.shop.Support;
 
 import java.util.List;
 
@@ -25,6 +26,9 @@ public class ResultUser {
     @SerializedName("notification")
     @Expose
     Notification notification;
+    @SerializedName("support")
+    @Expose
+    Support support;
 
     public ResponseWS getResponseWS() {
         return responseWS;
@@ -61,5 +65,13 @@ public class ResultUser {
 
     public void setNotification(Notification notification) {
         this.notification = notification;
+    }
+
+    public Support getSupport() {
+        return support;
+    }
+
+    public void setSupport(Support support) {
+        this.support = support;
     }
 }

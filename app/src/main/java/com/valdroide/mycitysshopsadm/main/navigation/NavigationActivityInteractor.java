@@ -1,9 +1,7 @@
 package com.valdroide.mycitysshopsadm.main.navigation;
 
-/**
- * Created by LEO on 20/2/2017.
- */
+import android.content.Context;
 
 public interface NavigationActivityInteractor {
-    void logOut();
+    void logOut(Context context);
 }

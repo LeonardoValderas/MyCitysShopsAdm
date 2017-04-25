@@ -2,7 +2,6 @@ package com.valdroide.mycitysshopsadm;
 
 import android.app.Activity;
 import android.app.Application;
-
 import com.facebook.stetho.Stetho;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.valdroide.mycitysshopsadm.lib.di.LibsModule;
@@ -35,6 +34,10 @@ import com.valdroide.mycitysshopsadm.main.splash.di.DaggerSplashActivityComponen
 import com.valdroide.mycitysshopsadm.main.splash.di.SplashActivityComponent;
 import com.valdroide.mycitysshopsadm.main.splash.di.SplashActivityModule;
 import com.valdroide.mycitysshopsadm.main.splash.ui.SplashActivityView;
+import com.valdroide.mycitysshopsadm.main.support.di.DaggerSupportActivityComponent;
+import com.valdroide.mycitysshopsadm.main.support.di.SupportActivityComponent;
+import com.valdroide.mycitysshopsadm.main.support.di.SupportActivityModule;
+import com.valdroide.mycitysshopsadm.main.support.ui.SupportActivityView;
 
 public class MyCitysShopsAdmApp extends Application {
     private LibsModule libsModule;
@@ -46,6 +49,7 @@ public class MyCitysShopsAdmApp extends Application {
         initModules();
         initDB();
         Stetho.initializeWithDefaults(this);
+
     }
 
     @Override
@@ -68,6 +72,15 @@ public class MyCitysShopsAdmApp extends Application {
         myCitysShopsAdmAppModule = new MyCitysShopsAdmAppModule(this);
     }
 
+    public SupportActivityComponent getSupportActivityComponent(SupportActivityView view, Activity activity) {
+        return DaggerSupportActivityComponent
+                .builder()
+                .myCitysShopsAdmAppModule(myCitysShopsAdmAppModule)
+                .libsModule(new LibsModule(activity))
+                .supportActivityModule(new SupportActivityModule(view, activity))
+                .build();
+    }
+
     public AccountActivityComponent getAccountActivityComponent(AccountActivityView view, Activity activity) {
         return DaggerAccountActivityComponent
                 .builder()
@@ -76,6 +89,7 @@ public class MyCitysShopsAdmApp extends Application {
                 .accountActivityModule(new AccountActivityModule(view, activity))
                 .build();
     }
+
     public OfferActivityComponent getOfferActivityComponent(OfferActivityView view, Activity activity, OnItemClickListener onItemClickListener) {
         return DaggerOfferActivityComponent
                 .builder()
@@ -84,6 +98,7 @@ public class MyCitysShopsAdmApp extends Application {
                 .offerActivityModule(new OfferActivityModule(view, activity, onItemClickListener))
                 .build();
     }
+
     public NotificationActivityComponent getNotificationActivityComponent(NotificationActivityView view, Activity activity) {
         return DaggerNotificationActivityComponent
                 .builder()
@@ -92,6 +107,7 @@ public class MyCitysShopsAdmApp extends Application {
                 .notificationActivityModule(new NotificationActivityModule(view, activity))
                 .build();
     }
+
     public SplashActivityComponent getSplashActivityComponent(SplashActivityView view, Activity activity) {
         return DaggerSplashActivityComponent
                 .builder()

@@ -57,26 +57,18 @@ public class OfferActivityPresenterImpl implements OfferActivityPresenter {
     }
 
     @Override
-    public void deleteOffer(Context context, Offer offer, boolean isDelete) {
-        interactor.deleteOffer(context, offer, isDelete);
-    }
-
-    @Override
     @Subscribe
     public void onEventMainThread(OfferActivityEvent event) {
         if (this.view != null) {
             switch (event.getType()) {
                 case OfferActivityEvent.GETOFFER:
-                    view.setOffers(event.getOffers());
+                    view.setOffers(event.getOffers(), event.getMax_offer());
                     break;
                 case OfferActivityEvent.SAVEOFFER:
                     view.saveOffer(event.getOffer());
                     break;
                 case OfferActivityEvent.UPDATEOFFER:
                     view.updateOffer(event.getOffer());
-                    break;
-                case OfferActivityEvent.DELETEOFFER:
-                    view.deleteOffer(event.getOffer());
                     break;
                 case OfferActivityEvent.SWITCHOFFER:
                     view.switchOffer(event.getOffer());

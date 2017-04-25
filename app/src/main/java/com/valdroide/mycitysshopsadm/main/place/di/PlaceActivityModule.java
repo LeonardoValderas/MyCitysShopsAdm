@@ -63,8 +63,8 @@ public class PlaceActivityModule {
 
     @Provides
     @Singleton
-    PlaceActivityRepository providePlaceActivityRepository(EventBus eventBus, APIService service) {
-        return new PlaceActivityRepositoryImpl(eventBus, service);
+    PlaceActivityRepository providePlaceActivityRepository(EventBus eventBus) {
+        return new PlaceActivityRepositoryImpl(eventBus);
     }
 
     @Provides
@@ -111,10 +111,10 @@ public class PlaceActivityModule {
         return new AdapterSpinnerCity(context, resource, cities);
     }
 
-    @Provides
-    @Singleton
-    APIService provideAPIService() {
-        ShopClient client = new ShopClient();
-        return client.getAPIService();
-    }
+//    @Provides
+//    @Singleton
+//    APIService provideAPIService() {
+//        ShopClient client = new ShopClient();
+//        return client.getAPIService();
+//    }
 }

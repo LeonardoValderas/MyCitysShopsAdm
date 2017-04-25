@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_navigation"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.valdroide.mycitysshopsadm.main.navigation.ui.NavigationActivity"
+    tools:showIn="@layout/app_bar_navigation">
+
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="100dp">
+
+        <ImageView
+            android:layout_width="550dp"
+            android:layout_height="550dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_star" />
+
+        <TextView
+            android:id="@+id/textViewFollow"
+            style="@style/TextView_Amount_Content_Nav"
+            android:text="0"
+            android:textSize="65dp" />
+    </FrameLayout>
+
+    <TextView
+        style="@style/TextView_Follow_Content_Nav"
+        android:layout_below="@+id/frame"
+        android:text="@string/following"
+        android:textSize="75dp" />
+
+</RelativeLayout>

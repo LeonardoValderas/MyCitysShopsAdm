@@ -1,42 +1,69 @@
 package com.valdroide.mycitysshopsadm.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.valdroide.mycitysshopsadm.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
+
+import javax.activation.CommandMap;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.activation.MailcapCommandMap;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 public class Utils {
 
-    public static String URL_IMAGE = "http://10.0.2.2:8080/my_citys_shops_adm/account/image_account/";
-    public static String URL_IMAGE_OFFER = "http://10.0.2.2:8080/my_citys_shops_adm/offer/image_offer/";
+//    public static String URL_IMAGE = "http://10.0.2.2:8080/my_citys_shops_adm/account/image_account/";
+//    public static String URL_IMAGE_OFFER = "http://10.0.2.2:8080/my_citys_shops_adm/offer/image_offer/";
+   // public static String URL_IMAGE = "http://10.0.3.2:8080/my_citys_shops_adm/account/image_account/";
+   // public static String URL_IMAGE_OFFER = "http://10.0.3.2:8080/my_citys_shops_adm/offer/image_offer/";
+
     //public static String URL_IMAGE = "http://myd.esy.es/myd/clothes/image_clothes/";
+    public static String URL_IMAGE = "http://myd.esy.es/my_citys_shops_adm/account/image_account/";
+    public static String URL_IMAGE_OFFER = "http://myd.esy.es/my_citys_shops_adm/offer/image_offer/";
+//    public static String ERROR_DATA_BASE = "Error al guardar los datos.";
+//    public static String ERROR_INTERNET = "Verificar su conexión de Internet.";
 
-    public static String ERROR_DATA_BASE = "Error al guardar los datos.";
-    public static String ERROR_INTERNET = "Verificar su conexión de Internet.";
-    public static String ERROR_OFFER_VALIDATE = "Problemas al validar sus Promos.";
-
-    //FECHAS
-    public static String getFechaInit() {
+      //FECHAS
+    public static String getFechaLogFile() {
         Date dateOficial = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(dateOficial);
@@ -61,22 +88,17 @@ public class Utils {
             return true;
     }
 
-    public static String getLastDateWeek() {
+    public static String getLastDayNotification() {
+        Date dateOficial = new Date();
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        cal.add(Calendar.DATE, 7);
+        cal.setTime(dateOficial);
+        cal.add(Calendar.DATE, 10);
+
         return df.format(cal.getTime());
     }
 
-    public static String getLastDateMonth() {
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        cal.set(Calendar.DATE, Calendar.getInstance().getActualMaximum(Calendar.DATE));
-        return df.format(cal.getTime());
-    }
-
-    public static boolean validateExpirateOffer(String dateExperate) {
+    public static boolean validateExpirateNotification(String dateExperate) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date strDate = null;
         try {
@@ -85,7 +107,7 @@ public class Utils {
             e.printStackTrace();
         }
         if (strDate != null)
-            if (System.currentTimeMillis() > strDate.getTime()) {
+            if (System.currentTimeMillis() >= strDate.getTime()) {
                 return true;
             }
         return false;
@@ -132,22 +154,6 @@ public class Utils {
                 });
     }
 
-    public static void setPicasso(Context context, Uri uri, final int resource, final ImageView imageView) {
-        Picasso.with(context)
-                .load(uri.toString()).fit()
-                .placeholder(resource)
-                .into(imageView, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                    }
-
-                    @Override
-                    public void onError() {
-                        imageView.setImageResource(resource);
-                    }
-                });
-    }
-
     public static boolean isNetworkAvailable(Context context) {
         int[] networkTypes = {ConnectivityManager.TYPE_MOBILE,
                 ConnectivityManager.TYPE_WIFI};
@@ -165,22 +171,42 @@ public class Utils {
         return false;
     }
 
-    public boolean isNetworkAvailableNonStatic(Context context) {
-        int[] networkTypes = {ConnectivityManager.TYPE_MOBILE,
-                ConnectivityManager.TYPE_WIFI};
-        try {
-            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            for (int networkType : networkTypes) {
-                NetworkInfo netInfo = cm.getActiveNetworkInfo();
-                if (netInfo != null && netInfo.getState() == NetworkInfo.State.CONNECTED) {
-                    return true;
+    public static void applyFontForToolbarTitle(Activity context, Toolbar toolbar) {
+        for (int i = 0; i < toolbar.getChildCount(); i++) {
+            View view = toolbar.getChildAt(i);
+            if (view instanceof TextView) {
+                TextView tv = (TextView) view;
+                Typeface titleFont = Typeface.
+                        createFromAsset(context.getAssets(), "fonts/antspan.ttf");
+                if (tv.getText() != null) {
+                    tv.setTypeface(titleFont);
+                    break;
                 }
             }
-        } catch (Exception e) {
-            return false;
         }
-        return false;
     }
+
+    //TITLE GRUOP
+    public static Typeface setFontPacificoTextView(Context context) {
+        return Typeface.createFromAsset(context.getAssets(), "fonts/Pacifico.ttf");
+    }
+
+    //TITLE ITEM
+    public static Typeface setFontGoodDogTextView(Context context) {
+        return Typeface.createFromAsset(context.getAssets(), "fonts/GoodDog.otf");
+    }
+
+    //TITLE DIALOG
+    public static Typeface setFontExoTextView(Context context) {
+        return Typeface.createFromAsset(context.getAssets(), "fonts/Exo.otf");
+    }
+
+    //TITLE TEXT DIALOG
+    public static Typeface setFontRalewatTextView(Context context) {
+        return Typeface.createFromAsset(context.getAssets(), "fonts/Raleway.ttf");
+    }
+
+
 
     private static Map<Character, Character> MAP_NORM;
 
@@ -255,6 +281,58 @@ public class Utils {
         return sb.toString();
     }
 
+    public static boolean validateLogFile(Context context) {
+        try {
+            if (getDateLogFile(context).equals("") || !getFechaLogFile().equals(getDateLogFile(context)))
+                return createLogFile(context);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean createLogFile(Context context) {
+        try {
+            File logFile = new File(context.getFilesDir() + "/" + context.getString(R.string.log_file_name));
+            if (logFile.createNewFile()) {
+                writelogFile(context, "Se crea archivo log correctamente");
+                setDateLogFile(context, getFechaLogFile());
+                return true;
+            } else {
+                logFile.delete();
+                logFile.createNewFile();
+                setDateLogFile(context, getFechaLogFile());
+                return true;
+            }
+        } catch (Exception e) {
+            writelogFile(context, e.getMessage());
+            return false;
+        }
+    }
+
+    public static void writelogFile(Context context, String msg) {
+        FileOutputStream fileOutputStream = null;
+        OutputStreamWriter write = null;
+        try {
+            fileOutputStream = new FileOutputStream(new File(context.getFilesDir() + "/" +
+                    context.getResources().getString(R.string.log_file_name)), true);
+            write = new OutputStreamWriter(fileOutputStream);
+            write.append(msg + " " + Utils.getFechaOficialSeparate() + "\n");
+
+            write.close();
+            fileOutputStream.flush();
+            fileOutputStream.close();
+
+        } catch (Exception e) {
+
+        } finally {
+            if (fileOutputStream != null)
+                fileOutputStream = null;
+            if (write != null)
+                write = null;
+        }
+    }
+
     public static void setIdCity(Context context, int id) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.my_city_id_shared), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -287,13 +365,6 @@ public class Utils {
         return sharedPreferences.getInt(context.getString(R.string.id_shop), 0);
     }
 
-    public static void resetIdShop(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.shop_id_shared), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(context.getString(R.string.id_shop), 0);
-        editor.commit();
-    }
-
     public static void setIdFollow(Context context, int id) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.my_follow_id_shared), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -304,5 +375,109 @@ public class Utils {
     public static int getIdFollow(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.my_follow_id_shared), Context.MODE_PRIVATE);
         return sharedPreferences.getInt(context.getString(R.string.id_follow), 0);
+    }
+
+    public static void setDateLogFile(Context context, String date) {
+        writelogFile(context, "Se actualiza date Log SharePreferences");
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.log_date_shared), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getString(R.string.log_date), date);
+        editor.commit();
+        writelogFile(context, "Se actualiza date Log SharePreferences Correctamente");
+    }
+
+    public static String getDateLogFile(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.log_date_shared), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(context.getString(R.string.log_date), "");
+    }
+    ////EMAIL SENDER
+    public static CommandMap createMailcapCommandMap() {
+        try {
+            MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap();
+            mc.addMailcap("text/html;; x-java-content-handler=com.sun.mail.handlers.text_html");
+            mc.addMailcap("text/xml;; x-java-content-handler=com.sun.mail.handlers.text_xml");
+            mc.addMailcap("text/plain;; x-java-content-handler=com.sun.mail.handlers.text_plain");
+            mc.addMailcap("multipart/*;; x-java-content-handler=com.sun.mail.handlers.multipart_mixed");
+            mc.addMailcap("message/rfc822;; x-java-content-handler=com.sun.mail.handlers.message_rfc822");
+            CommandMap.setDefaultCommandMap(mc);
+            return mc;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Session createPropertiesAndSession(final String from, final String password) {
+        try {
+            Properties properties = System.getProperties();
+            properties.put("mail.smtp.port", "465");
+            properties.put("mail.smtp.host", "smtp.gmail.com");
+            properties.put("mail.smtp.socketFactory.port", "465");
+            properties.put("mail.smtp.socketFactory.class",
+                    "javax.net.ssl.SSLSocketFactory");
+            properties.put("mail.smtp.auth", "true");
+            properties.put("mail.smtp.port", "465");
+            return createSession(properties, from, password);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Session createSession(Properties properties, final String from, final String password) {
+        try {
+            return Session.getDefaultInstance(properties,
+                    new javax.mail.Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(from, password);
+                        }
+                    });
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static MimeMessage createMimeMessage(Session session, final String from, final String to, final String Shop_name, Context context) {
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(from));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            message.setSubject("Soporte " + Shop_name + " " + "Ciudad: " + Utils.getIdCity(context));
+            return message;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static BodyPart createMimeBodyPart(String comment) {
+        try {
+            BodyPart messageBodyPart1 = new MimeBodyPart();
+            messageBodyPart1.setText(comment);
+            return messageBodyPart1;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
+    public static MimeBodyPart createMimeBodyPart2(String filename) {
+        try {
+            MimeBodyPart messageBodyPart2 = new MimeBodyPart();
+            DataSource source = new FileDataSource(filename);
+            messageBodyPart2.setDataHandler(new DataHandler(source));
+            messageBodyPart2.setFileName("Error_Log.txt");
+            return messageBodyPart2;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Multipart createMultipart(BodyPart messageBodyPart1, MimeBodyPart messageBodyPart2) {
+        try {
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(messageBodyPart1);
+            multipart.addBodyPart(messageBodyPart2);
+            return multipart;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

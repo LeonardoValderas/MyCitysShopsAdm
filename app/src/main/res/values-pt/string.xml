@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--TITLE TOOLBAR-->
+    <!--MENU DRAWER-->
+    <string name="offer_title">Minha Cartelera</string>
+    <string name="my_account_title">Minha Conta</string>
+    <string name="support_title">Soporte</string>
+    <string name="notification_title">Notificação</string>
+    <string name="my_account_menu_drawer">Minha Conta</string>
+    <string name="my_billboard_menu_drawer">Minha Cartelera</string>
+    <string name="notification_menu_drawer">Notificação</string>
+    <!--ACCOUNT-->
+    <string name="account_save">Datos guardados.</string>
+    <string name="error_logo">Escolha um logo.</string>
+    <string name="error_address">Entre o endereço.</string>
+    <string name="error_map">Escolha um ponto no mapa.</string>
+    <string name="error_description">Entre a descrição.</string>
+    <string name="error_working">Entre seu horário de atendimento.</string>
+    <!--OFFER-->
+    <string name="error_image">Escolha uma imagem.</string>
+    <string name="title_empty">Entre um titulo.</string>
+    <string name="description_empty">Entre a descrição.</string>
+    <string name="offer_success">Atividade carregada correctamente.</string>
+    <string name="offer_update">Atividade atualizada correctamente.</string>
+    <string name="offer_unable">Atividade desativada</string>
+    <string name="offer_able">Atividade ativada</string>
+    <string name="offer_available">Atividades disponível:</string>
+    <!--NOTIFICATION-->
+    <string name="send_notification_success">Notificação enviada.</string>
+    <string name="notification_empty">Entre uma notificação.</string>
+    <string name="hint_notification">Entre a notificação.(Max.300)</string>
+    <string name="notification_unavailable">Você poderá enviar uma nova notificação a partir </string>
+    <!--ERROR MSG-->
+    <string name="error_fill_place">Problemas ao carregar os datos. Feche a aplicação e tente novamente.</string>
+    <string name="error_file_log">Problemas para gerar o arquivo Log.</string>
+    <string name="email_success">Email enviado correctamente. Soporte se comunicará com você.</string>
+    <string name="error_notification">Problemas para mostrar a notificação.</string>
+    <string name="error_data_base">Problemas na base de datos.</string>
+    <string name="error_internet">Verificar sua conexão de Internet.</string>
+    <string name="shop_name_empty">Não é possível obter o nome de sua loja.</string>
+    <!--LOGIN-->
+    <string name="user_empty">Entre seu usuario.</string>
+    <string name="pass_empty">Entre sua senha.</string>
+    <string name="error_id_city">Problema ao tentar obter o código de sua cidade.</string>
+    <!--MENU-->
+    <string name="log_out_menu">Sair</string>
+    <string name="support_menu">Soporte</string>
+    <!--EMAIL-->
+    <string name="hint_comment">Entre um comentario.(Max.300)</string>
+    <!--PLACE-->
+    <string name="country_title_place">País</string>
+    <string name="state_title_place">Estado</string>
+    <string name="city_title_place">Cidade</string>
+    <string name="enter_button_place">Entre</string>
+    <string name="user_login">Usuario</string>
+    <string name="pass_login">Senha</string>
+    <string name="change_city">Mudar de Cidade</string>
+    <string name="hint_title_offer">Enter um titulo.(Max.20)</string>
+    <string name="hint_offer">Enter a atividade.(Max.100)</string>
+    <string name="processing">Processamento...</string>
+    <string name="sent_emal_auto">Se enviou um email automaticamente para suporte.</string>
+    <string name="my_location">MINHA LOCALIZAÇÃO</string>
+</resources>

@@ -9,12 +9,12 @@ public class OfferActivityEvent {
     public static final int GETOFFER = 0;
     public static final int SAVEOFFER = 1;
     public static final int UPDATEOFFER = 2;
-    public static final int DELETEOFFER = 3;
-    public static final int SWITCHOFFER = 4;
-    public static final int ERROR = 5;
+    public static final int SWITCHOFFER = 3;
+    public static final int ERROR = 4;
     private String error;
     private Offer offer;
     private List<Offer> offers;
+    private int max_offer;
 
     public int getType() {
         return type;
@@ -46,5 +46,13 @@ public class OfferActivityEvent {
 
     public void setOffers(List<Offer> offers) {
         this.offers = offers;
+    }
+
+    public int getMax_offer() {
+        return max_offer;
+    }
+
+    public void setMax_offer(int max_offer) {
+        this.max_offer = max_offer;
     }
 }

@@ -1,5 +1,7 @@
 package com.valdroide.mycitysshopsadm.main.navigation;
 
+import android.content.Context;
+
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.navigation.events.NavigationActivityEvent;
 import com.valdroide.mycitysshopsadm.main.navigation.ui.NavigationActivityView;
@@ -29,8 +31,8 @@ public class NavigationActivityPresenterImpl implements NavigationActivityPresen
     }
 
     @Override
-    public void logOut() {
-        interactor.logOut();
+    public void logOut(Context context) {
+        interactor.logOut(context);
     }
 
     @Override

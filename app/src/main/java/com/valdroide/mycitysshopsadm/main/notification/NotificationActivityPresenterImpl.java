@@ -36,15 +36,24 @@ public class NotificationActivityPresenterImpl implements NotificationActivityPr
     }
 
     @Override
+    public void validateNotificationExpire(Context context, String now) {
+        interactor.validateNotificationExpire(context, now);
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(NotificationActivityEvent event) {
         if (this.view != null) {
             switch (event.getType()) {
                 case NotificationActivityEvent.SEND:
-                    view.sentSuccess();
+                    view.setSuccess(event.getDate());
+                    break;
+                case NotificationActivityEvent.ISAVAILABLE:
+                    view.isAvailable(event.is_available(), event.getDate());
                     break;
                 case NotificationActivityEvent.ERROR:
-                    view.sentError(event.getError());
+                    view.setError(event.getError());
+                    break;
             }
         }
     }

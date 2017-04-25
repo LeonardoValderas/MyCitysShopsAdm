@@ -36,42 +36,42 @@ public class APIServiceTest extends BaseTest {
         service = client.getAPIService();
     }
 
-    @Test
-    public void insertAccountTest() throws IOException {
-        int id_shop = 1;
-        //String shop_name = "Name";
-        String shop_name = "";
-        String encode = "ksksksksk";
-        String url_logo = "http//";
-        String name_logo = "NameLogo";
-        String description = "Description";
-        String phone = "Phone";
-        String email = "Email";
-        String latitud = "Latitud";
-        String longitud = "Longitud";
-        String adrress = "Address";
-        final boolean[] isOK = new boolean[1];
-        Call<ResultPlace> accountService = service.insertAccount(id_shop, shop_name, encode, url_logo, name_logo, description, phone, email, latitud, longitud, adrress);
-//        accountService.enqueue(new Callback<ResultPlace>() {
-//            @Override
-//            public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
-//                isOK[0] = response.isSuccessful();
-//            }
+//    @Test
+//    public void insertAccountTest() throws IOException {
+//        int id_shop = 1;
+//        //String shop_name = "Name";
+//        String shop_name = "";
+//        String encode = "ksksksksk";
+//        String url_logo = "http//";
+//        String name_logo = "NameLogo";
+//        String description = "Description";
+//        String phone = "Phone";
+//        String email = "Email";
+//        String latitud = "Latitud";
+//        String longitud = "Longitud";
+//        String adrress = "Address";
+//        final boolean[] isOK = new boolean[1];
+//        Call<ResultPlace> accountService = service.insertAccount(id_shop, shop_name, encode, url_logo, name_logo, description, phone, email, latitud, longitud, adrress);
+////        accountService.enqueue(new Callback<ResultPlace>() {
+////            @Override
+////            public void onResponse(Call<ResultPlace> call, Response<ResultPlace> response) {
+////                isOK[0] = response.isSuccessful();
+////            }
+////
+////            @Override
+////            public void onFailure(Call<ResultPlace> call, Throwable t) {
+////
+////            }
+////        });
 //
-//            @Override
-//            public void onFailure(Call<ResultPlace> call, Throwable t) {
 //
-//            }
-//        });
-
-
-        Response<ResultPlace> response = accountService.execute();
- //       assertFalse(isOK[0]);
-       // ResponseWS responseWS = response.body().getResponseWS();
-        //assertNotNull(responseWS);
-        //assertEquals("0", responseWS.getSuccess());
-       // assertNotEquals(0, responseWS.getId());
-
-    }
+//        Response<ResultPlace> response = accountService.execute();
+// //       assertFalse(isOK[0]);
+//       // ResponseWS responseWS = response.body().getResponseWS();
+//        //assertNotNull(responseWS);
+//        //assertEquals("0", responseWS.getSuccess());
+//       // assertNotEquals(0, responseWS.getId());
+//
+//    }
 }
 

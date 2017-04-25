@@ -11,14 +11,9 @@ public class AccountActivityInteractorImpl implements AccountActivityInteractor 
     }
 
     @Override
-    public void getAccount() {
-        repository.getAccount();
+    public void getAccount(Context context) {
+        repository.getAccount(context);
     }
-
-//    @Override
-//    public void saveAccount(Context context, Account account) {
-//        repository.saveAccount(context, account);
-//    }
 
     @Override
     public void updateAccount(Context context, Account account) {

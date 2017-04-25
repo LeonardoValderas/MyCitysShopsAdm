@@ -48,7 +48,7 @@ public class Account extends BaseModel {
     public String WEB;
 
     @Column
-    @SerializedName("whatsaap")
+    @SerializedName("whatsapp")
     public String WHATSAAP;
 
     @Column

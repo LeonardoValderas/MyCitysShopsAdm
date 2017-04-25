@@ -42,6 +42,11 @@ public class SplashActivityPresenterImpl implements SplashActivityPresenter {
     }
 
     @Override
+    public void sendEmail(Context context, String comment) {
+        interactor.sendEmail(context, comment);
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(SplashActivityEvent event) {
         if (this.view != null) {

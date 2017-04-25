@@ -40,8 +40,11 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Utils.writelogFile(this, "Se inicia ButterKnife(Login)");
         ButterKnife.bind(this);
+        Utils.writelogFile(this, "Se inicia Injection(Login)");
         setupInjection();
+        Utils.writelogFile(this, "Se inicia presenter Oncreate(Login)");
         presenter.onCreate();
     }
 
@@ -52,25 +55,35 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
 
     @OnClick(R.id.buttonInto)
     public void validateLogin() {
-        if (editTextUser.getText().toString().equals(""))
-            Utils.showSnackBar(conteiner, getString(R.string.user_empty));
-        else if (editTextPass.getText().toString().equals(""))
-            Utils.showSnackBar(conteiner, getString(R.string.pass_empty));
-        else if (Utils.getIdCity(this) == 0) {
-            Utils.showSnackBar(conteiner, getString(R.string.error_id_city));
-        } else {
-            presenter.validateLogin(this, editTextUser.getText().toString(),
-                    editTextPass.getText().toString(), Utils.getIdCity(this));
+        Utils.writelogFile(this, "Metodo validateLogin on click buttonInto(Login)");
+        try {
+            if (editTextUser.getText().toString().equals(""))
+                Utils.showSnackBar(conteiner, getString(R.string.user_empty));
+            else if (editTextPass.getText().toString().equals(""))
+                Utils.showSnackBar(conteiner, getString(R.string.pass_empty));
+            else if (Utils.getIdCity(this) == 0) {
+                Utils.writelogFile(this, "Utils.getIdCity es cero(Login)");
+                Utils.showSnackBar(conteiner, getString(R.string.error_id_city));
+            } else {
+                Utils.writelogFile(this, " presenter.validateLogin(Login)");
+                presenter.validateLogin(this, editTextUser.getText().toString(),
+                        editTextPass.getText().toString(), Utils.getIdCity(this));
+            }
+        } catch (Exception e) {
+            setError(e.getMessage());
+            Utils.writelogFile(this, "validateLogin error " + e.getMessage() + "(Login)");
         }
     }
 
     @OnClick(R.id.buttonChangePlace)
     public void changePlace() {
+        Utils.writelogFile(this, "Metodo changePlace on click buttonChangePlace y presenter.changePlace(Login)");
         presenter.changePlace(this);
     }
 
     @Override
     public void loginSuccess() {
+        Utils.writelogFile(this, "Metodo loginSuccess y intente Splash con extra true(Login)");
         Intent intent = new Intent(this, SplashActivity.class);
         intent.putExtra("isLoguin", true);
         startActivity(intent);
@@ -78,16 +91,19 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
 
     @Override
     public void setError(String msg) {
+        Utils.writelogFile(this, "Metodo setError: " + msg + "(Login)");
         Utils.showSnackBar(conteiner, msg);
     }
 
     @Override
     public void goToPlace() {
+        Utils.writelogFile(this, "Metodo goToPlace Intente Place(Login)");
         startActivity(new Intent(this, PlaceActivity.class));
     }
 
     @Override
     protected void onDestroy() {
+        Utils.writelogFile(this, "Metodo onDestroy(Login)");
         presenter.onDestroy();
         super.onDestroy();
     }

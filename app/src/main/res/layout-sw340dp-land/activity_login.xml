@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back"
+    tools:context="com.valdroide.mycitysshopsadm.main.login.ui.LoginActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="40dp"
+            android:layout_weight="60"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewUser"
+                style="@style/TextView_Title_Login_Normal"
+                android:text="@string/user_login"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/editTextUser"
+                style="@style/EditText_Login_Normal"
+                android:layout_below="@+id/textViewUser"
+                android:layout_marginTop="10dp"
+                android:inputType="textPersonName"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/textViewPass"
+                style="@style/TextView_Title_Login_Normal"
+                android:layout_below="@+id/editTextUser"
+                android:layout_marginTop="20dp"
+                android:text="@string/pass_login"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/editTextPass"
+                style="@style/EditText_Login_Normal"
+                android:layout_below="@+id/textViewPass"
+                android:layout_marginTop="10dp"
+                android:inputType="textPassword"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="40"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/buttonInto"
+                style="@style/Button_Place_Normal"
+                android:padding="15dp"
+                android:text="@string/enter_button_place"
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/buttonChangePlace"
+                style="@style/Button_Place_Normal"
+                android:layout_marginTop="15dp"
+                android:padding="15dp"
+                android:text="@string/change_city"
+                android:textSize="15dp" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

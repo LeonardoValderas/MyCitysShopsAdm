@@ -20,4 +20,9 @@ public class SplashActivityInteractorImpl implements SplashActivityInteractor {
         repository.validateDateShop(context);
     }
 
+    @Override
+    public void sendEmail(Context context, String comment) {
+        repository.sendEmail(context, comment);
+    }
+
 }

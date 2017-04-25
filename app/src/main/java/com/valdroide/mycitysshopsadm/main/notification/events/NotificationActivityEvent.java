@@ -4,8 +4,10 @@ public class NotificationActivityEvent {
     private int type;
     public static final int SEND = 0;
     public static final int ERROR = 1;
+    public static final int ISAVAILABLE = 2;
     private String error;
-
+    private boolean is_available;
+    private String date;
     public int getType() {
         return type;
     }
@@ -20,5 +22,21 @@ public class NotificationActivityEvent {
 
     public void setError(String error) {
         this.error = error;
+    }
+
+    public boolean is_available() {
+        return is_available;
+    }
+
+    public void setIs_available(boolean is_available) {
+        this.is_available = is_available;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

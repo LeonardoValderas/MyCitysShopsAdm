@@ -18,7 +18,9 @@ public class Offer extends BaseModel {
     @Column
     @SerializedName("id_shop_foreign")
     public int ID_SHOP_FOREIGN;
-
+    @Column
+    @SerializedName("id_city_foreign")
+    public int ID_CITY_FOREIGN;
     @Column
     @SerializedName("title")
     public String TITLE;
@@ -49,10 +51,11 @@ public class Offer extends BaseModel {
     public Offer() {
     }
 
-    public Offer(int ID_OFFER_KEY, int ID_SHOP_FOREIGN, String TITLE, String OFFER, String URL_IMAGE,
+    public Offer(int ID_OFFER_KEY, int ID_SHOP_FOREIGN, int ID_CITY_FOREIGN, String TITLE, String OFFER, String URL_IMAGE,
                  String NAME_IMAGE, int IS_ACTIVE, String DATE_UNIQUE, String Encode, String NAME_BEFORE) {
         this.ID_OFFER_KEY = ID_OFFER_KEY;
         this.ID_SHOP_FOREIGN = ID_SHOP_FOREIGN;
+        this.ID_CITY_FOREIGN = ID_CITY_FOREIGN;
         this.TITLE = TITLE;
         this.OFFER = OFFER;
         this.URL_IMAGE = URL_IMAGE;
@@ -141,5 +144,13 @@ public class Offer extends BaseModel {
 
     public void setIS_ACTIVE(int IS_ACTIVE) {
         this.IS_ACTIVE = IS_ACTIVE;
+    }
+
+    public int getID_CITY_FOREIGN() {
+        return ID_CITY_FOREIGN;
+    }
+
+    public void setID_CITY_FOREIGN(int ID_CITY_FOREIGN) {
+        this.ID_CITY_FOREIGN = ID_CITY_FOREIGN;
     }
 }

@@ -7,6 +7,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import com.valdroide.mycitysshopsadm.main.login.ui.LoginActivity;
 import com.valdroide.mycitysshopsadm.main.navigation.NavigationActivityPresenter;
 import com.valdroide.mycitysshopsadm.main.notification.ui.NotificationActivity;
 import com.valdroide.mycitysshopsadm.main.offer.ui.OfferActivity;
+import com.valdroide.mycitysshopsadm.main.support.ui.SupportActivity;
 import com.valdroide.mycitysshopsadm.utils.Utils;
 
 import javax.inject.Inject;
@@ -29,7 +31,9 @@ import butterknife.ButterKnife;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NavigationActivityView {
-
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -48,17 +52,34 @@ public class NavigationActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+        Utils.writelogFile(this, "Se inicia ButterKnife(Navigation)");
         ButterKnife.bind(this);
+        Utils.writelogFile(this, "Se inicia Injection(Navigation)");
         setupInjection();
+        Utils.writelogFile(this, "Se inicia presenter Oncreate(Navigation)");
         presenter.onCreate();
+        Utils.writelogFile(this, "Se inicia toolbar Oncreate(Navigation)");
         setSupportActionBar(toolbar);
+        Utils.writelogFile(this, "Se inicia ActionBarDrawerToggle Oncreate(Navigation)");
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        Utils.writelogFile(this, "set addDrawerListener Oncreate(Navigation)");
+        drawer.addDrawerListener(toggle);
+        Utils.writelogFile(this, "toggle.syncState(); Oncreate(Navigation)");
         toggle.syncState();
-
+        Utils.writelogFile(this, "setNavigationItemSelectedListener Oncreate(Navigation)");
         navigationView.setNavigationItemSelectedListener(this);
-        textViewFollow.setText(String.valueOf(Utils.getIdFollow(this)));
+        setFollow();
+    }
+
+    public void setFollow() {
+        Utils.writelogFile(this, "set follow textview Oncreate(Navigation)");
+        try {
+            textViewFollow.setText(String.valueOf(Utils.getIdFollow(this)));
+        } catch (Exception e) {
+            setError(e.getMessage());
+            Utils.writelogFile(this, " catch error " + e.getMessage() + "(Navigation)");
+        }
     }
 
     private void setupInjection() {
@@ -68,6 +89,7 @@ public class NavigationActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        Utils.writelogFile(this, "onBackPressed (Navigation)");
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -77,6 +99,7 @@ public class NavigationActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Utils.writelogFile(this, "onCreateOptionsMenu (Navigation)");
         getMenuInflater().inflate(R.menu.navigation, menu);
         return true;
     }
@@ -86,7 +109,12 @@ public class NavigationActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_log_out) {
-            presenter.logOut();
+            Utils.writelogFile(this, "action_log_out click (Navigation)");
+            presenter.logOut(this);
+            return true;
+        } else if (id == R.id.action_support) {
+            Utils.writelogFile(this, "action_support click Intent SupportActivity(Navigation)");
+            startActivity(new Intent(this, SupportActivity.class));
             return true;
         }
 
@@ -99,19 +127,23 @@ public class NavigationActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.my_account) {
+            Utils.writelogFile(this, "my_account click Intent AccountActivity(Navigation)");
             startActivity(new Intent(this, AccountActivity.class));
         } else if (id == R.id.offers) {
+            Utils.writelogFile(this, "offers click Intent OfferActivity(Navigation)");
             startActivity(new Intent(this, OfferActivity.class));
         } else if (id == R.id.notification) {
+            Utils.writelogFile(this, "notification click Intent NotificationActivity(Navigation)");
             startActivity(new Intent(this, NotificationActivity.class));
         }
-
+        Utils.writelogFile(this, "closeDrawer(Navigation)");
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     protected void onDestroy() {
+        Utils.writelogFile(this, "onDestroy(Navigation)");
         presenter.onDestroy();
         super.onDestroy();
     }
@@ -127,6 +159,7 @@ public class NavigationActivity extends AppCompatActivity
 
     @Override
     public void setError(String error) {
+        Utils.writelogFile(this, "setError " + error + "(Navigation)");
         Utils.showSnackBar(content, error);
     }
 }

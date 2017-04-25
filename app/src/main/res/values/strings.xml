@@ -1,57 +1,99 @@
 <resources>
+
     <string name="app_name">My Citys Shops.(Adm)</string>
+    <string name="app_name_title">My City\'s Shops(Adm)</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <!--TITLE TOOLBAR-->
+    <!--MENU DRAWER-->
+    <string name="support_title">Soporte</string>
+    <string name="offer_title">Cartelera</string>
+    <string name="my_account_title">Mi Cuenta</string>
+    <string name="notification_title">Notificación</string>
+    <string name="my_account_menu_drawer">Mi Cuenta</string>
+    <string name="my_billboard_menu_drawer">Mi Cartelera</string>
+    <string name="notification_menu_drawer">Notificación</string>
 
-    <string name="action_delete">Eliminar</string>
-    <string name="my_account_title">MI CUENTA</string>
-    <string name="notification_title">NOTIFICACION</string>
+    <!--ACCOUNT-->
     <string name="account_save">Datos guardados.</string>
-    <string name="error_name">Ingrese un nombre.</string>
     <string name="error_logo">Seleccione un logo.</string>
     <string name="error_address">Ingrese una dirección.</string>
     <string name="error_map">Seleccione un punto en el mapa.</string>
     <string name="error_description">Ingrese una descripción.</string>
     <string name="error_working">Ingrese su horario de atención.</string>
+    <string name="hint_number_phone">Ingrese número de contacto.(Opcional)</string>
+    <string name="hint_number_whatsapp">Ingrese número de Whatsapp.(Opcional)</string>
+    <string name="hint_email">Ingrese Email de contacto.(Opcional)</string>
+    <string name="hint_web">Ingrese su Web.(Opcional)</string>
+    <string name="hint_face">Ingrese su Facebook.(Opcional)</string>
+    <string name="hint_insta">Ingrese su Instagram.(Opcional)</string>
+    <string name="hint_twitter">Ingrese su Twitter.(Opcional)</string>
+    <string name="hint_snap">Ingrese su Snapchat.(Opcional)</string>
+    <string name="hint_description">Ingrese una descripción del comercio.</string>
+    <string name="hint_address">Ingrese la dirección del comercio.</string>
+    <string name="hint_working">Ingrese su horario de atención.</string>
+    <!--OFFER-->
     <string name="error_image">Seleccione una imagen.</string>
-    <!--Deb-->
-    <string name="google_maps_key">AIzaSyAWfQFYnINp_aoysUJlg1vvcb5h7HwGhyU</string>
     <string name="title_empty">Ingrese un titulo.</string>
-    <string name="description_empty">Ingrese la promo.</string>
-    <string name="offer_success">Promo cargada corectamente.</string>
-    <string name="offer_update">Promo actualizada correctamente.</string>
-    <string name="offer_delete">Promo eliminada correctamente.</string>
+    <string name="description_empty">Ingrese una descripción.</string>
+    <string name="offer_success">Actividad cargada corectamente.</string>
+    <string name="offer_update">Actividad actualizada correctamente.</string>
+    <string name="offer_unable">Actividad Desactivada</string>
+    <string name="offer_able">Actividad activada</string>
+    <string name="offer_available">Actividades disponibles:</string>
+    <!--NOTIFICATION-->
     <string name="send_notification_success">Notificación enviada.</string>
     <string name="notification_empty">Ingrese una notificación.</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="hint_notification">Ingrese la notificación.(Max.300)</string>
+    <string name="notification_unavailable">Usted podrá enviar una nueva notificación a partir del </string>
+    <!--MAP KEY Deb-->
+    <string name="google_maps_key">AIzaSyAWfQFYnINp_aoysUJlg1vvcb5h7HwGhyU</string>
 
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="error_fill_place">Error al cargar los datos. Cierre la aplicación y vuelva a intentarlo.</string>
+
+    <string name="title_activity_login">Sign in</string>
+    <!--MSG-->
+    <string name="error_fill_place">Problemas al cargar los datos. Cierre la aplicación y vuelva a intentarlo.</string>
+    <string name="error_file_log">Problema para generar el archivo Log.</string>
+    <string name="email_success">Email enviado correctamente. Soporte se comunicará con usted.</string>
+    <string name="shop_name_empty">No se pudo obtener el nombre de su tienda.</string>
+    <string name="error_data_base">Problema en la base de datos.</string>
+    <string name="error_internet">Verificar su conexión de Internet.</string>
+    <!--SHARED-->
     <string name="my_city_id_shared">my_city_id</string>
     <string name="id_city">id_city</string>
     <string name="shop_id_shared">shop_id_shared</string>
     <string name="id_shop">id_shop</string>
     <string name="my_follow_id_shared">my_follow_id</string>
     <string name="id_follow">id_follow</string>
-
-    <string name="user_empty">Ingrese el usuario.</string>
-    <string name="pass_empty">Ingrese su contraseña.</string>
-    <string name="error_id_city">Error al obtener su ubicación.</string>
-    <!-- Strings related to log -->
+    <string name="log_date_shared">date_log_file</string>
+    <string name="log_date">log_date</string>
     <string name="my_user_log_shared">my_user_log</string>
+    <!--LOGIN-->
+    <string name="user_empty">Ingrese su usuario.</string>
+    <string name="pass_empty">Ingrese su contraseña.</string>
+    <string name="error_id_city">Problema al intentar obtener su ubicación.</string>
+     <!--MENU-->
     <string name="log_out_menu">Desloguear</string>
-    <string name="offer_unable">Promo Desactivada</string>
-    <string name="offer_able">Promo activada</string>
+    <string name="support_menu">Soporte</string>
+    <!--LOG  -->
+    <string name="log_file_name">LogMyCity.txt</string>
+    <!--EMAIL-->
+    <string name="hint_comment">Ingrese un comentario.(Max.300)</string>
+    <string name="following">SEGUIDORES !!!</string>
+    <!--PLACE-->
+    <string name="country_title_place">País</string>
+    <string name="state_title_place">Provincia</string>
+    <string name="city_title_place">Ciudad</string>
+    <string name="enter_button_place">Ingresar</string>
+    <string name="user_login">Usuario</string>
+    <string name="pass_login">Contraseña</string>
+    <string name="change_city">Cambiar de Ciudad</string>
+    <string name="hint_title_offer">Ingrese un titulo.(Max.20)</string>
+    <string name="hint_offer">Ingrese la actividad.(Max.100)</string>
+
+    <string name="processing">Procesando...</string>
+    <string name="sent_emal_auto">Se envió una email automaticamente a soporte.</string>
+    <string name="my_location">MI UBICACIÓN</string>
+
 </resources>

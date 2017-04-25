@@ -4,33 +4,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/my_account"
-            android:icon="@android:drawable/ic_menu_crop"
-            android:title="Mi Cuenta" />
+            android:icon="@drawable/ic_my_account"
+            android:title="@string/my_account_menu_drawer" />
         <item
             android:id="@+id/offers"
-            android:icon="@android:drawable/ic_menu_agenda"
-            android:title="Promos" />
+            android:icon="@drawable/ic_offers"
+            android:title="@string/my_billboard_menu_drawer" />
         <item
             android:id="@+id/notification"
-            android:icon="@android:drawable/ic_menu_set_as"
-            android:title="Notificación" />
-        <!--<item-->
-            <!--android:id="@+id/nav_manage"-->
-            <!--android:icon="@drawable/ic_menu_manage"-->
-            <!--android:title="Tools" />-->
+            android:icon="@drawable/ic_notification"
+            android:title="@string/notification_menu_drawer" />
     </group>
-
-    <!--<item android:title="Communicate">-->
-        <!--<menu>-->
-            <!--<item-->
-                <!--android:id="@+id/nav_share"-->
-                <!--android:icon="@drawable/ic_menu_share"-->
-                <!--android:title="Share" />-->
-            <!--<item-->
-                <!--android:id="@+id/nav_send"-->
-                <!--android:icon="@drawable/ic_menu_send"-->
-                <!--android:title="Send" />-->
-        <!--</menu>-->
-    <!--</item>-->
-
 </menu>

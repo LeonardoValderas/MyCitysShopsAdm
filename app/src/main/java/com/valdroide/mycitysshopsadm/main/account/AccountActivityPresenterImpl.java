@@ -37,14 +37,9 @@ public class AccountActivityPresenterImpl implements AccountActivityPresenter {
     }
 
     @Override
-    public void getAccount() {
-        interactor.getAccount();
+    public void getAccount(Context context) {
+        interactor.getAccount(context);
     }
-
-//    @Override
-//    public void saveAccount(Context context, Account account) {
-//        interactor.saveAccount(context, account);
-//    }
 
     @Override
     public void updateAccount(Context context, Account account) {
@@ -67,7 +62,6 @@ public class AccountActivityPresenterImpl implements AccountActivityPresenter {
                     break;
                 case AccountActivityEvent.ERROR:
                     view.error(event.getError());
-
             }
         }
     }

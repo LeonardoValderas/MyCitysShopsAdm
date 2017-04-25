@@ -63,7 +63,7 @@ public class SupportActivity extends AppCompatActivity implements SupportActivit
 
     public void initDialog() {
         pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Procesando...");
+        pDialog.setMessage(getString(R.string.processing));
         pDialog.setCancelable(false);
     }
 
@@ -86,8 +86,17 @@ public class SupportActivity extends AppCompatActivity implements SupportActivit
     @Override
     public void sendEmailSuccess() {
         Utils.writelogFile(this, "sendEmailSuccess(support)");
-        editTextEmail.setText("");
+        setText(editTextEmail, "");
         setError(getString(R.string.email_success));
+    }
+
+    private void setText(final EditText editText,final String value){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                editText.setText(value);
+            }
+        });
     }
 
     @Override

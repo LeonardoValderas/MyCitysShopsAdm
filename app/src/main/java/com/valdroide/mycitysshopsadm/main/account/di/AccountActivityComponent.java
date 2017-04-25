@@ -8,9 +8,6 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 
-/**
- * Created by LEO on 30/1/2017.
- */
 @Singleton
 @Component(modules = {AccountActivityModule.class, LibsModule.class, MyCitysShopsAdmAppModule.class})
 public interface AccountActivityComponent {

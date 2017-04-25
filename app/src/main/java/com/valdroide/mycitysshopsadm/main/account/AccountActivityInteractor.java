@@ -4,12 +4,7 @@ import android.content.Context;
 
 import com.valdroide.mycitysshopsadm.entities.shop.Account;
 
-/**
- * Created by LEO on 20/2/2017.
- */
-
 public interface AccountActivityInteractor {
-    void getAccount();
-    //void saveAccount(Context context, Account account);
+    void getAccount(Context context);
     void updateAccount(Context context, Account account);
 }

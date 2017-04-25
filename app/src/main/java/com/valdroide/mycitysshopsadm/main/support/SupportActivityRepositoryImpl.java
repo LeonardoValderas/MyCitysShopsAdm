@@ -41,11 +41,9 @@ public class SupportActivityRepositoryImpl implements SupportActivityRepository 
                 }
             };
             new Thread(runnable).start();
-            Utils.writelogFile(context, "post SENDEMAILSUCCESS(support, Repository)");
-            post(SupportActivityEvent.SENDEMAILSUCCESS);
         } else {
-            Utils.writelogFile(context, " Base de datos error " + Utils.ERROR_DATA_BASE + "(support, Repository)");
-            post(SupportActivityEvent.ERROR, Utils.ERROR_DATA_BASE);
+            Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(support, Repository)");
+            post(SupportActivityEvent.ERROR, context.getString(R.string.error_data_base));
         }
     }
 
@@ -84,13 +82,15 @@ public class SupportActivityRepositoryImpl implements SupportActivityRepository 
                 message.setContent(multipart);
                 Utils.writelogFile(context, "send(support, Repository)");
                 Transport.send(message);
+                Utils.writelogFile(context, "post SENDEMAILSUCCESS(support, Repository)");
+                post(SupportActivityEvent.SENDEMAILSUCCESS);
             } catch (MessagingException ex) {
                 Utils.writelogFile(context, " send error " + ex.getMessage() + "(support, Repository)");
                 post(SupportActivityEvent.ERROR, ex.getMessage());
             }
         } else {
-            Utils.writelogFile(context, " Internet error " + Utils.ERROR_INTERNET + "(support, Repository)");
-            post(SupportActivityEvent.ERROR, Utils.ERROR_INTERNET);
+            Utils.writelogFile(context, " Internet error " + context.getString(R.string.error_internet) + "(support, Repository)");
+            post(SupportActivityEvent.ERROR, context.getString(R.string.error_internet));
         }
     }
 

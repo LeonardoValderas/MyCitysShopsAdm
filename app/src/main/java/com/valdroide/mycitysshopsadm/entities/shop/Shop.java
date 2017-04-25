@@ -36,6 +36,9 @@ public class Shop extends BaseModel {
     @Column
     @SerializedName("is_active")
     public int ISACTIVE;
+    @Column
+    @SerializedName("count_offer")
+    public int COUNT_OFFER;
 
     public int getID_SHOP_KEY() {
         return ID_SHOP_KEY;
@@ -99,5 +102,13 @@ public class Shop extends BaseModel {
 
     public void setID_CAT_SUB_FOREIGN(int ID_CAT_SUB_FOREIGN) {
         this.ID_CAT_SUB_FOREIGN = ID_CAT_SUB_FOREIGN;
+    }
+
+    public int getCOUNT_OFFER() {
+        return COUNT_OFFER;
+    }
+
+    public void setCOUNT_OFFER(int COUNT_OFFER) {
+        this.COUNT_OFFER = COUNT_OFFER;
     }
 }

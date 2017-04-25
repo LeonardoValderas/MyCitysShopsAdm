@@ -48,7 +48,7 @@ public class AdapterSpinnerState extends ArrayAdapter<State> {
 
     public void setStates(List<State> states) {
         this.states = states;
-        notifyDataSetChanged();
+        this.notifyDataSetChanged();
     }
 }
 
