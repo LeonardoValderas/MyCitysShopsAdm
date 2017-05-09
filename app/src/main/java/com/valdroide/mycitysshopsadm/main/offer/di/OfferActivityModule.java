@@ -71,8 +71,8 @@ public class OfferActivityModule {
 
     @Provides
     @Singleton
-    OfferActivityRecyclerAdapter provideOfferActivityRecyclerAdapter(List<Offer> offersList, OnItemClickListener onItemClickListener, Context context) {
-        return new OfferActivityRecyclerAdapter(offersList, onItemClickListener, context);
+    OfferActivityRecyclerAdapter provideOfferActivityRecyclerAdapter(List<Offer> offersList, OnItemClickListener onItemClickListener, Activity activity) {
+        return new OfferActivityRecyclerAdapter(offersList, onItemClickListener, activity);
     }
 
     @Provides

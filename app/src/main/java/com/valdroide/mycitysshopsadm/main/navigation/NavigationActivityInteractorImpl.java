@@ -13,4 +13,9 @@ public class NavigationActivityInteractorImpl implements NavigationActivityInter
     public void logOut(Context context) {
       repository.logOut(context);
     }
+
+    @Override
+    public void getURLShop(Context context) {
+        repository.getURLShop(context);
+    }
 }

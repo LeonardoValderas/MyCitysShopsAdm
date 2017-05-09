@@ -16,9 +16,8 @@ public interface APIService {
     //ACCOUNT
     @FormUrlEncoded
     @POST("account/updateAccount.php")
-    Call<ResultPlace> updateAccount(@Field("id_shop_foreign") int id_shop, @Field("id_account") int id_account,
-                                    @Field("id_city_foreign") int id_city_foreign,
-                                    @Field("encode") String encode, @Field("url_logo") String url_logo,
+    Call<ResultPlace> updateAccount(@Field("id_shop_foreign") int id_shop, @Field("id_city_foreign") int id_city_foreign,
+                                    @Field("id_account") int id_account, @Field("encode") String encode, @Field("url_logo") String url_logo,
                                     @Field("name_logo") String name_logo, @Field("name_before") String name_before,
                                     @Field("description") String description, @Field("working") String working,
                                     @Field("phone") String phone, @Field("email") String email,

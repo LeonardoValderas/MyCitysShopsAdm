@@ -2,6 +2,7 @@ package com.valdroide.mycitysshopsadm;
 
 import android.app.Activity;
 import android.app.Application;
+
 import com.facebook.stetho.Stetho;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.valdroide.mycitysshopsadm.lib.di.LibsModule;
@@ -13,6 +14,10 @@ import com.valdroide.mycitysshopsadm.main.login.di.DaggerLoginActivityComponent;
 import com.valdroide.mycitysshopsadm.main.login.di.LoginActivityComponent;
 import com.valdroide.mycitysshopsadm.main.login.di.LoginActivityModule;
 import com.valdroide.mycitysshopsadm.main.login.ui.LoginActivityView;
+import com.valdroide.mycitysshopsadm.main.map.di.DaggerMapActivityComponent;
+import com.valdroide.mycitysshopsadm.main.map.di.MapActivityComponent;
+import com.valdroide.mycitysshopsadm.main.map.di.MapActivityModule;
+import com.valdroide.mycitysshopsadm.main.map.ui.MapActivityView;
 import com.valdroide.mycitysshopsadm.main.navigation.di.DaggerNavigationActivityComponent;
 import com.valdroide.mycitysshopsadm.main.navigation.di.NavigationActivityComponent;
 import com.valdroide.mycitysshopsadm.main.navigation.di.NavigationActivityModule;
@@ -71,6 +76,16 @@ public class MyCitysShopsAdmApp extends Application {
         libsModule = new LibsModule();
         myCitysShopsAdmAppModule = new MyCitysShopsAdmAppModule(this);
     }
+
+    public MapActivityComponent getMapActivityComponent(MapActivityView view, Activity activity) {
+        return DaggerMapActivityComponent
+                .builder()
+                .myCitysShopsAdmAppModule(myCitysShopsAdmAppModule)
+                .libsModule(new LibsModule(activity))
+                .mapActivityModule(new MapActivityModule(activity, view))
+                .build();
+    }
+
 
     public SupportActivityComponent getSupportActivityComponent(SupportActivityView view, Activity activity) {
         return DaggerSupportActivityComponent

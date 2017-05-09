@@ -97,7 +97,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         pDialog.show();
         Utils.writelogFile(this, "presenter.getOffer()(offer)");
         presenter.getOffer(this);
-        editTextTitle.setFilters(new InputFilter[] {new InputFilter.AllCaps(), new InputFilter.LengthFilter(20)});
+        editTextTitle.setFilters(new InputFilter[]{new InputFilter.AllCaps(), new InputFilter.LengthFilter(20)});
     }
 
     public void initDialog() {
@@ -470,8 +470,10 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
                     pDialog.show();
                     is_active = 1;
 
-                    presenter.saveOffer(this, fillOffer(Utils.removeAccents(editTextTitle.getText().toString()),
-                            Utils.removeAccents(editTextDescription.getText().toString())));
+//                    presenter.saveOffer(this, fillOffer(Utils.removeAccents(editTextTitle.getText().toString()),
+//                            Utils.removeAccents(editTextDescription.getText().toString())));
+                    presenter.saveOffer(this, fillOffer(editTextTitle.getText().toString(),
+                            editTextDescription.getText().toString()));
                 }
             } catch (Exception e) {
                 Utils.writelogFile(this, "action_add click error: " + e.getMessage() + " (offer)");
@@ -488,8 +490,10 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
                     Utils.showSnackBar(conteiner, getString(R.string.description_empty));
                 else {
                     pDialog.show();
-                    presenter.updateOffer(this, fillOffer(Utils.removeAccents(editTextTitle.getText().toString()),
-                            Utils.removeAccents(editTextDescription.getText().toString())));
+//                    presenter.updateOffer(this, fillOffer(Utils.removeAccents(editTextTitle.getText().toString()),
+//                            Utils.removeAccents(editTextDescription.getText().toString())));
+                    presenter.updateOffer(this, fillOffer(editTextTitle.getText().toString(),
+                            editTextDescription.getText().toString()));
                 }
             } catch (Exception e) {
                 Utils.writelogFile(this, "action_update click error: " + e.getMessage() + " (offer)");

@@ -1,5 +1,6 @@
 package com.valdroide.mycitysshopsadm.main.login.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
     Button buttonChangePlace;
     @Bind(R.id.activity_login)
     RelativeLayout conteiner;
+    private ProgressDialog pDialog;
 
     @Inject
     LoginActivityPresenter presenter;
@@ -46,13 +48,23 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
         setupInjection();
         Utils.writelogFile(this, "Se inicia presenter Oncreate(Login)");
         presenter.onCreate();
+        initDialog();
     }
 
+    public void dismissDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
     private void setupInjection() {
         MyCitysShopsAdmApp app = (MyCitysShopsAdmApp) getApplication();
         app.getLoginActivityComponent(this, this).inject(this);
     }
 
+    public void initDialog() {
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage(getString(R.string.processing));
+        pDialog.setCancelable(false);
+    }
     @OnClick(R.id.buttonInto)
     public void validateLogin() {
         Utils.writelogFile(this, "Metodo validateLogin on click buttonInto(Login)");
@@ -65,6 +77,7 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
                 Utils.writelogFile(this, "Utils.getIdCity es cero(Login)");
                 Utils.showSnackBar(conteiner, getString(R.string.error_id_city));
             } else {
+                pDialog.show();
                 Utils.writelogFile(this, " presenter.validateLogin(Login)");
                 presenter.validateLogin(this, editTextUser.getText().toString(),
                         editTextPass.getText().toString(), Utils.getIdCity(this));
@@ -86,12 +99,14 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
         Utils.writelogFile(this, "Metodo loginSuccess y intente Splash con extra true(Login)");
         Intent intent = new Intent(this, SplashActivity.class);
         intent.putExtra("isLoguin", true);
+        dismissDialog();
         startActivity(intent);
     }
 
     @Override
     public void setError(String msg) {
         Utils.writelogFile(this, "Metodo setError: " + msg + "(Login)");
+        dismissDialog();
         Utils.showSnackBar(conteiner, msg);
     }
 

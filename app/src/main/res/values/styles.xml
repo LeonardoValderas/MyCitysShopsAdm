@@ -7,10 +7,13 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <style name="TextSizeToolBar720" parent="@style/Base.TextAppearance.AppCompat.Title">
         <item name="android:textSize">25dp</item>
     </style>
+
     <style name="NoActionBarStyle" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -29,6 +32,7 @@
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="TextView_Title_Place_600_Land">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -75,7 +79,6 @@
     <style name="TextView_Follow_Content_Nav">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-
         <item name="android:gravity">center</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -91,6 +94,14 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+    </style>
+
+    <style name="TextView_Description_Recycler">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+
     </style>
 
     <style name="TextView_Switch_Recycler">

@@ -12,7 +12,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +26,7 @@ import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.entities.shop.Account;
 import com.valdroide.mycitysshopsadm.main.account.AccountActivityPresenter;
-import com.valdroide.mycitysshopsadm.main.map.MapActivity;
+import com.valdroide.mycitysshopsadm.main.map.ui.MapActivity;
 import com.valdroide.mycitysshopsadm.utils.Utils;
 
 import java.io.IOException;
@@ -110,9 +109,10 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
             if (getIntent().getStringExtra("uri") != null) {
                 Utils.writelogFile(this, "getStringExtra(uri) != null y parse Uri(Account)");
                 uriExtra = Uri.parse(getIntent().getStringExtra("uri"));
-                if (uriExtra != null)
+                if (uriExtra != null) {
                     Utils.writelogFile(this, "parse Uri != null y assignImage (Account)");
-                assignImage(uriExtra);
+                    assignImage(uriExtra);
+                }
             }
             Utils.writelogFile(this, "fillExtraData(); (Account)");
             fillExtraData();
@@ -196,9 +196,13 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
     @Override
     public void error(String mgs) {
         Utils.writelogFile(this, "error " + mgs + " (Account)");
+        dismissDialog();
+        Utils.showSnackBar(activityAccount, mgs);
+    }
+
+    public void dismissDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
-        Utils.showSnackBar(activityAccount, mgs);
     }
 
     @Override
@@ -226,7 +230,8 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
             id_account = account.getID_ACCOUNT_KEY();
             textViewName.setText(account.getSHOP_NAME());
             url_logo = account.getURL_LOGO() == null ? "" : account.getURL_LOGO();
-            Utils.setPicasso(this, url_logo, android.R.drawable.ic_menu_crop, imageViewLogo);
+            if (!url_logo.isEmpty())
+                Utils.setPicasso(this, url_logo, android.R.drawable.ic_menu_crop, imageViewLogo);
             name_logo = account.getNAME_LOGO();
             name_before = name_logo;
             editTextPhone.setText(account.getPHONE());
@@ -245,8 +250,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         } catch (Exception e) {
             Utils.writelogFile(this, "error catch " + e.getMessage());
         }
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+        dismissDialog();
     }
 
     public Account prepareAccount() {
@@ -433,29 +437,36 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
                 presenter.updateAccount(this, prepareAccount());
         } else if (id == R.id.action_map) {
             Utils.writelogFile(this, "action_map click Intent set extras(Account)");
-            try {
-                Intent intent = new Intent(this, MapActivity.class);
-                intent.putExtra("map", true);
-                intent.putExtra("name", textViewName.getText().toString());
-                if (uriExtra != null)
-                    intent.putExtra("uri", uriExtra.toString());
-                intent.putExtra("phone", editTextPhone.getText().toString());
-                intent.putExtra("email", editTextEmail.getText().toString());
-                intent.putExtra("facebook", editTextFace.getText().toString());
-                intent.putExtra("web", editTextWeb.getText().toString());
-                intent.putExtra("whatsaap", editTextWhatsaap.getText().toString());
-                intent.putExtra("instagram", editTextInsta.getText().toString());
-                intent.putExtra("twitter", editTextTwitter.getText().toString());
-                intent.putExtra("snapchat", editTextSnap.getText().toString());
-                intent.putExtra("working", editTextWorking.getText().toString());
-                intent.putExtra("address", editTextAddress.getText().toString());
-                intent.putExtra("description", editTextDescription.getText().toString());
-                intent.putExtra("latitud", latitud);
-                intent.putExtra("longitud", longitud);
-                startActivity(intent);
-            } catch (Exception e) {
-                error(e.getMessage());
-                Utils.writelogFile(this, "action_map click Intent error: " + e.getMessage() + " (Account)");
+            if (Utils.getIdCity(this) != 0) {
+                Utils.writelogFile(this, "id_city != 0(Account)");
+                try {
+                    Intent intent = new Intent(this, MapActivity.class);
+                    intent.putExtra("map", true);
+                    intent.putExtra("name", textViewName.getText().toString());
+                    if (uriExtra != null)
+                        intent.putExtra("uri", uriExtra.toString());
+                    intent.putExtra("phone", editTextPhone.getText().toString());
+                    intent.putExtra("email", editTextEmail.getText().toString());
+                    intent.putExtra("facebook", editTextFace.getText().toString());
+                    intent.putExtra("web", editTextWeb.getText().toString());
+                    intent.putExtra("whatsaap", editTextWhatsaap.getText().toString());
+                    intent.putExtra("instagram", editTextInsta.getText().toString());
+                    intent.putExtra("twitter", editTextTwitter.getText().toString());
+                    intent.putExtra("snapchat", editTextSnap.getText().toString());
+                    intent.putExtra("working", editTextWorking.getText().toString());
+                    intent.putExtra("address", editTextAddress.getText().toString());
+                    intent.putExtra("description", editTextDescription.getText().toString());
+                    intent.putExtra("latitud", latitud);
+                    intent.putExtra("longitud", longitud);
+                    startActivity(intent);
+
+                } catch (Exception e) {
+                    Utils.writelogFile(this, "action_map click Intent error: " + e.getMessage() + " (Account)");
+                    error(e.getMessage());
+                }
+            } else {
+                Utils.writelogFile(this, "id_city == 0 (Account)");
+                error(getString(R.string.id_city));
             }
         } else if (id == R.id.action_edit) {
             Utils.writelogFile(this, "action_edit click(Account)");

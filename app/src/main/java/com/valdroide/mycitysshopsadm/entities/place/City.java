@@ -29,6 +29,14 @@ public class City extends BaseModel {
     @SerializedName("city")
     public String CITY;
 
+    @Column
+    @SerializedName("latitud")
+    public String LATITUD;
+
+    @Column
+    @SerializedName("longitud")
+    public String LONGITUD;
+
     public City() {
     }
 
@@ -66,5 +74,21 @@ public class City extends BaseModel {
 
     public void setCITY(String CITY) {
         this.CITY = CITY;
+    }
+
+    public String getLATITUD() {
+        return LATITUD;
+    }
+
+    public void setLATITUD(String LATITUD) {
+        this.LATITUD = LATITUD;
+    }
+
+    public String getLONGITUD() {
+        return LONGITUD;
+    }
+
+    public void setLONGITUD(String LONGITUD) {
+        this.LONGITUD = LONGITUD;
     }
 }

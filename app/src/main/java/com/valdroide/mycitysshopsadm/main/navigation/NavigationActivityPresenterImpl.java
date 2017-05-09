@@ -36,6 +36,11 @@ public class NavigationActivityPresenterImpl implements NavigationActivityPresen
     }
 
     @Override
+    public void getURLShop(Context context) {
+        interactor.getURLShop(context);
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(NavigationActivityEvent event) {
         if (this.view != null) {
@@ -45,6 +50,9 @@ public class NavigationActivityPresenterImpl implements NavigationActivityPresen
                     break;
                 case NavigationActivityEvent.ERROR:
                     view.setError(event.getError());
+                    break;
+                case NavigationActivityEvent.URL:
+                    view.setURLShop(event.getUrl());
                     break;
             }
         }

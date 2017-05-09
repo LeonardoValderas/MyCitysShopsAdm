@@ -25,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,6 +35,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.activation.CommandMap;
 import javax.activation.DataHandler;
@@ -53,8 +61,8 @@ public class Utils {
 
 //    public static String URL_IMAGE = "http://10.0.2.2:8080/my_citys_shops_adm/account/image_account/";
 //    public static String URL_IMAGE_OFFER = "http://10.0.2.2:8080/my_citys_shops_adm/offer/image_offer/";
-   // public static String URL_IMAGE = "http://10.0.3.2:8080/my_citys_shops_adm/account/image_account/";
-   // public static String URL_IMAGE_OFFER = "http://10.0.3.2:8080/my_citys_shops_adm/offer/image_offer/";
+    // public static String URL_IMAGE = "http://10.0.3.2:8080/my_citys_shops_adm/account/image_account/";
+    // public static String URL_IMAGE_OFFER = "http://10.0.3.2:8080/my_citys_shops_adm/offer/image_offer/";
 
     //public static String URL_IMAGE = "http://myd.esy.es/myd/clothes/image_clothes/";
     public static String URL_IMAGE = "http://myd.esy.es/my_citys_shops_adm/account/image_account/";
@@ -62,7 +70,7 @@ public class Utils {
 //    public static String ERROR_DATA_BASE = "Error al guardar los datos.";
 //    public static String ERROR_INTERNET = "Verificar su conexión de Internet.";
 
-      //FECHAS
+    //FECHAS
     public static String getFechaLogFile() {
         Date dateOficial = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -155,36 +163,57 @@ public class Utils {
     }
 
     public static boolean isNetworkAvailable(Context context) {
-        int[] networkTypes = {ConnectivityManager.TYPE_MOBILE,
-                ConnectivityManager.TYPE_WIFI};
         try {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            for (int networkType : networkTypes) {
-                NetworkInfo netInfo = cm.getActiveNetworkInfo();
-                if (netInfo != null && netInfo.getState() == NetworkInfo.State.CONNECTED) {
-                    return true;
-                }
+            if (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting()) {
+                return internetConnectionAvailable(5000);
+            }else {
+                return false;
             }
         } catch (Exception e) {
             return false;
         }
-        return false;
     }
 
-    public static void applyFontForToolbarTitle(Activity context, Toolbar toolbar) {
-        for (int i = 0; i < toolbar.getChildCount(); i++) {
-            View view = toolbar.getChildAt(i);
-            if (view instanceof TextView) {
-                TextView tv = (TextView) view;
-                Typeface titleFont = Typeface.
-                        createFromAsset(context.getAssets(), "fonts/antspan.ttf");
-                if (tv.getText() != null) {
-                    tv.setTypeface(titleFont);
-                    break;
+    private static boolean internetConnectionAvailable(int timeOut) {
+        InetAddress inetAddress = null;
+        try {
+            Future<InetAddress> future = Executors.newSingleThreadExecutor().submit(new Callable<InetAddress>() {
+                @Override
+                public InetAddress call() {
+                    try {
+                        return InetAddress.getByName("google.com");
+                    } catch (UnknownHostException e) {
+                        return null;
+                    }
                 }
-            }
+            });
+            inetAddress = future.get(timeOut, TimeUnit.MILLISECONDS);
+            future.cancel(true);
+        } catch (InterruptedException e) {
+            return false;
+        } catch (ExecutionException e) {
+            return false;
+        } catch (TimeoutException e) {
+            return false;
         }
+        return inetAddress != null && !inetAddress.equals("");
     }
+
+//     public static void applyFontForToolbarTitle(Activity context, Toolbar toolbar) {
+//        for (int i = 0; i < toolbar.getChildCount(); i++) {
+//            View view = toolbar.getChildAt(i);
+//            if (view instanceof TextView) {
+//                TextView tv = (TextView) view;
+//                Typeface titleFont = Typeface.
+//                        createFromAsset(context.getAssets(), "fonts/antspan.ttf");
+//                if (tv.getText() != null) {
+//                    tv.setTypeface(titleFont);
+//                    break;
+//                }
+//            }
+//        }
+//    }
 
     //TITLE GRUOP
     public static Typeface setFontPacificoTextView(Context context) {
@@ -205,7 +234,6 @@ public class Utils {
     public static Typeface setFontRalewatTextView(Context context) {
         return Typeface.createFromAsset(context.getAssets(), "fonts/Raleway.ttf");
     }
-
 
 
     private static Map<Character, Character> MAP_NORM;
@@ -390,6 +418,7 @@ public class Utils {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.log_date_shared), Context.MODE_PRIVATE);
         return sharedPreferences.getString(context.getString(R.string.log_date), "");
     }
+
     ////EMAIL SENDER
     public static CommandMap createMailcapCommandMap() {
         try {

@@ -34,6 +34,9 @@ public class Shop extends BaseModel {
     @SerializedName("id_cat_sub")
     public int ID_CAT_SUB_FOREIGN;
     @Column
+    @SerializedName("follow")
+    public int FOLLOW;
+    @Column
     @SerializedName("is_active")
     public int ISACTIVE;
     @Column
@@ -110,5 +113,13 @@ public class Shop extends BaseModel {
 
     public void setCOUNT_OFFER(int COUNT_OFFER) {
         this.COUNT_OFFER = COUNT_OFFER;
+    }
+
+    public int getFOLLOW() {
+        return FOLLOW;
+    }
+
+    public void setFOLLOW(int FOLLOW) {
+        this.FOLLOW = FOLLOW;
     }
 }

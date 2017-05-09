@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">My Citys Shops.(Adm)</string>
+    <string name="app_name_title">My City\'s Shops(Adm)</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
     <!--TITLE TOOLBAR-->
     <!--MENU DRAWER-->
     <string name="offer_title">My BillBoard</string>
@@ -20,11 +24,11 @@
     <string name="hint_number_phone">Enter contact number.(Optional)</string>
     <string name="hint_number_whatsapp">Enter Whatsapp number.(Optional)</string>
     <string name="hint_email">Enter Email.(Optional)</string>
-    <string name="hint_web">Enter your Web.(Optional)</string>
-    <string name="hint_face">Enter your Facebook.(Optional)</string>
-    <string name="hint_insta">Enter your Instagram.(Optional)</string>
-    <string name="hint_twitter">Enter your Twitter.(Optional)</string>
-    <string name="hint_snap">Enter your Snapchat.(Optional)</string>
+    <string name="hint_web">Enter your Web address without https://.(Optional)</string>
+    <string name="hint_face">Enter your Facebook\'s user.(Optional)</string>
+    <string name="hint_insta">Enter your Instagram\'s user.(Optional)</string>
+    <string name="hint_twitter">Enter your Twitter\'s user.(Optional)</string>
+    <string name="hint_snap">Enter your Snapchat\'s user.(Optional)</string>
     <string name="hint_description">Enter a Shop\'s description.</string>
     <string name="hint_address">Enter Shop\'s address.</string>
     <string name="hint_working">Enter operating hour.</string>
@@ -34,8 +38,8 @@
     <string name="description_empty">Enter a description.</string>
     <string name="offer_success">Activity added successfully.</string>
     <string name="offer_update">Activity updated successfully.</string>
-    <string name="offer_unable">Activity disabled</string>
-    <string name="offer_able">Activity enabled</string>
+    <string name="offer_unable">Activate</string>
+    <string name="offer_able">Deactivate</string>
     <string name="offer_available">Available activities:</string>
     <!--NOTIFICATION-->
     <string name="send_notification_success">Notification sent.</string>
@@ -74,4 +78,16 @@
     <string name="processing">Processing...</string>
     <string name="sent_emal_auto">An email was automatically sent to support.</string>
     <string name="my_location">MY LOCATION</string>
+    <!--SHARED-->
+    <string name="my_city_id_shared">my_city_id</string>
+    <string name="id_city">id_city</string>
+    <string name="shop_id_shared">shop_id_shared</string>
+    <string name="id_shop">id_shop</string>
+    <string name="my_follow_id_shared">my_follow_id</string>
+    <string name="id_follow">id_follow</string>
+    <string name="log_date_shared">date_log_file</string>
+    <string name="log_date">log_date</string>
+    <string name="my_user_log_shared">my_user_log</string>
+    <!--LOG  -->
+    <string name="log_file_name">LogMyCity.txt</string>
 </resources>

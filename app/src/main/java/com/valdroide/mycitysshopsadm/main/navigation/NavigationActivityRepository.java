@@ -4,4 +4,5 @@ import android.content.Context;
 
 public interface NavigationActivityRepository {
     void logOut(Context context);
+    void getURLShop(Context context);
 }

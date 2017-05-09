@@ -282,7 +282,8 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                 Utils.writelogFile(context, "dateShop == null y Se trae Shop(Splash, Repository)");
                 shop = SQLite.select().from(Shop.class).querySingle();
                 if (shop != null) {
-                    Utils.writelogFile(context, "shop != null y Se llama al metodo getShopData(Splash, Repository)");
+                    Utils.writelogFile(context, "shop != null, setIdFollow y Se llama al metodo getShopData(Splash, Repository)");
+                    Utils.setIdFollow(context, shop.getFOLLOW());
                     getShopData(context, shop.getID_SHOP_KEY());
                 } else {
                     Utils.writelogFile(context, "shop == null, " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
@@ -387,8 +388,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                         Delete.table(Account.class);
                                         Utils.writelogFile(context, "delete Account ok y save account(Splash, Repository)");
                                         account.save();
-                                        Utils.writelogFile(context, "save Account ok y save Follow en shared(Splash, Repository)");
-                                        Utils.setIdFollow(context, account.getFOLLOW());
+                                        Utils.writelogFile(context, "save Account ok(Splash, Repository)");
                                         Utils.writelogFile(context, "save Follow y getOffers(Splash, Repository)");
                                     }
 
@@ -485,7 +485,6 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                         Utils.writelogFile(context, "delete Account ok y save account(Splash, Repository)");
                                         account.save();
                                         Utils.writelogFile(context, "save account y save Follow en shared(Splash, Repository)");
-                                        Utils.setIdFollow(context, account.getFOLLOW());
                                         Utils.writelogFile(context, "save Follow ok y getOffers(Splash, Repository)");
                                     }
                                     offers = response.body().getOffers();
@@ -564,6 +563,8 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                     if (shop != null) {
                                         Utils.writelogFile(context, " shop !=  null y update shop(Splash, Repository)");
                                         shop.update();
+                                        Utils.writelogFile(context, " set follow shared(Splash, Repository)");
+                                        Utils.setIdFollow(context, shop.getFOLLOW());
                                         Utils.writelogFile(context, " update shop ok y GOTONAV(Splash, Repository)");
                                     } else {
                                         Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Splash, Repository)");

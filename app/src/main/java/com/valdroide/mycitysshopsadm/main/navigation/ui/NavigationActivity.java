@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -47,6 +48,8 @@ public class NavigationActivity extends AppCompatActivity
     NavigationActivityPresenter presenter;
     @Bind(R.id.textViewFollow)
     TextView textViewFollow;
+    @Bind(R.id.imageViewShop)
+    ImageView imageViewShop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class NavigationActivity extends AppCompatActivity
         toggle.syncState();
         Utils.writelogFile(this, "setNavigationItemSelectedListener Oncreate(Navigation)");
         navigationView.setNavigationItemSelectedListener(this);
+        presenter.getURLShop(this);
         setFollow();
     }
 
@@ -80,6 +84,14 @@ public class NavigationActivity extends AppCompatActivity
             setError(e.getMessage());
             Utils.writelogFile(this, " catch error " + e.getMessage() + "(Navigation)");
         }
+    }
+
+    @Override
+    public void setURLShop(String url) {
+        if (url != null)
+            if (!url.isEmpty()) {
+                Utils.setPicasso(this, url, android.R.drawable.ic_menu_crop, imageViewShop);
+            }
     }
 
     private void setupInjection() {
@@ -162,4 +174,6 @@ public class NavigationActivity extends AppCompatActivity
         Utils.writelogFile(this, "setError " + error + "(Navigation)");
         Utils.showSnackBar(content, error);
     }
+
+
 }

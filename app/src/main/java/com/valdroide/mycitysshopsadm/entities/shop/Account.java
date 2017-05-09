@@ -79,9 +79,9 @@ public class Account extends BaseModel {
     @SerializedName("adrress")
     public String ADDRESS;
 
-    @Column
-    @SerializedName("follow")
-    public int FOLLOW;
+//    @Column
+//    @SerializedName("follow")
+//    public int FOLLOW;
 
     @Column
     @SerializedName("date_unique")
@@ -94,33 +94,33 @@ public class Account extends BaseModel {
     public Account() {
     }
 
-    public Account(int ID_ACCOUNT_KEY, String SHOP_NAME, String URL_LOGO, String NAME_LOGO, String NAME_BEFORE,
-                    String encode, String DESCRIPTION, String WORKING_HOURS, String PHONE, String EMAIL, String WEB,
-                    String WHATSAAP, String FACEBOOK, String INSTAGRAM, String TWITTER, String SNAPCHAT, String LATITUD,
-                    String LONGITUD, String ADDRESS, int FOLLOW, String DATE_UNIQUE) {
-
-        this.ID_ACCOUNT_KEY = ID_ACCOUNT_KEY;
-        this.SHOP_NAME = SHOP_NAME;
-        this.URL_LOGO = URL_LOGO;
-        this.NAME_LOGO = NAME_LOGO;
-        this.DESCRIPTION = DESCRIPTION;
-        this.WORKING_HOURS = WORKING_HOURS;
-        this.PHONE = PHONE;
-        this.EMAIL = EMAIL;
-        this.WEB = WEB;
-        this.WHATSAAP = WHATSAAP;
-        this.FACEBOOK = FACEBOOK;
-        this.INSTAGRAM = INSTAGRAM;
-        this.TWITTER = TWITTER;
-        this.SNAPCHAT = SNAPCHAT;
-        this.LATITUD = LATITUD;
-        this.LONGITUD = LONGITUD;
-        this.ADDRESS = ADDRESS;
-        this.Encode = encode;
-        this.NAME_BEFORE = NAME_BEFORE;
-        this.FOLLOW = FOLLOW;
-        this.DATE_UNIQUE = DATE_UNIQUE;
-    }
+//    public Account(int ID_ACCOUNT_KEY, String SHOP_NAME, String URL_LOGO, String NAME_LOGO, String NAME_BEFORE,
+//                    String encode, String DESCRIPTION, String WORKING_HOURS, String PHONE, String EMAIL, String WEB,
+//                    String WHATSAAP, String FACEBOOK, String INSTAGRAM, String TWITTER, String SNAPCHAT, String LATITUD,
+//                    String LONGITUD, String ADDRESS, String DATE_UNIQUE) {
+//
+//        this.ID_ACCOUNT_KEY = ID_ACCOUNT_KEY;
+//        this.SHOP_NAME = SHOP_NAME;
+//        this.URL_LOGO = URL_LOGO;
+//        this.NAME_LOGO = NAME_LOGO;
+//        this.DESCRIPTION = DESCRIPTION;
+//        this.WORKING_HOURS = WORKING_HOURS;
+//        this.PHONE = PHONE;
+//        this.EMAIL = EMAIL;
+//        this.WEB = WEB;
+//        this.WHATSAAP = WHATSAAP;
+//        this.FACEBOOK = FACEBOOK;
+//        this.INSTAGRAM = INSTAGRAM;
+//        this.TWITTER = TWITTER;
+//        this.SNAPCHAT = SNAPCHAT;
+//        this.LATITUD = LATITUD;
+//        this.LONGITUD = LONGITUD;
+//        this.ADDRESS = ADDRESS;
+//        this.Encode = encode;
+//        this.NAME_BEFORE = NAME_BEFORE;
+//       // this.FOLLOW = FOLLOW;
+//        this.DATE_UNIQUE = DATE_UNIQUE;
+//    }
     public Account(int ID_ACCOUNT_KEY, String SHOP_NAME, String URL_LOGO, String NAME_LOGO, String NAME_BEFORE,
                    String encode, String DESCRIPTION, String WORKING_HOURS, String PHONE, String EMAIL, String WEB,
                    String WHATSAAP, String FACEBOOK, String INSTAGRAM, String TWITTER, String SNAPCHAT, String LATITUD,
@@ -234,7 +234,6 @@ public class Account extends BaseModel {
 
     public void setEncode(String encode) {
         Encode = encode;
-
     }
 
     public String getNAME_BEFORE() {
@@ -245,13 +244,13 @@ public class Account extends BaseModel {
         this.NAME_BEFORE = NAME_BEFORE;
     }
 
-    public int getFOLLOW() {
-        return FOLLOW;
-    }
-
-    public void setFOLLOW(int FOLLOW) {
-        this.FOLLOW = FOLLOW;
-    }
+//    public int getFOLLOW() {
+//        return FOLLOW;
+//    }
+//
+//    public void setFOLLOW(int FOLLOW) {
+//        this.FOLLOW = FOLLOW;
+//    }
 
     public String getWORKING_HOURS() {
         return WORKING_HOURS;

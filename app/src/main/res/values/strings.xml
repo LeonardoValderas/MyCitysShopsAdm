@@ -25,11 +25,11 @@
     <string name="hint_number_phone">Ingrese número de contacto.(Opcional)</string>
     <string name="hint_number_whatsapp">Ingrese número de Whatsapp.(Opcional)</string>
     <string name="hint_email">Ingrese Email de contacto.(Opcional)</string>
-    <string name="hint_web">Ingrese su Web.(Opcional)</string>
-    <string name="hint_face">Ingrese su Facebook.(Opcional)</string>
-    <string name="hint_insta">Ingrese su Instagram.(Opcional)</string>
-    <string name="hint_twitter">Ingrese su Twitter.(Opcional)</string>
-    <string name="hint_snap">Ingrese su Snapchat.(Opcional)</string>
+    <string name="hint_web">Ingrese su Web, sin https//.(Opcional)</string>
+    <string name="hint_face">Ingrese usuario Facebook.(Opcional)</string>
+    <string name="hint_insta">Ingrese usuario Instagram.(Opcional)</string>
+    <string name="hint_twitter">Ingrese usuario Twitter.(Opcional)</string>
+    <string name="hint_snap">Ingrese usuario Snapchat.(Opcional)</string>
     <string name="hint_description">Ingrese una descripción del comercio.</string>
     <string name="hint_address">Ingrese la dirección del comercio.</string>
     <string name="hint_working">Ingrese su horario de atención.</string>
@@ -39,8 +39,8 @@
     <string name="description_empty">Ingrese una descripción.</string>
     <string name="offer_success">Actividad cargada corectamente.</string>
     <string name="offer_update">Actividad actualizada correctamente.</string>
-    <string name="offer_unable">Actividad Desactivada</string>
-    <string name="offer_able">Actividad activada</string>
+    <string name="offer_unable">Activar</string>
+    <string name="offer_able">Desactivar</string>
     <string name="offer_available">Actividades disponibles:</string>
     <!--NOTIFICATION-->
     <string name="send_notification_success">Notificación enviada.</string>
@@ -50,8 +50,6 @@
     <!--MAP KEY Deb-->
     <string name="google_maps_key">AIzaSyAWfQFYnINp_aoysUJlg1vvcb5h7HwGhyU</string>
 
-
-    <string name="title_activity_login">Sign in</string>
     <!--MSG-->
     <string name="error_fill_place">Problemas al cargar los datos. Cierre la aplicación y vuelva a intentarlo.</string>
     <string name="error_file_log">Problema para generar el archivo Log.</string>
@@ -81,6 +79,7 @@
     <!--EMAIL-->
     <string name="hint_comment">Ingrese un comentario.(Max.300)</string>
     <string name="following">SEGUIDORES !!!</string>
+    <string name="error_notification">Problema para mostrar la notificación.</string>
     <!--PLACE-->
     <string name="country_title_place">País</string>
     <string name="state_title_place">Provincia</string>

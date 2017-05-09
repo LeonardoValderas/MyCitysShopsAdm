@@ -8,5 +8,6 @@ public interface NavigationActivityPresenter {
     void onCreate();
     void onDestroy();
     void logOut(Context context);
+    void getURLShop(Context context);
     void onEventMainThread(NavigationActivityEvent event);
 }

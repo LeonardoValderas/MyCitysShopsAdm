@@ -40,7 +40,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".main.navigation.ui.NavigationActivity" />
         </activity>
-        <activity android:name=".main.map.MapActivity" />
+        <activity android:name=".main.map.ui.MapActivity" />
         <activity android:name=".main.offer.ui.OfferActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

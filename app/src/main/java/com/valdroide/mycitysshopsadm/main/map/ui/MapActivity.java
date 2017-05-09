@@ -1,4 +1,4 @@
-package com.valdroide.mycitysshopsadm.main.map;
+package com.valdroide.mycitysshopsadm.main.map.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
+
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,26 +16,34 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivity;
+import com.valdroide.mycitysshopsadm.main.map.MapActivityPresenter;
 import com.valdroide.mycitysshopsadm.utils.Utils;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, MapActivityView {
     @Bind(R.id.activity_map)
     RelativeLayout activityMap;
     private SupportMapFragment mapFragment;
     private GoogleMap mapa;
-    public static double latBache = -41.139755445793554;
-    public static double lonBache = -71.296729134343434;
+    public static double latCity = 0.00;
+    public static double lonCity = 0.00;
     private Handler touchScreem;
     private boolean actualizar = false;
     private double longitudExtra = 0.00;
     private double latitudExtra = 0.00;
     private String name = "", uriExtra = "", phone = "", whatsapp = "", email = "", web = "", face = "", insta = "",
             twitter = "", snap = "", working = "", description = "", longitud = "", latitud = "", address = "";
+    private CameraPosition cameraPosition;
+    private CameraUpdate cu;
+    @Inject
+    MapActivityPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +51,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_map);
         Utils.writelogFile(this, "Se inicia ButterKnife(Map)");
         ButterKnife.bind(this);
+        Utils.writelogFile(this, "onCreate(Map)");
+        setupInjection();
+        presenter.onCreate();
         Utils.writelogFile(this, "Se inicia toolbar Oncreate(Map)");
         getSupportActionBar().setTitle(R.string.my_location);
-
+        presenter.getLatLong(this, Utils.getIdCity(this));
+        actualizar = getIntent().getBooleanExtra("map", false);
+        getExtraInfo();
         init();
     }
 
@@ -54,10 +68,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
-            actualizar = getIntent().getBooleanExtra("map", false);
         } catch (Exception e) {
             Utils.writelogFile(this, " catch error " + e.getMessage() + "(Map)");
         }
+    }
+
+    public void setupInjection() {
+        MyCitysShopsAdmApp app = (MyCitysShopsAdmApp) getApplication();
+        app.getMapActivityComponent(this, this).inject(this);
     }
 
     @Override
@@ -73,9 +91,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
             }, 3000);
             mapa.getUiSettings().setAllGesturesEnabled(false);
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(latBache, lonBache)).zoom(15).build();
-            CameraUpdate cu = CameraUpdateFactory
+
+            if (longitudExtra != 0.00 && latitudExtra != 0.00) {
+                mapa.addMarker(new MarkerOptions().position(
+                        new LatLng(latitudExtra, longitudExtra)).title(name));
+
+                cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(latitudExtra, longitudExtra)).zoom(15).build();
+            } else {
+                cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(latCity, lonCity)).zoom(15).build();
+            }
+
+            cu = CameraUpdateFactory
                     .newCameraPosition(cameraPosition);
             mapa.animateCamera(cu);
 
@@ -97,31 +125,63 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     mapa.clear();
                 }
             });
-            if (actualizar) {
-                name = getIntent().getStringExtra("name");
-                uriExtra = getIntent().getStringExtra("uri");
-                phone = getIntent().getStringExtra("phone");
-                web = getIntent().getStringExtra("web");
-                email = getIntent().getStringExtra("email");
-                address = getIntent().getStringExtra("address");
-                whatsapp = getIntent().getStringExtra("whatsaap");
-                face = getIntent().getStringExtra("facebook");
-                insta = getIntent().getStringExtra("instagram");
-                twitter = getIntent().getStringExtra("twitter");
-                snap = getIntent().getStringExtra("snapchat");
-                working = getIntent().getStringExtra("working");
-                description = getIntent().getStringExtra("description");
-                longitud = getIntent().getStringExtra("longitud");
-                latitud = getIntent().getStringExtra("latitud");
-                if (!longitud.isEmpty() && !latitud.isEmpty()) {
-                    longitudExtra = Double.valueOf(longitud);
-                    latitudExtra = Double.valueOf(latitud);
-                    mapa.addMarker(new MarkerOptions().position(
-                            new LatLng(latitudExtra, longitudExtra)).title(name));
-                }
-            }
+//            if (longitudExtra != 0.00 && latitudExtra != 0.00) {
+//                mapa.addMarker(new MarkerOptions().position(
+//                        new LatLng(latitudExtra, longitudExtra)).title(name));
+//            }
+
+
+//            if (actualizar) {
+//                name = getIntent().getStringExtra("name");
+//                uriExtra = getIntent().getStringExtra("uri");
+//                phone = getIntent().getStringExtra("phone");
+//                web = getIntent().getStringExtra("web");
+//                email = getIntent().getStringExtra("email");
+//                address = getIntent().getStringExtra("address");
+//                whatsapp = getIntent().getStringExtra("whatsaap");
+//                face = getIntent().getStringExtra("facebook");
+//                insta = getIntent().getStringExtra("instagram");
+//                twitter = getIntent().getStringExtra("twitter");
+//                snap = getIntent().getStringExtra("snapchat");
+//                working = getIntent().getStringExtra("working");
+//                description = getIntent().getStringExtra("description");
+//                longitud = getIntent().getStringExtra("longitud");
+//                latitud = getIntent().getStringExtra("latitud");
+//                if (!longitud.isEmpty() && !latitud.isEmpty()) {
+//                    longitudExtra = Double.valueOf(longitud);
+//                    latitudExtra = Double.valueOf(latitud);
+//                    mapa.addMarker(new MarkerOptions().position(
+//                            new LatLng(latitudExtra, longitudExtra)).title(name));
+//                }
+//            }
         } catch (Exception e) {
             Utils.writelogFile(this, " catch error " + e.getMessage() + "(Map)");
+        }
+    }
+
+    public void getExtraInfo() {
+        if (actualizar) {
+            name = getIntent().getStringExtra("name");
+            uriExtra = getIntent().getStringExtra("uri");
+            phone = getIntent().getStringExtra("phone");
+            web = getIntent().getStringExtra("web");
+            email = getIntent().getStringExtra("email");
+            address = getIntent().getStringExtra("address");
+            whatsapp = getIntent().getStringExtra("whatsaap");
+            face = getIntent().getStringExtra("facebook");
+            insta = getIntent().getStringExtra("instagram");
+            twitter = getIntent().getStringExtra("twitter");
+            snap = getIntent().getStringExtra("snapchat");
+            working = getIntent().getStringExtra("working");
+            description = getIntent().getStringExtra("description");
+            longitud = getIntent().getStringExtra("longitud");
+            latitud = getIntent().getStringExtra("latitud");
+            if (!longitud.isEmpty() && !latitud.isEmpty()) {
+                longitudExtra = Double.valueOf(longitud);
+                latitudExtra = Double.valueOf(latitud);
+//                mapa.addMarker(new MarkerOptions().position(
+//                        new LatLng(latitudExtra, longitudExtra)).title(name));
+            }
         }
     }
 
@@ -167,5 +227,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         } catch (Exception e) {
             Utils.writelogFile(this, " catch error " + e.getMessage() + "(Map)");
         }
+    }
+
+    @Override
+    public void setLatLong(String lat, String lon) {
+        Utils.writelogFile(this, "setLatLong (Map)");
+        latCity = Double.parseDouble(lat);
+        lonCity = Double.parseDouble(lon);
+    }
+
+    @Override
+    public void error(String error) {
+        Utils.writelogFile(this, "error " + error + "(Map)");
+        Utils.showSnackBar(activityMap, error);
     }
 }

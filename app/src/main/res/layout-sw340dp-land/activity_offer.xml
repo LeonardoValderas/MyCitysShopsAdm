@@ -31,8 +31,8 @@
 
                 <ImageView
                     android:id="@+id/imageViewImage"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
+                    android:layout_width="180dp"
+                    android:layout_height="130dp"
                     android:clickable="true"
                     android:src="@android:drawable/ic_menu_crop" />
 

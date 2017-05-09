@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">My Citys Shops.(Adm)</string>
+    <string name="app_name_title">My City\'s Shops(Adm)</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
     <!--TITLE TOOLBAR-->
     <!--MENU DRAWER-->
     <string name="offer_title">Minha Cartelera</string>
@@ -22,8 +27,8 @@
     <string name="description_empty">Entre a descrição.</string>
     <string name="offer_success">Atividade carregada correctamente.</string>
     <string name="offer_update">Atividade atualizada correctamente.</string>
-    <string name="offer_unable">Atividade desativada</string>
-    <string name="offer_able">Atividade ativada</string>
+    <string name="offer_unable">Ativar</string>
+    <string name="offer_able">Desativar</string>
     <string name="offer_available">Atividades disponível:</string>
     <!--NOTIFICATION-->
     <string name="send_notification_success">Notificação enviada.</string>
@@ -56,8 +61,33 @@
     <string name="pass_login">Senha</string>
     <string name="change_city">Mudar de Cidade</string>
     <string name="hint_title_offer">Enter um titulo.(Max.20)</string>
-    <string name="hint_offer">Enter a atividade.(Max.100)</string>
+    <string name="hint_offer">Entre a atividade.(Max.100)</string>
     <string name="processing">Processamento...</string>
     <string name="sent_emal_auto">Se enviou um email automaticamente para suporte.</string>
     <string name="my_location">MINHA LOCALIZAÇÃO</string>
+    <string name="hint_number_phone">Intruduzir número de contacto.(Opcional)</string>
+    <string name="hint_number_whatsapp">Intruduzir número de Whatsapp.(Opcional)</string>
+    <string name="hint_email">Intruduzir Email de contacto.(Opcional)</string>
+    <string name="hint_web">Intruduzir sua Web, sem https//.(Opcional)</string>
+    <string name="hint_face">Intruduzir seu usuario Facebook.(Opcional)</string>
+    <string name="hint_insta">Intruduzir seu usuario Instagram.(Opcional)</string>
+    <string name="hint_twitter">Intruduzir seu usuario Twitter.(Opcional)</string>
+    <string name="hint_snap">Intruduzir seu usuario Snapchat.(Opcional)</string>
+    <string name="hint_description">Intruduzir uma descrição do comércio.</string>
+    <string name="hint_address">Intruduzir o endereço do comércio.</string>
+    <string name="hint_working">Intruduzir seu horário de serviço.</string>
+    <!--SHARED-->
+    <string name="my_city_id_shared">my_city_id</string>
+    <string name="id_city">id_city</string>
+    <string name="shop_id_shared">shop_id_shared</string>
+    <string name="id_shop">id_shop</string>
+    <string name="my_follow_id_shared">my_follow_id</string>
+    <string name="id_follow">id_follow</string>
+    <string name="log_date_shared">date_log_file</string>
+    <string name="log_date">log_date</string>
+    <string name="my_user_log_shared">my_user_log</string>
+    <!--LOG  -->
+    <string name="log_file_name">LogMyCity.txt</string>
+    <string name="following">SEGUIDORES !!!</string>
+
 </resources>
