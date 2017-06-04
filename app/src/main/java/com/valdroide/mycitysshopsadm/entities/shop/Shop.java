@@ -31,8 +31,8 @@ public class Shop extends BaseModel {
     @SerializedName("id_city")
     public int ID_CITY_FOREIGN;
     @Column
-    @SerializedName("id_cat_sub")
-    public int ID_CAT_SUB_FOREIGN;
+    @SerializedName("id_subcategory")
+    public int ID_SUBCATEGORY_FOREIGN;
     @Column
     @SerializedName("follow")
     public int FOLLOW;
@@ -99,12 +99,12 @@ public class Shop extends BaseModel {
         this.ID_CITY_FOREIGN = ID_CITY_FOREIGN;
     }
 
-    public int getID_CAT_SUB_FOREIGN() {
-        return ID_CAT_SUB_FOREIGN;
+    public int getID_SUBCATEGORY_FOREIGN() {
+        return ID_SUBCATEGORY_FOREIGN;
     }
 
-    public void setID_CAT_SUB_FOREIGN(int ID_CAT_SUB_FOREIGN) {
-        this.ID_CAT_SUB_FOREIGN = ID_CAT_SUB_FOREIGN;
+    public void setID_SUBCATEGORY_FOREIGN(int ID_SUBCATEGORY_FOREIGN) {
+        this.ID_SUBCATEGORY_FOREIGN = ID_SUBCATEGORY_FOREIGN;
     }
 
     public int getCOUNT_OFFER() {

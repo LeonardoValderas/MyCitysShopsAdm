@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivity;
+import com.valdroide.mycitysshopsadm.main.draw.activity.ui.DrawActivity;
 import com.valdroide.mycitysshopsadm.main.login.ui.LoginActivity;
 import com.valdroide.mycitysshopsadm.main.navigation.NavigationActivityPresenter;
 import com.valdroide.mycitysshopsadm.main.notification.ui.NotificationActivity;
@@ -147,6 +148,9 @@ public class NavigationActivity extends AppCompatActivity
         } else if (id == R.id.notification) {
             Utils.writelogFile(this, "notification click Intent NotificationActivity(Navigation)");
             startActivity(new Intent(this, NotificationActivity.class));
+        } else if (id == R.id.draw) {
+            Utils.writelogFile(this, "notification click Intent NotificationActivity(Navigation)");
+            startActivity(new Intent(this, DrawActivity.class));
         }
         Utils.writelogFile(this, "closeDrawer(Navigation)");
         drawer.closeDrawer(GravityCompat.START);

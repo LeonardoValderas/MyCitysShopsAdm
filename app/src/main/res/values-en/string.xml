@@ -14,6 +14,7 @@
     <string name="my_account_menu_drawer">My Account</string>
     <string name="my_billboard_menu_drawer">My BillBoard</string>
     <string name="notification_menu_drawer">Notification</string>
+    <string name="draw_string_menu">Draw</string>
     <!--ACCOUNT-->
     <string name="account_save">Data saved.</string>
     <string name="error_logo">Select a logo.</string>
@@ -90,4 +91,6 @@
     <string name="my_user_log_shared">my_user_log</string>
     <!--LOG  -->
     <string name="log_file_name">LogMyCity.txt</string>
+
+
 </resources>

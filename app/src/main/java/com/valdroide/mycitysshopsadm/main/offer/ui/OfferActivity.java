@@ -117,7 +117,6 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
             Utils.writelogFile(this, "initRecyclerViewAdapter error " + e.getMessage() + " (offer)");
             error(e.getMessage());
         }
-
     }
 
     public void setTextQuantity(String quantity) {
@@ -133,25 +132,10 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     public void getPhoto() {
         Utils.writelogFile(this, "getPhoto click imageViewImage y oldPhones(offer)");
         if (!Utils.oldPhones())
-            checkForPermission();
+            Utils.checkForPermission(this, this, null, PERMISSION_GALERY);
         Utils.writelogFile(this, "hasPermission(offer)");
-        if (hasPermission())
-            ImageDialogLogo();
-    }
-
-    private void checkForPermission() {
-        Utils.writelogFile(this, "checkForPermission(offer)");
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            Utils.writelogFile(this, "no PERMISSION_GRANTED(offer)");
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_GALERY);
-        }
-    }
-
-    private boolean hasPermission() {
-        Utils.writelogFile(this, "hasPermission(offer)");
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        return permissionCheck == PackageManager.PERMISSION_GRANTED;
+        if (Utils.hasPermission(this))
+            Utils.ImageDialogLogo(this, null, PERMISSION_GALERY);
     }
 
     @Override
@@ -159,31 +143,8 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_GALERY)
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                ImageDialogLogo();
+                Utils.ImageDialogLogo(this, null, PERMISSION_GALERY);
             }
-    }
-
-    public void ImageDialogLogo() {
-        Utils.writelogFile(this, "ImageDialogLogo(offer)");
-        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(
-                this);
-        myAlertDialog.setTitle("Galeria");
-        myAlertDialog.setMessage("Seleccione una foto.");
-
-        myAlertDialog.setPositiveButton("Galeria",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        Intent pickIntent = new Intent(
-                                Intent.ACTION_GET_CONTENT, null);
-                        pickIntent.setType("image/*");
-                        pickIntent.putExtra(
-                                "return-data", true);
-                        startActivityForResult(
-                                pickIntent,
-                                GALERY);
-                    }
-                });
-        myAlertDialog.show();
     }
 
     public void assignImage(Uri uri) {
@@ -205,7 +166,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         try {
             if (requestCode == GALERY) {
                 Uri imageUri = CropImage.getPickImageResultUri(this, data);
-                startCropImageActivity(imageUri);
+                Utils.startCropImageActivity(this, null, imageUri);
             }
             if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
@@ -221,13 +182,6 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
             Utils.writelogFile(this, "onActivityResult error: " + e.getMessage() + " (offer)");
             error(e.getMessage());
         }
-    }
-
-    private void startCropImageActivity(Uri imageUri) {
-        CropImage.activity(imageUri)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setMultiTouchEnabled(true)
-                .start(OfferActivity.this);
     }
 
     public void cleanView() {
@@ -280,8 +234,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         updateQuantity();
         Utils.writelogFile(this, "adapter.setOffers (offer)");
         adapter.setOffers(offers);
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+        validateDialog();
     }
 
     @Override
@@ -290,8 +243,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         adapter.setOffer(offer);
         updateQuantity();
         menuAdd();
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+        validateDialog();
         cleanView();
         Utils.showSnackBar(conteiner, getString(R.string.offer_success));
     }
@@ -301,8 +253,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         Utils.writelogFile(this, "updateOffer (offer)");
         adapter.updateAdapter(offer, position);
         menuAdd();
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+        validateDialog();
         cleanView();
         Utils.showSnackBar(conteiner, getString(R.string.offer_update));
     }
@@ -311,16 +262,19 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     public void switchOffer(Offer offer) {
         Utils.writelogFile(this, "switchOffer (offer)");
         adapter.updateAdapter(offer, position);
-        if (pDialog.isShowing())
-            pDialog.hide();
+        validateDialog();
         Utils.showSnackBar(conteiner, getString(R.string.offer_update));
     }
 
     @Override
     public void error(String msg) {
+        validateDialog();
+        Utils.showSnackBar(conteiner, msg);
+    }
+
+    private void validateDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
-        Utils.showSnackBar(conteiner, msg);
     }
 
     @Override
@@ -469,9 +423,6 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
                 else {
                     pDialog.show();
                     is_active = 1;
-
-//                    presenter.saveOffer(this, fillOffer(Utils.removeAccents(editTextTitle.getText().toString()),
-//                            Utils.removeAccents(editTextDescription.getText().toString())));
                     presenter.saveOffer(this, fillOffer(editTextTitle.getText().toString(),
                             editTextDescription.getText().toString()));
                 }
@@ -490,8 +441,6 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
                     Utils.showSnackBar(conteiner, getString(R.string.description_empty));
                 else {
                     pDialog.show();
-//                    presenter.updateOffer(this, fillOffer(Utils.removeAccents(editTextTitle.getText().toString()),
-//                            Utils.removeAccents(editTextDescription.getText().toString())));
                     presenter.updateOffer(this, fillOffer(editTextTitle.getText().toString(),
                             editTextDescription.getText().toString()));
                 }

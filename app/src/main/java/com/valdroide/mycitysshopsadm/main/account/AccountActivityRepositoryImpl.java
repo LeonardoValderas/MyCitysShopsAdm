@@ -42,7 +42,7 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
 
             post(AccountActivityEvent.GETACCOUNT, account);
         } catch (Exception e) {
-            Utils.writelogFile(context, "account catch error " + e.getMessage() + " (Account- Repository)");
+            Utils.writelogFile(context, "account catch error " + e.getMessage() + " (Account, Repository)");
             post(AccountActivityEvent.ERROR, e.getMessage());
         }
     }
@@ -52,7 +52,7 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
         Utils.writelogFile(context, "Metodo updateAccount y Se valida conexion a internet(Account, Repository)");
         if (Utils.isNetworkAvailable(context)) {
             try {
-                Utils.writelogFile(context, "Call updateAccount(Splash, Repository)");
+                Utils.writelogFile(context, "Call updateAccount(Account, Repository)");
                 Call<ResultPlace> accountService = service.updateAccount(Utils.getIdShop(context), Utils.getIdCity(context),
                         account.getID_ACCOUNT_KEY(), account.getEncode(), account.getURL_LOGO(),
                         account.getNAME_LOGO(), account.getNAME_BEFORE(), account.getDESCRIPTION(),

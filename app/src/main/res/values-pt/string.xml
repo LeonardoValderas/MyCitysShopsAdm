@@ -14,6 +14,7 @@
     <string name="my_account_menu_drawer">Minha Conta</string>
     <string name="my_billboard_menu_drawer">Minha Cartelera</string>
     <string name="notification_menu_drawer">Notificação</string>
+    <string name="draw_string_menu">Sorteio</string>
     <!--ACCOUNT-->
     <string name="account_save">Datos guardados.</string>
     <string name="error_logo">Escolha um logo.</string>

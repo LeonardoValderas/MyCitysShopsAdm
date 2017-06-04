@@ -1,23 +1,35 @@
 package com.valdroide.mycitysshopsadm.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 import com.valdroide.mycitysshopsadm.R;
+import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -65,10 +77,17 @@ public class Utils {
     // public static String URL_IMAGE_OFFER = "http://10.0.3.2:8080/my_citys_shops_adm/offer/image_offer/";
 
     //public static String URL_IMAGE = "http://myd.esy.es/myd/clothes/image_clothes/";
-    public static String URL_IMAGE = "http://myd.esy.es/my_citys_shops_adm/account/image_account/";
-    public static String URL_IMAGE_OFFER = "http://myd.esy.es/my_citys_shops_adm/offer/image_offer/";
-//    public static String ERROR_DATA_BASE = "Error al guardar los datos.";
-//    public static String ERROR_INTERNET = "Verificar su conexión de Internet.";
+//    public static String URL_IMAGE = "http://myd.esy.es/my_citys_shops_adm/account/image_account/";
+//    public static String URL_IMAGE_OFFER = "http://myd.esy.es/my_citys_shops_adm/offer/image_offer/";
+
+    //DEB
+    public static String URL_IMAGE = "http://mycitysshops.esy.es/deb/my_citys_shops_adm/account/image_account/";
+    public static String URL_IMAGE_OFFER = "http://mycitysshops.esy.es/deb/my_citys_shops_adm/offer/image_offer/";
+    public static String URL_IMAGE_DRAW = "http://mycitysshops.esy.es/deb/my_citys_shops_adm/draw/image_draw/";
+    //PRODUCT
+//    public static String URL_IMAGE = "http://mycitysshops.esy.es/my_citys_shops_adm/account/image_account/";
+//    public static String URL_IMAGE_OFFER = "http://mycitysshops.esy.es/my_citys_shops_adm/offer/image_offer/";
+//    public static String URL_IMAGE_DRAW = "http://mycitysshops.esy.es/my_citys_shops_adm/draw/image_draw/";
 
     //FECHAS
     public static String getFechaLogFile() {
@@ -101,7 +120,7 @@ public class Utils {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         cal.setTime(dateOficial);
-        cal.add(Calendar.DATE, 10);
+        cal.add(Calendar.DATE, 7);
 
         return df.format(cal.getTime());
     }
@@ -119,6 +138,63 @@ public class Utils {
                 return true;
             }
         return false;
+    }
+
+    public static boolean validateExpirateVsLimit(String dateExperate, String dateLimit) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date strDate = null;
+        Date limitDate = null;
+        try {
+            strDate = sdf.parse(dateExperate);
+            limitDate = sdf.parse(dateLimit);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (strDate != null && limitDate != null)
+            if (limitDate.getTime() <= strDate.getTime()) {
+                return true;
+            }
+        return false;
+    }
+
+    public static boolean validateCurrentDate(String dateExperate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date strDate = null;
+        try {
+            strDate = sdf.parse(dateExperate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+        if (strDate != null)
+            if (System.currentTimeMillis() <= strDate.getTime()) {
+                return false;
+            }
+        return true;
+    }
+
+    public static String formatViewDate(String dateString, String dateClose) {
+        SimpleDateFormat sdfActual = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        SimpleDateFormat sdfActualClose = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat sdfClose = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        Date strDate = null;
+        try {
+            if (!dateString.isEmpty())
+                strDate = sdfActual.parse(dateString);
+            else
+                strDate = sdfActualClose.parse(dateClose);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+        if (strDate != null)
+            if (!dateString.isEmpty())
+                return sdf.format(strDate.getTime());
+            else
+                return sdfClose.format(strDate.getTime());
+        else
+            return "";
     }
 
     public static int randomNumber() {
@@ -167,7 +243,7 @@ public class Utils {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             if (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting()) {
                 return internetConnectionAvailable(5000);
-            }else {
+            } else {
                 return false;
             }
         } catch (Exception e) {
@@ -199,21 +275,6 @@ public class Utils {
         }
         return inetAddress != null && !inetAddress.equals("");
     }
-
-//     public static void applyFontForToolbarTitle(Activity context, Toolbar toolbar) {
-//        for (int i = 0; i < toolbar.getChildCount(); i++) {
-//            View view = toolbar.getChildAt(i);
-//            if (view instanceof TextView) {
-//                TextView tv = (TextView) view;
-//                Typeface titleFont = Typeface.
-//                        createFromAsset(context.getAssets(), "fonts/antspan.ttf");
-//                if (tv.getText() != null) {
-//                    tv.setTypeface(titleFont);
-//                    break;
-//                }
-//            }
-//        }
-//    }
 
     //TITLE GRUOP
     public static Typeface setFontPacificoTextView(Context context) {
@@ -486,7 +547,6 @@ public class Utils {
         }
     }
 
-
     public static MimeBodyPart createMimeBodyPart2(String filename) {
         try {
             MimeBodyPart messageBodyPart2 = new MimeBodyPart();
@@ -507,6 +567,76 @@ public class Utils {
             return multipart;
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    public static void ImageDialogLogo(final Activity activity, final Fragment fragment, final int GALLERY) {
+        AlertDialog.Builder myAlertDialog;
+        if (activity != null)
+            myAlertDialog = new AlertDialog.Builder(
+                    activity);
+        else
+            myAlertDialog = new AlertDialog.Builder(
+                    fragment.getActivity());
+        myAlertDialog.setTitle("Galeria");
+        myAlertDialog.setMessage("Seleccione una foto.");
+
+        myAlertDialog.setPositiveButton("Galeria",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Intent pickIntent = new Intent(
+                                Intent.ACTION_GET_CONTENT, null);
+                        pickIntent.setType("image/*");
+                        pickIntent.putExtra(
+                                "return-data", true);
+                        if (activity != null)
+                            activity.startActivityForResult(
+                                    pickIntent,
+                                    GALLERY);
+                        else
+                            fragment.startActivityForResult(
+                                    pickIntent,
+                                    GALLERY);
+                    }
+                });
+        myAlertDialog.show();
+    }
+
+    public static void startCropImageActivity(Activity activity, Fragment fragment, Uri imageUri) {
+        if (activity != null) {
+            CropImage.activity(imageUri)
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setMultiTouchEnabled(true)
+                    .start(activity);
+        } else {
+            CropImage.activity(imageUri)
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setMultiTouchEnabled(true)
+                    .start(fragment.getContext(), fragment);
+        }
+    }
+
+    public static boolean hasPermission(Context context) {
+        int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return permissionCheck == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static void checkForPermission(Context context, final Activity activity, final Fragment fragment, int PERMISSION_GALERY) {
+        int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            if (activity != null) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_GALERY);
+            } else {
+                fragment.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_GALERY);
+            }
+        }
+    }
+    @SuppressWarnings("deprecation")
+    public static Spanned fromHtml(String source) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            return Html.fromHtml(source);
         }
     }
 }

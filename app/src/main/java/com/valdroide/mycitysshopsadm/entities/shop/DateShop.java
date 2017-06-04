@@ -28,6 +28,9 @@ public class DateShop extends BaseModel {
     @SerializedName("offer_date")
     public String OFFER_DATE;
     @Column
+    @SerializedName("draw_date")
+    public String DRAW_DATE;
+    @Column
     @SerializedName("notification_date")
     public String NOTIFICATION_DATE;
 
@@ -84,5 +87,13 @@ public class DateShop extends BaseModel {
 
     public void setNOTIFICATION_DATE(String NOTIFICATION_DATE) {
         this.NOTIFICATION_DATE = NOTIFICATION_DATE;
+    }
+
+    public String getDRAW_DATE() {
+        return DRAW_DATE;
+    }
+
+    public void setDRAW_DATE(String DRAW_DATE) {
+        this.DRAW_DATE = DRAW_DATE;
     }
 }

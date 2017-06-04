@@ -14,5 +14,9 @@
             android:id="@+id/notification"
             android:icon="@drawable/ic_notification"
             android:title="@string/notification_menu_drawer" />
+        <item
+            android:id="@+id/draw"
+            android:icon="@drawable/ic_draw"
+            android:title="@string/draw_string_menu" />
     </group>
 </menu>

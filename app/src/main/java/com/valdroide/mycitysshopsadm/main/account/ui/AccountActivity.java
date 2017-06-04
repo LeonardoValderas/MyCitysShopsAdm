@@ -182,10 +182,11 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
     public void getPhoto() {
         Utils.writelogFile(this, "getPhoto() click imageViewLogo y validate oldPhones(Account)");
         if (!Utils.oldPhones())
-            checkForPermission();
+            Utils.checkForPermission(this, this, null, PERMISSION_GALERY);
         Utils.writelogFile(this, "hasPermission() y ImageDialogLogo(Account)");
-        if (hasPermission())
-            ImageDialogLogo();
+        if (Utils.hasPermission(this))
+            Utils.ImageDialogLogo(this, null, GALERY);
+
     }
 
     private void setupInjection() {
@@ -272,34 +273,20 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
                 }
                 name_logo = Utils.removeAccents(name) + Utils.getFechaOficial() + ".PNG";
                 url_logo = Utils.URL_IMAGE + name_logo;
-
             }
 
             return new Account(id_account, textViewName.getText().toString(), url_logo, name_logo,
-                    name_before, encode, Utils.removeAccents(editTextDescription.getText().toString()),
+                    name_before, encode, editTextDescription.getText().toString(),
                     Utils.removeAccents(editTextWorking.getText().toString()),
                     editTextPhone.getText().toString(), Utils.removeAccents(editTextEmail.getText().toString()),
-                    Utils.removeAccents(editTextWeb.getText().toString()), Utils.removeAccents(editTextWhatsaap.getText().toString()),
+                    editTextWeb.getText().toString(), Utils.removeAccents(editTextWhatsaap.getText().toString()),
                     Utils.removeAccents(editTextFace.getText().toString()), Utils.removeAccents(editTextInsta.getText().toString()),
                     Utils.removeAccents(editTextTwitter.getText().toString()), Utils.removeAccents(editTextSnap.getText().toString()),
-                    latitud, longitud, Utils.removeAccents(editTextAddress.getText().toString()), Utils.getFechaOficialSeparate());
+                    latitud, longitud, editTextAddress.getText().toString(), Utils.getFechaOficialSeparate());
         } catch (Exception e) {
             Utils.writelogFile(this, "fill account object error:" + e.getMessage() + "(Account)");
             return null;
         }
-    }
-
-    private void checkForPermission() {
-        Utils.writelogFile(this, "is not oldPhones(Account)");
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_GALERY);
-        }
-    }
-
-    private boolean hasPermission() {
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        return permissionCheck == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
@@ -307,31 +294,8 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_GALERY)
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                ImageDialogLogo();
+                Utils.ImageDialogLogo(this, null, GALERY);
             }
-    }
-
-    public void ImageDialogLogo() {
-        Utils.writelogFile(this, "ImageDialogLogo() (Account)");
-        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(
-                this);
-        myAlertDialog.setTitle("Galeria");
-        myAlertDialog.setMessage("Seleccione una foto.");
-
-        myAlertDialog.setPositiveButton("Galeria",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        Intent pickIntent = new Intent(
-                                Intent.ACTION_GET_CONTENT, null);
-                        pickIntent.setType("image/*");
-                        pickIntent.putExtra(
-                                "return-data", true);
-                        startActivityForResult(
-                                pickIntent,
-                                GALERY);
-                    }
-                });
-        myAlertDialog.show();
     }
 
     public void assignImage(Uri uri) {
@@ -352,7 +316,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         try {
             if (requestCode == GALERY) {
                 Uri imageUri = CropImage.getPickImageResultUri(this, data);
-                startCropImageActivity(imageUri);
+                Utils.startCropImageActivity(this, null, imageUri);
             }
             if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
@@ -369,13 +333,6 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
             Utils.writelogFile(this, "onActivityResult image() error: " + e.getMessage() + " (Account)");
             error(e.getMessage());
         }
-    }
-
-    private void startCropImageActivity(Uri imageUri) {
-        CropImage.activity(imageUri)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setMultiTouchEnabled(true)
-                .start(AccountActivity.this);
     }
 
     public void menuSave() {

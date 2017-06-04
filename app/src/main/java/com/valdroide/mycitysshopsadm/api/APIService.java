@@ -1,5 +1,6 @@
 package com.valdroide.mycitysshopsadm.api;
 
+import com.valdroide.mycitysshopsadm.entities.response.ResponseWS;
 import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
 import com.valdroide.mycitysshopsadm.entities.response.ResultShop;
 import com.valdroide.mycitysshopsadm.entities.response.ResultUser;
@@ -89,5 +90,22 @@ public interface APIService {
     @FormUrlEncoded
     @POST("login/validateLogin.php")
     Call<ResultShop> validateLogin(@Field("user") String user, @Field("pass") String pass, @Field("id_city") int id_city);
+
+    //DRAW
+    @FormUrlEncoded
+    @POST("draw/createDraw.php")
+    Call<ResponseWS> createDraw(@Field("id_shop_foreign") int id_shop, @Field("id_city_foreign") int id_city_foreign,
+                                @Field("description") String description, @Field("for_following") int for_following,
+                                @Field("condition") String condition,  @Field("start_date") String start_date,
+                                @Field("end_date") String end_date, @Field("limit_date") String limit_date,
+                                @Field("url_logo") String url_logo, @Field("name_logo") String name_logo,
+                                @Field("date_unique") String date_unique, @Field("encode") String encode,
+                                @Field("shop_name") String shop_name);
+    @FormUrlEncoded
+    @POST("draw/cancelDraw.php")
+    Call<ResponseWS> cancelDraw(@Field("id_shop_foreign") int id_shop, @Field("id_city_foreign") int id_city_foreign,
+                                @Field("id_draw") int id_draw, @Field("is_cancel") int is_cancel,
+                                @Field("is_take") int is_take,  @Field("is_limit") int is_limit, @Field("for_following") int for_following,
+                                @Field("shop_name") String shop_name, @Field("date_unique") String date_unique);
 
 }

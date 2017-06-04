@@ -122,8 +122,13 @@ public class SplashActivity extends AppCompatActivity implements SplashActivityV
     public void setError(String msg) {
         Utils.writelogFile(this, "Error: " + msg + " (Splash)");
         progressBar.setVisibility(View.INVISIBLE);
-        presenter.sendEmail(this, "Error Splash, Email Automatico.");
-        textViewDownload.setText(msg + "\n" + getString(R.string.sent_emal_auto));
+
+        if (msg.equalsIgnoreCase(getString(R.string.error_internet))) {
+            textViewDownload.setText(msg);
+        } else {
+            presenter.sendEmail(this, "Error Splash, Email Automatico.");
+            textViewDownload.setText(msg + "\n" + getString(R.string.sent_emal_auto));
+        }
     }
 
     @Override

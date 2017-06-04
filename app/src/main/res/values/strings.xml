@@ -14,6 +14,7 @@
     <string name="my_account_menu_drawer">Mi Cuenta</string>
     <string name="my_billboard_menu_drawer">Mi Cartelera</string>
     <string name="notification_menu_drawer">Notificación</string>
+    <string name="draw_string_menu">Sorteo</string>
 
     <!--ACCOUNT-->
     <string name="account_save">Datos guardados.</string>
@@ -47,6 +48,14 @@
     <string name="notification_empty">Ingrese una notificación.</string>
     <string name="hint_notification">Ingrese la notificación.(Max.300)</string>
     <string name="notification_unavailable">Usted podrá enviar una nueva notificación a partir del </string>
+
+    <!--DRAW-->
+    <string name="draw_thing">Ingrese el objeto a sortear.</string>
+    <string name="only_following">Para mi seguidores.</string>
+    <string name="for_all">Para todos.</string>
+    <string name="date_end_draw">Fecha Fin</string>
+    <string name="draw_condition_string">Ingrese las condiciones del sorteo.</string>
+    <string name="create_draw">Crear el sorteo</string>
     <!--MAP KEY Deb-->
     <string name="google_maps_key">AIzaSyAWfQFYnINp_aoysUJlg1vvcb5h7HwGhyU</string>
 
@@ -71,7 +80,7 @@
     <string name="user_empty">Ingrese su usuario.</string>
     <string name="pass_empty">Ingrese su contraseña.</string>
     <string name="error_id_city">Problema al intentar obtener su ubicación.</string>
-     <!--MENU-->
+    <!--MENU-->
     <string name="log_out_menu">Desloguear</string>
     <string name="support_menu">Soporte</string>
     <!--LOG  -->
@@ -94,5 +103,29 @@
     <string name="processing">Procesando...</string>
     <string name="sent_emal_auto">Se envió una email automaticamente a soporte.</string>
     <string name="my_location">MI UBICACIÓN</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create_draw_fragment">Crear</string>
+    <string name="close_draw_fragment">Cerrar</string>
+    <string name="time_end_draw">Hora Fin</string>
+    <string name="object_empty">Ingrese la descripción del objeto a sortear</string>
+    <string name="conditions_empty">Ingrese las condiciones del sorteo</string>
+    <string name="end_date_empty">Seleccione una fecha de finalización del sorteo.</string>
+    <string name="time_date_empty">Seleccione una hora de finalización del sorteo.</string>
+    <string name="data_end_before">Seleccione una fecha superior a la actual.</string>
+    <string name="draw_create_success">Sorteo creado correctamente.</string>
+    <string name="error_draw_null">Problemas para generar el sorteo.</string>
+    <string name="date_limit">Fecha limite uso o retiro</string>
+    <string name="date_limit_empty">Seleccione una fecha limite de uso o retiro del premio.</string>
+    <string name="error_dateLimit_vs_dateExpirate">Seleccione una fecha limite de uso o retiro mayor a la fecha de finalización del sorteo.</string>
+    <string name="draw_title">Sorteo</string>
+    <string name="date_create_hint">Fecha de creación:</string>
+    <string name="date_end_hint">Fecha de Cierre:</string>
+    <string name="date_limit_hint">Fecha limite de uso o retiro:</string>
+    <string name="draw_cancel_success">Sorteo cerrado correctamente.</string>
+    <string name="winner_text">GANADOR:</string>
+    <string name="DNI">DNI</string>
+
 
 </resources>

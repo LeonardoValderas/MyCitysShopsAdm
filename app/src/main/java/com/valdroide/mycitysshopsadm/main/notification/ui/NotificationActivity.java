@@ -52,13 +52,17 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         Utils.writelogFile(this, "Se inicia presenter Oncreate(Notification)");
         presenter.onCreate();
         Utils.writelogFile(this, "Se inicia toolbar Oncreate(Notification)");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.notification_title);
+        initToolBar();
         initDialog();
         pDialog.show();
         editTextEmailHint.setHint(getString(R.string.hint_notification));
         presenter.validateNotificationExpire(this, Utils.getFechaLogFile());
+    }
+
+    private void initToolBar(){
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.notification_title);
     }
 
     private void setupInjection() {

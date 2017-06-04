@@ -2,6 +2,7 @@ package com.valdroide.mycitysshopsadm;
 
 import android.app.Activity;
 import android.app.Application;
+import android.support.v4.app.Fragment;
 
 import com.facebook.stetho.Stetho;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -10,6 +11,16 @@ import com.valdroide.mycitysshopsadm.main.account.di.AccountActivityComponent;
 import com.valdroide.mycitysshopsadm.main.account.di.AccountActivityModule;
 import com.valdroide.mycitysshopsadm.main.account.di.DaggerAccountActivityComponent;
 import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivityView;
+import com.valdroide.mycitysshopsadm.main.draw.fragments.draw.di.DaggerDrawFragmentComponent;
+import com.valdroide.mycitysshopsadm.main.draw.fragments.draw.di.DrawFragmentComponent;
+import com.valdroide.mycitysshopsadm.main.draw.fragments.draw.di.DrawFragmentModule;
+import com.valdroide.mycitysshopsadm.main.draw.fragments.draw.ui.DrawFragment;
+import com.valdroide.mycitysshopsadm.main.draw.fragments.draw.ui.DrawFragmentView;
+import com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.di.DaggerDrawListFragmentComponent;
+import com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.di.DrawListFragmentComponent;
+import com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.di.DrawListFragmentModule;
+import com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.ui.DrawListFragment;
+import com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.ui.DrawListFragmentView;
 import com.valdroide.mycitysshopsadm.main.login.di.DaggerLoginActivityComponent;
 import com.valdroide.mycitysshopsadm.main.login.di.LoginActivityComponent;
 import com.valdroide.mycitysshopsadm.main.login.di.LoginActivityModule;
@@ -86,6 +97,14 @@ public class MyCitysShopsAdmApp extends Application {
                 .build();
     }
 
+    public DrawFragmentComponent getDrawFragmentComponent(DrawFragmentView view, Fragment fragment) {
+        return DaggerDrawFragmentComponent
+                .builder()
+                .myCitysShopsAdmAppModule(myCitysShopsAdmAppModule)
+                .libsModule(new LibsModule(fragment))
+                .drawFragmentModule(new DrawFragmentModule(fragment, view))
+                .build();
+    }
 
     public SupportActivityComponent getSupportActivityComponent(SupportActivityView view, Activity activity) {
         return DaggerSupportActivityComponent
@@ -120,6 +139,15 @@ public class MyCitysShopsAdmApp extends Application {
                 .myCitysShopsAdmAppModule(myCitysShopsAdmAppModule)
                 .libsModule(new LibsModule(activity))
                 .notificationActivityModule(new NotificationActivityModule(view, activity))
+                .build();
+    }
+
+    public DrawListFragmentComponent getDrawListFragmentComponent(DrawListFragmentView view, Fragment fragment, com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.ui.adapters.OnItemClickListener onItemClickListener) {
+        return DaggerDrawListFragmentComponent
+                .builder()
+                .myCitysShopsAdmAppModule(myCitysShopsAdmAppModule)
+                .libsModule(new LibsModule(fragment))
+                .drawListFragmentModule(new DrawListFragmentModule(view, fragment, onItemClickListener))
                 .build();
     }
 

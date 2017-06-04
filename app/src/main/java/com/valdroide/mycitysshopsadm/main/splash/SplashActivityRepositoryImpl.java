@@ -558,45 +558,45 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                             if (responseWS != null) {
                                 Utils.writelogFile(context, "ResponseWS != null y valida getSuccess(Splash, Repository)");
                                 if (responseWS.getSuccess().equals("0")) {
-                                    Utils.writelogFile(context, " getSuccess = 0 y getAccount(Splash, Repository)");
+                                    Utils.writelogFile(context, "getSuccess = 0 y getAccount(Splash, Repository)");
                                     Shop shop = response.body().getShop();
                                     if (shop != null) {
-                                        Utils.writelogFile(context, " shop !=  null y update shop(Splash, Repository)");
+                                        Utils.writelogFile(context, "shop !=  null y update shop(Splash, Repository)");
                                         shop.update();
-                                        Utils.writelogFile(context, " set follow shared(Splash, Repository)");
+                                        Utils.writelogFile(context, "set follow shared(Splash, Repository)");
                                         Utils.setIdFollow(context, shop.getFOLLOW());
-                                        Utils.writelogFile(context, " update shop ok y GOTONAV(Splash, Repository)");
+                                        Utils.writelogFile(context, "update shop ok y GOTONAV(Splash, Repository)");
                                     } else {
-                                        Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
+                                        Utils.writelogFile(context, "shop == null " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
                                         post(SplashActivityEvent.ERROR, context.getString(R.string.error_data_base));
                                     }
                                     post(SplashActivityEvent.GOTONAV);
                                 } else {
-                                    Utils.writelogFile(context, " GOTOLOG(Splash, Repository)");
+                                    Utils.writelogFile(context, "GOTOLOG(Splash, Repository)");
                                     post(SplashActivityEvent.GOTOLOG);
                                 }
                             } else {
-                                Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
+                                Utils.writelogFile(context, "responseWS == null " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
                                 post(SplashActivityEvent.ERROR, context.getString(R.string.error_data_base));
                             }
                         } else {
-                            Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
+                            Utils.writelogFile(context, "!response.isSuccessful() " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
                             post(SplashActivityEvent.ERROR, context.getString(R.string.error_data_base));
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResultShop> call, Throwable t) {
-                        Utils.writelogFile(context, " Call error " + t.getMessage() + "(Splash, Repository)");
+                        Utils.writelogFile(context, "Call error " + t.getMessage() + "(Splash, Repository)");
                         post(SplashActivityEvent.ERROR, t.getMessage());
                     }
                 });
             } catch (Exception e) {
-                Utils.writelogFile(context, " catch error " + e.getMessage() + "(Splash, Repository)");
+                Utils.writelogFile(context, "catch error " + e.getMessage() + "(Splash, Repository)");
                 post(SplashActivityEvent.ERROR, e.getMessage());
             }
         } else {
-            Utils.writelogFile(context, " Internet error " + context.getString(R.string.error_internet) + "(Splash, Repository)");
+            Utils.writelogFile(context, "Internet error " + context.getString(R.string.error_internet) + "(Splash, Repository)");
             post(SplashActivityEvent.ERROR, context.getString(R.string.error_internet));
         }
     }
