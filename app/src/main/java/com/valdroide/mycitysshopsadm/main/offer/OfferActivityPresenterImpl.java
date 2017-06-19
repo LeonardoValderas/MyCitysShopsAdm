@@ -23,6 +23,8 @@ public class OfferActivityPresenterImpl implements OfferActivityPresenter {
     @Override
     public void onCreate() {
         eventBus.register(this);
+        if (view != null)
+            view.showProgressDialog();
     }
 
     @Override
@@ -57,23 +59,33 @@ public class OfferActivityPresenterImpl implements OfferActivityPresenter {
     }
 
     @Override
+    public void getCity(Context context) {
+        interactor.getCity(context);
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(OfferActivityEvent event) {
         if (this.view != null) {
             switch (event.getType()) {
                 case OfferActivityEvent.GETOFFER:
                     view.setOffers(event.getOffers(), event.getMax_offer());
+                    view.hidePorgressDialog();
                     break;
                 case OfferActivityEvent.SAVEOFFER:
+                    view.hidePorgressDialog();
                     view.saveOffer(event.getOffer());
                     break;
                 case OfferActivityEvent.UPDATEOFFER:
+                    view.hidePorgressDialog();
                     view.updateOffer(event.getOffer());
                     break;
                 case OfferActivityEvent.SWITCHOFFER:
+                    view.hidePorgressDialog();
                     view.switchOffer(event.getOffer());
                     break;
                 case OfferActivityEvent.ERROR:
+                    view.hidePorgressDialog();
                     view.error(event.getError());
             }
         }

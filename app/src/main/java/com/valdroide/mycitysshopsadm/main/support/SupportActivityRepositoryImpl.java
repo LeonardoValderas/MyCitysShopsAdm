@@ -37,27 +37,22 @@ public class SupportActivityRepositoryImpl implements SupportActivityRepository 
                 @Override
                 public void run() {
                     Utils.writelogFile(context, "sendEmail(support, Repository)");
-                    sendEmail(context, support, getShopName(context), comment);
+                    sendEmail(context, support, Utils.getNameShop(context), comment);
                 }
             };
             new Thread(runnable).start();
         } else {
-            Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(support, Repository)");
+            Utils.writelogFile(context, "Base de datos error(support, Repository)");
             post(SupportActivityEvent.ERROR, context.getString(R.string.error_data_base));
         }
     }
 
-    public Support getSupport(Context context) {
+    private Support getSupport(Context context) {
         Utils.writelogFile(context, "getSupport(support, Repository)");
         return SQLite.select().from(Support.class).querySingle();
     }
 
-    public String getShopName(Context context) {
-        Utils.writelogFile(context, "getShopName(support, Repository)");
-        return SQLite.select(Account_Table.SHOP_NAME).from(Account.class).querySingle().getSHOP_NAME();
-    }
-
-    public void sendEmail(Context context, final Support support, String Shop_name, String comment) {
+    private void sendEmail(Context context, final Support support, String Shop_name, String comment) {
         Utils.writelogFile(context, "Metodo sendEmail y Se valida conexion a internet(support, Repository)");
         if (Utils.isNetworkAvailable(context)) {
             Utils.writelogFile(context, "setSupport variables(support, Repository)");
@@ -89,16 +84,16 @@ public class SupportActivityRepositoryImpl implements SupportActivityRepository 
                 post(SupportActivityEvent.ERROR, ex.getMessage());
             }
         } else {
-            Utils.writelogFile(context, " Internet error " + context.getString(R.string.error_internet) + "(support, Repository)");
+            Utils.writelogFile(context, "Internet error(support, Repository)");
             post(SupportActivityEvent.ERROR, context.getString(R.string.error_internet));
         }
     }
 
-    public void post(int type) {
+    private void post(int type) {
         post(type, null);
     }
 
-    public void post(int type, String error) {
+    private void post(int type, String error) {
         SupportActivityEvent event = new SupportActivityEvent();
         event.setType(type);
         event.setError(error);

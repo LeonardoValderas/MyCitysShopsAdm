@@ -6,6 +6,8 @@ import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.api.APIService;
+import com.valdroide.mycitysshopsadm.entities.place.City;
+import com.valdroide.mycitysshopsadm.entities.place.City_Table;
 import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
 import com.valdroide.mycitysshopsadm.entities.shop.DateShop;
 import com.valdroide.mycitysshopsadm.entities.shop.Offer;
@@ -242,6 +244,18 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
         }
     }
 
+    @Override
+    public void getCity(Context context) {
+        Utils.writelogFile(context, "getCity(Offer, Repository)");
+        try {
+            String city = SQLite.select(City_Table.CITY).from(City.class).where(City_Table.ID_CITY_KEY.eq(Utils.getIdCity(context))).querySingle().getCITY();
+            post(OfferActivityEvent.CITY, true, city);
+        }catch (Exception e){
+            Utils.writelogFile(context, "getCity catch error " + e.getMessage() + " (Offer, Repository)");
+            post(AccountActivityEvent.ERROR, e.getMessage());
+        }
+    }
+
     private void deleteOffer(final Context context, final Offer offer) {
         Utils.writelogFile(context, "Metodo deleteOffer y Se valida conexion a internet(Offer, Repository)");
         if (Utils.isNetworkAvailable(context)) {
@@ -307,28 +321,28 @@ public class OfferActivityRepositoryImpl implements OfferActivityRepository {
         }
     }
 
-    public void post(int type) {
-        post(type, null, null, 0, null);
+    private void post(int type, Offer offer) {
+        post(type, offer, null, 0, null, null);
     }
 
-    public void post(int type, Offer offer) {
-        post(type, offer, null, 0, null);
+    private void post(int type, boolean isCity, String city) {
+        post(type, null, null, 0, city, null);
     }
 
-    public void post(int type, List<Offer> offers, int max) {
-        post(type, null, offers, max, null);
+    private void post(int type, List<Offer> offers, int max) {
+        post(type, null, offers, max, null, null);
     }
 
-    public void post(int type, String error) {
-        post(type, null, null, 0, error);
+    private void post(int type, String error) {
+        post(type, null, null, 0, null, error);
     }
 
-
-    public void post(int type, Offer offer, List<Offer> offers, int max_offer, String error) {
+    private void post(int type, Offer offer, List<Offer> offers, int max_offer,  String city, String error) {
         OfferActivityEvent event = new OfferActivityEvent();
         event.setType(type);
         event.setOffer(offer);
         event.setOffers(offers);
+        event.setCity(city);
         event.setMax_offer(max_offer);
         event.setError(error);
         eventBus.post(event);

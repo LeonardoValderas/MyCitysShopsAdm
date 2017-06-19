@@ -1,5 +1,5 @@
 package com.valdroide.mycitysshopsadm.main.draw;
 
 public interface Communicator {
-    void refresh();
+    void refresh(boolean isBroadcast);
 }

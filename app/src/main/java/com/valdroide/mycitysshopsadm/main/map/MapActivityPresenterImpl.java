@@ -28,11 +28,17 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
     @Override
     public void onDestroy() {
         eventBus.unregister(this);
+        view = null;
     }
 
     @Override
     public void getLatLong(Context context, int id_city) {
         interactor.getLatLong(context, id_city);
+    }
+
+    @Override
+    public MapActivityView getView() {
+        return this.view;
     }
 
     @Subscribe

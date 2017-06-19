@@ -28,7 +28,7 @@ public class LoginActivityRepositoryImpl implements LoginActivityRepository {
     }
 
     @Override
-    public void validateLogin(final Context context, String user, String pass, int id_city) {
+    public void validateLogin(final Context context, final String user, final String pass, int id_city) {
         Utils.writelogFile(context, "Metodo validateLogin y Se valida conexion a internet(Login, Repository)");
         if (Utils.isNetworkAvailable(context)) {
             try {
@@ -48,8 +48,11 @@ public class LoginActivityRepositoryImpl implements LoginActivityRepository {
                                     Shop shop = response.body().getShop();
                                     if (shop != null) {
                                         Utils.writelogFile(context, "shop != null y save shop (Login, Repository)");
+                                        shop.setUSER(user);
+                                        shop.setPASS(pass);
                                         shop.save();
                                         Utils.setIdShop(context, shop.getID_SHOP_KEY());
+                                        Utils.setNameShop(context, shop.getSHOP());
                                         post(LoginActivityEvent.LOGIN);
                                     } else {
                                         Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Login, Repository)");
@@ -86,6 +89,48 @@ public class LoginActivityRepositoryImpl implements LoginActivityRepository {
     }
 
     @Override
+    public void validateLoginAdm(final Context context, String user, String pass, int id_city) {
+        Utils.writelogFile(context, "Metodo validateLoginAdm y Se valida conexion a internet(Login, Repository)");
+        if (Utils.isNetworkAvailable(context)) {
+            try {
+                Utils.writelogFile(context, "Call validateLoginAdm(Login, Repository)");
+                Call<ResponseWS> loginService = service.validateLoginAdm(user,
+                        pass, id_city);
+                loginService.enqueue(new Callback<ResponseWS>() {
+                    @Override
+                    public void onResponse(Call<ResponseWS> call, Response<ResponseWS> response) {
+                        if (response.isSuccessful()) {
+                            Utils.writelogFile(context, "Response Successful y get ResponseWS(Login, Repository)");
+                             if (response.body().getSuccess().equals("0")) {
+                                Utils.writelogFile(context, " getSuccess = 0 y gotoNotification(Login, Repository)");
+                                post(LoginActivityEvent.ADM);
+                            } else {
+                                Utils.writelogFile(context, "getSuccess != 0  " + response.body().getMessage()+ "(Login, Repository)");
+                                post(LoginActivityEvent.ERROR, response.body().getMessage());
+                            }
+                        } else {
+                            Utils.writelogFile(context, "!response.isSuccessful()(Login, Repository)");
+                            post(LoginActivityEvent.ERROR, context.getString(R.string.error_data_base));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseWS> call, Throwable t) {
+                        Utils.writelogFile(context, " Call error " + t.getMessage() + "(Login, Repository)");
+                        post(LoginActivityEvent.ERROR, t.getMessage());
+                    }
+                });
+            } catch (Exception e) {
+                Utils.writelogFile(context, " catch error " + e.getMessage() + "(Login, Repository)");
+                post(LoginActivityEvent.ERROR, e.getMessage());
+            }
+        } else {
+            Utils.writelogFile(context, " Internet error " + context.getString(R.string.error_internet) + "(Login, Repository)");
+            post(LoginActivityEvent.ERROR, context.getString(R.string.error_internet));
+        }
+    }
+
+    @Override
     public void changePlace(Context context) {
         Utils.writelogFile(context, "Metodo changePlace (Login, Repository)");
         try {
@@ -100,11 +145,11 @@ public class LoginActivityRepositoryImpl implements LoginActivityRepository {
         }
     }
 
-    public void post(int type) {
+    private void post(int type) {
         post(type, null);
     }
 
-    public void post(int type, String error) {
+    private void post(int type, String error) {
         LoginActivityEvent event = new LoginActivityEvent();
         event.setType(type);
         event.setError(error);

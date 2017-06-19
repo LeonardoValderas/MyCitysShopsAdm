@@ -10,7 +10,9 @@ import android.widget.RelativeLayout;
 
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
+import com.valdroide.mycitysshopsadm.entities.shop.Notification;
 import com.valdroide.mycitysshopsadm.main.login.LoginActivityPresenter;
+import com.valdroide.mycitysshopsadm.main.notification.ui.NotificationActivity;
 import com.valdroide.mycitysshopsadm.main.place.ui.PlaceActivity;
 import com.valdroide.mycitysshopsadm.main.splash.ui.SplashActivity;
 import com.valdroide.mycitysshopsadm.utils.Utils;
@@ -51,20 +53,17 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
         initDialog();
     }
 
-    public void dismissDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
-    }
     private void setupInjection() {
         MyCitysShopsAdmApp app = (MyCitysShopsAdmApp) getApplication();
         app.getLoginActivityComponent(this, this).inject(this);
     }
 
-    public void initDialog() {
+    private void initDialog() {
         pDialog = new ProgressDialog(this);
         pDialog.setMessage(getString(R.string.processing));
         pDialog.setCancelable(false);
     }
+
     @OnClick(R.id.buttonInto)
     public void validateLogin() {
         Utils.writelogFile(this, "Metodo validateLogin on click buttonInto(Login)");
@@ -77,10 +76,16 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
                 Utils.writelogFile(this, "Utils.getIdCity es cero(Login)");
                 Utils.showSnackBar(conteiner, getString(R.string.error_id_city));
             } else {
-                pDialog.show();
+                showProgressDialog();
                 Utils.writelogFile(this, " presenter.validateLogin(Login)");
-                presenter.validateLogin(this, editTextUser.getText().toString(),
-                        editTextPass.getText().toString(), Utils.getIdCity(this));
+
+                if (editTextUser.getText().toString().equalsIgnoreCase("MCS_ADMIN")) {
+                    presenter.validateLoginAdm(this, editTextUser.getText().toString(),
+                            editTextPass.getText().toString(), Utils.getIdCity(this));
+                } else {
+                    presenter.validateLogin(this, editTextUser.getText().toString(),
+                            editTextPass.getText().toString(), Utils.getIdCity(this));
+                }
             }
         } catch (Exception e) {
             setError(e.getMessage());
@@ -91,6 +96,7 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
     @OnClick(R.id.buttonChangePlace)
     public void changePlace() {
         Utils.writelogFile(this, "Metodo changePlace on click buttonChangePlace y presenter.changePlace(Login)");
+        showProgressDialog();
         presenter.changePlace(this);
     }
 
@@ -99,14 +105,12 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
         Utils.writelogFile(this, "Metodo loginSuccess y intente Splash con extra true(Login)");
         Intent intent = new Intent(this, SplashActivity.class);
         intent.putExtra("isLoguin", true);
-        dismissDialog();
         startActivity(intent);
     }
 
     @Override
     public void setError(String msg) {
         Utils.writelogFile(this, "Metodo setError: " + msg + "(Login)");
-        dismissDialog();
         Utils.showSnackBar(conteiner, msg);
     }
 
@@ -114,6 +118,25 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
     public void goToPlace() {
         Utils.writelogFile(this, "Metodo goToPlace Intente Place(Login)");
         startActivity(new Intent(this, PlaceActivity.class));
+    }
+
+    @Override
+    public void goToNotification() {
+        hidePorgressDialog();
+        Intent intent = new Intent(this, NotificationActivity.class);
+        intent.putExtra("isADM", true);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showProgressDialog() {
+        pDialog.show();
+    }
+
+    @Override
+    public void hidePorgressDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 
     @Override

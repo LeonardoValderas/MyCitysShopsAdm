@@ -10,6 +10,8 @@ public interface DrawFragmentPresenter {
     void onCreate();
     void onDestroy();
     DrawFragmentView getView();
+    void getCity(Context context);
     void createDraw(Context context, Draw draw);
+    void validateBroadcast(Context context);
     void onEventMainThread(DrawFragmentEvent event);
 }

@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.entities.shop.Draw;
+import com.valdroide.mycitysshopsadm.main.draw.broadcast.RefreshAdapterDraw;
 import com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.DrawListFragmentPresenter;
 import com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.ui.adapters.DrawListFragmentAdapter;
 import com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.ui.adapters.OnItemClickListener;
@@ -30,7 +31,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class DrawListFragment extends Fragment implements DrawListFragmentView, OnItemClickListener {
+public class DrawListFragment extends Fragment implements DrawListFragmentView, OnItemClickListener, RefreshAdapterDraw {
 
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -56,18 +57,14 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
         return view;
     }
 
-    public void refresh() {
-        presenter.getDraws(getActivity());
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setupInjection();
+        initDialog();
         presenter.onCreate();
         initRecyclerViewAdapter();
-        initDialog();
-        pDialog.show();
         presenter.getDraws(getActivity());
     }
 
@@ -90,6 +87,12 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
         }
     }
 
+    public void refresh(boolean isBroadcast) {
+        presenter.getDraws(getActivity());
+        if(isBroadcast)
+            presenter.validateBroadcast(getActivity());
+    }
+
     private void initDialog() {
         Utils.writelogFile(getActivity(), "initDialog(DrawListFragment)");
         pDialog = new ProgressDialog(getActivity());
@@ -97,31 +100,39 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
         pDialog.setCancelable(false);
     }
 
-    private void validateDialog() {
-        Utils.writelogFile(getActivity(), "validateDialog(DrawListFragment)");
-        if (pDialog.isShowing())
-            pDialog.dismiss();
-    }
-
     @Override
     public void setDraws(List<Draw> draws) {
         Utils.writelogFile(getActivity(), "setDraws(DrawListFragment)");
         adapter.setDraw(draws);
-        validateDialog();
     }
 
     @Override
     public void setError(String error) {
         Utils.writelogFile(getActivity(), "setError: " + error + " (DrawListFragment)");
-        validateDialog();
         Utils.showSnackBar(conteiner, error);
     }
 
     @Override
     public void cancelSuccess() {
         adapter.deleteDraw(position);
-        validateDialog();
         Utils.showSnackBar(conteiner, getString(R.string.draw_cancel_success));
+    }
+
+    @Override
+    public void forceSuccess(Draw draw) {
+        adapter.setUpdateDraw(position, draw);
+        Utils.showSnackBar(conteiner, getString(R.string.draw_force_list));
+    }
+
+    @Override
+    public void showProgressDialog() {
+        pDialog.show();
+    }
+
+    @Override
+    public void hidePorgressDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 
     @Override
@@ -146,17 +157,28 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
 
     private void showDialogs(final Draw draw) {
         Utils.writelogFile(getActivity(), "showDialogs(DrawListFragment)");
-        createDialog("Desea cerra el sorteo?", draw, 0);
+        if (draw != null) {
+            if (draw.getERROR_REPORTING() == 1) {
+                showProgressDialog();
+                presenter.forceDraw(getActivity(), draw);
+            } else if (draw.getIS_ZERO() == 1) {
+                showProgressDialog();
+                draw.setIS_ACTIVE(0);
+                closeDraw(draw);
+            } else {
+                createDialog("Desea cerra el sorteo?", draw, 0);
+            }
+        }
     }
 
     private boolean validateDateEndDraw(String date) {
         Utils.writelogFile(getActivity(), "validateDateEndDraw(DrawListFragment)");
-        return Utils.validateCurrentDate(date);
+        return Utils.validateExpirateCurrentTime(date, getString(R.string.format_draw));
     }
 
     private boolean validateDateLimitDraw(String date) {
         Utils.writelogFile(getActivity(), "validateDateLimitDraw(DrawListFragment)");
-        return Utils.validateExpirateVsLimit(Utils.getFechaLogFile(), date);
+        return Utils.validateExpirateVsLimit(Utils.getFechaLogFile("dd-MM-yyyy"), date, "dd-MM-yyyy");
     }
 
     private void createDialog(String msg, final Draw draw, final int type) {//0 init //1 cancel // 2 take/limit
@@ -174,8 +196,7 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
                         case 1:
                             draw.setIS_ACTIVE(0);
                             draw.setIS_CANCEL(1);
-                            pDialog.show();
-                            presenter.cancelDraw(getActivity(), draw);
+                            closeDraw(draw);
                     }
                 } else { // the draw is close validate if the alward was take.
                     if (!validateDateLimitDraw(draw.getLIMIT_DATE())) {// is true when the date limit is before that today
@@ -186,14 +207,12 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
                             case 2:
                                 draw.setIS_ACTIVE(0);
                                 draw.setIS_TAKE(1);
-                                pDialog.show();
-                                presenter.cancelDraw(getActivity(), draw);
+                                closeDraw(draw);
                         }
                     } else {
                         draw.setIS_ACTIVE(0);
                         draw.setIS_LIMIT(1);
-                        pDialog.show();
-                        presenter.cancelDraw(getActivity(), draw);
+                        closeDraw(draw);
                     }
                 }
             }
@@ -215,5 +234,15 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
             });
         }
         builder.show();
+    }
+
+    private void closeDraw(Draw draw) {
+        showProgressDialog();
+        presenter.cancelDraw(getActivity(), draw);
+    }
+
+    @Override
+    public void refreshAdapter() {
+        adapter.notifyDataSetChanged();
     }
 }

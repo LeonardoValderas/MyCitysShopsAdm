@@ -5,6 +5,14 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <!--FORMAT TIME-->
+    <string name="format_draw">yyyy-MM-dd HH:mm</string>
+    <string name="format_notification">dd/MM/yyyy</string>
+    <string name="format_draw_adapter_enter_start">yyyy-MM-dd HH:mm:ss</string>
+    <string name="format_draw_adapter_exit_start">dd-MM-yyyy HH:mm:ss</string>
+    <string name="format_draw_adapter_enter_end">yyyy-MM-dd HH:mm</string>
+    <string name="format_draw_adapter_exit_end">dd-MM-yyyy HH:mm</string>
+
     <!--TITLE TOOLBAR-->
     <!--MENU DRAWER-->
     <string name="support_title">Soporte</string>
@@ -76,6 +84,10 @@
     <string name="log_date_shared">date_log_file</string>
     <string name="log_date">log_date</string>
     <string name="my_user_log_shared">my_user_log</string>
+    <string name="draw_id_shared">id_draw_end</string>
+    <string name="id_draw">id_draw</string>
+    <string name="shop_name_shared">shop_name_shared</string>
+    <string name="name_shop">name_shop</string>
     <!--LOGIN-->
     <string name="user_empty">Ingrese su usuario.</string>
     <string name="pass_empty">Ingrese su contraseña.</string>
@@ -116,6 +128,7 @@
     <string name="data_end_before">Seleccione una fecha superior a la actual.</string>
     <string name="draw_create_success">Sorteo creado correctamente.</string>
     <string name="error_draw_null">Problemas para generar el sorteo.</string>
+    <string name="error_draw_date_end_exist">La fecha de cierre ya existe, ingrese una diferrente.</string>
     <string name="date_limit">Fecha limite uso o retiro</string>
     <string name="date_limit_empty">Seleccione una fecha limite de uso o retiro del premio.</string>
     <string name="error_dateLimit_vs_dateExpirate">Seleccione una fecha limite de uso o retiro mayor a la fecha de finalización del sorteo.</string>
@@ -126,6 +139,11 @@
     <string name="draw_cancel_success">Sorteo cerrado correctamente.</string>
     <string name="winner_text">GANADOR:</string>
     <string name="DNI">DNI</string>
-
-
+    <string name="winner_draw_broadcast">Tu sorteo ya tiene un ganador.</string>
+    <string name="error_reporting_draw_adapter">Problemas al intentar cerrar el sorteo y seleccionar un ganador. Intente forzar ésta acción haciendo click.</string>
+    <string name="draw_zero_adapter">El sorteo no tuvo participantes. Ya puede cerrar el sorteo.</string>
+    <string name="draw_force_list">Sorteo forzado correctamente.</string>
+<!--DRAW-->
+    <string name="error_draw">Problema al gestionar el sorteo.</string>
+    <string name="city_name_error">Problemas para obtener su ciudad.</string>
 </resources>

@@ -62,7 +62,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         init();
     }
 
-    public void init() {
+    private void init() {
         Utils.writelogFile(this, "Se inicia SupportMapFragment(Map)");
         try {
             mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -73,7 +73,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    public void setupInjection() {
+    private void setupInjection() {
         MyCitysShopsAdmApp app = (MyCitysShopsAdmApp) getApplication();
         app.getMapActivityComponent(this, this).inject(this);
     }
@@ -125,41 +125,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     mapa.clear();
                 }
             });
-//            if (longitudExtra != 0.00 && latitudExtra != 0.00) {
-//                mapa.addMarker(new MarkerOptions().position(
-//                        new LatLng(latitudExtra, longitudExtra)).title(name));
-//            }
-
-
-//            if (actualizar) {
-//                name = getIntent().getStringExtra("name");
-//                uriExtra = getIntent().getStringExtra("uri");
-//                phone = getIntent().getStringExtra("phone");
-//                web = getIntent().getStringExtra("web");
-//                email = getIntent().getStringExtra("email");
-//                address = getIntent().getStringExtra("address");
-//                whatsapp = getIntent().getStringExtra("whatsaap");
-//                face = getIntent().getStringExtra("facebook");
-//                insta = getIntent().getStringExtra("instagram");
-//                twitter = getIntent().getStringExtra("twitter");
-//                snap = getIntent().getStringExtra("snapchat");
-//                working = getIntent().getStringExtra("working");
-//                description = getIntent().getStringExtra("description");
-//                longitud = getIntent().getStringExtra("longitud");
-//                latitud = getIntent().getStringExtra("latitud");
-//                if (!longitud.isEmpty() && !latitud.isEmpty()) {
-//                    longitudExtra = Double.valueOf(longitud);
-//                    latitudExtra = Double.valueOf(latitud);
-//                    mapa.addMarker(new MarkerOptions().position(
-//                            new LatLng(latitudExtra, longitudExtra)).title(name));
-//                }
-//            }
         } catch (Exception e) {
             Utils.writelogFile(this, " catch error " + e.getMessage() + "(Map)");
         }
     }
 
-    public void getExtraInfo() {
+    private void getExtraInfo() {
         if (actualizar) {
             name = getIntent().getStringExtra("name");
             uriExtra = getIntent().getStringExtra("uri");
@@ -179,8 +150,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             if (!longitud.isEmpty() && !latitud.isEmpty()) {
                 longitudExtra = Double.valueOf(longitud);
                 latitudExtra = Double.valueOf(latitud);
-//                mapa.addMarker(new MarkerOptions().position(
-//                        new LatLng(latitudExtra, longitudExtra)).title(name));
             }
         }
     }
@@ -205,7 +174,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         return super.onOptionsItemSelected(item);
     }
 
-    public void volver() {
+    private void volver() {
         try {
             Intent intent = new Intent(this, AccountActivity.class);
             intent.putExtra("isMap", true);

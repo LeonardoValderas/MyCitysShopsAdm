@@ -16,6 +16,11 @@ public class LoginActivityInteractorImpl implements LoginActivityInteractor {
     }
 
     @Override
+    public void validateLoginAdm(Context context, String user, String pass, int id_city) {
+        repository.validateLoginAdm(context, user, pass, id_city);
+    }
+
+    @Override
     public void changePlace(Context context) {
         repository.changePlace(context);
     }

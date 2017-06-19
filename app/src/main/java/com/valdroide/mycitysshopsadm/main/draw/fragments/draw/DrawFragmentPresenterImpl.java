@@ -33,7 +33,12 @@ public class DrawFragmentPresenterImpl implements DrawFragmentPresenter {
 
     @Override
     public DrawFragmentView getView() {
-        return  this.view;
+        return this.view;
+    }
+
+    @Override
+    public void getCity(Context context) {
+        interactor.getCity(context);
     }
 
     @Override
@@ -42,15 +47,24 @@ public class DrawFragmentPresenterImpl implements DrawFragmentPresenter {
     }
 
     @Override
+    public void validateBroadcast(Context context) {
+        interactor.validateBroadcast(context);
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(DrawFragmentEvent event) {
         if (this.view != null) {
             switch (event.getType()) {
                 case DrawFragmentEvent.CREATEDRAW:
+                    view.hidePorgressDialog();
                     view.createSuccess();
                     break;
                 case DrawFragmentEvent.ERROR:
+                    view.hidePorgressDialog();
                     view.setError(event.getError());
+                case DrawFragmentEvent.CITY:
+                    view.setCity(event.getCity());
             }
         }
     }

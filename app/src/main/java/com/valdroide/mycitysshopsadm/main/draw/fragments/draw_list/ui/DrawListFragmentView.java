@@ -9,4 +9,7 @@ public interface DrawListFragmentView {
     void setDraws(List<Draw> draws);
     void setError(String error);
     void cancelSuccess();
+    void forceSuccess(Draw draw);
+    void showProgressDialog();
+    void hidePorgressDialog();
 }

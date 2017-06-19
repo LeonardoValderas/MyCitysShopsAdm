@@ -11,7 +11,9 @@ public class OfferActivityEvent {
     public static final int UPDATEOFFER = 2;
     public static final int SWITCHOFFER = 3;
     public static final int ERROR = 4;
+    public static final int CITY = 5;
     private String error;
+    private String city;
     private Offer offer;
     private List<Offer> offers;
     private int max_offer;
@@ -54,5 +56,13 @@ public class OfferActivityEvent {
 
     public void setMax_offer(int max_offer) {
         this.max_offer = max_offer;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

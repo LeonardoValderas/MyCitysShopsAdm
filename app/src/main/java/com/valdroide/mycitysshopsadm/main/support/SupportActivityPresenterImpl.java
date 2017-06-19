@@ -3,10 +3,6 @@ package com.valdroide.mycitysshopsadm.main.support;
 import android.content.Context;
 
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
-import com.valdroide.mycitysshopsadm.main.navigation.NavigationActivityInteractor;
-import com.valdroide.mycitysshopsadm.main.navigation.NavigationActivityPresenter;
-import com.valdroide.mycitysshopsadm.main.navigation.events.NavigationActivityEvent;
-import com.valdroide.mycitysshopsadm.main.navigation.ui.NavigationActivityView;
 import com.valdroide.mycitysshopsadm.main.support.events.SupportActivityEvent;
 import com.valdroide.mycitysshopsadm.main.support.ui.SupportActivityView;
 
@@ -32,6 +28,7 @@ public class SupportActivityPresenterImpl implements SupportActivityPresenter {
     @Override
     public void onDestroy() {
         eventBus.unregister(this);
+        view = null;
     }
 
     @Override
@@ -40,14 +37,21 @@ public class SupportActivityPresenterImpl implements SupportActivityPresenter {
     }
 
     @Override
+    public SupportActivityView getView() {
+        return this.view;
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(SupportActivityEvent event) {
         if (this.view != null) {
             switch (event.getType()) {
                 case SupportActivityEvent.SENDEMAILSUCCESS:
+                    view.hidePorgressDialog();
                     view.sendEmailSuccess();
                     break;
                 case SupportActivityEvent.ERROR:
+                    view.hidePorgressDialog();
                     view.setError(event.getError());
                     break;
             }

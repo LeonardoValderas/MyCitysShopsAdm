@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class DrawActivity extends AppCompatActivity implements Communicator{
+public class DrawActivity extends AppCompatActivity implements Communicator {
 
     @Bind(R.id.tabs)
     TabLayout tabs;
@@ -37,6 +37,11 @@ public class DrawActivity extends AppCompatActivity implements Communicator{
     @Inject
     SectionsPagerAdapter adapter;
 
+    private static DrawActivity drawActivityRunningInstance;
+
+    public static DrawActivity getInstace() {
+        return drawActivityRunningInstance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +51,10 @@ public class DrawActivity extends AppCompatActivity implements Communicator{
         setupInjection();
         setupNavigation();
         initToolBar();
+        drawActivityRunningInstance = this;
     }
 
-    private void initToolBar(){
+    private void initToolBar() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.draw_title);
     }
@@ -74,6 +80,7 @@ public class DrawActivity extends AppCompatActivity implements Communicator{
             }
         });
     }
+
     public void hideKeyBoard() {
         View view = getCurrentFocus();
         if (view != null) {
@@ -81,6 +88,7 @@ public class DrawActivity extends AppCompatActivity implements Communicator{
             mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
     private void setupInjection() {
         String[] titles = new String[]{getString(R.string.create_draw_fragment),
                 getString(R.string.close_draw_fragment)};
@@ -90,8 +98,8 @@ public class DrawActivity extends AppCompatActivity implements Communicator{
     }
 
     @Override
-    public void refresh() {
-        getDrawListFragment().refresh();
+    public void refresh(boolean isBroadcast) {
+        getDrawListFragment().refresh(isBroadcast);
     }
 
     public DrawListFragment getDrawListFragment() {

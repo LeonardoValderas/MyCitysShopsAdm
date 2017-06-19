@@ -14,4 +14,6 @@ public interface PlaceActivityView {
     void setError(String mgs);
     void savePlace();
     void saveSuccess(MyPlace place);
+    void showProgressDialog();
+    void hidePorgressDialog();
 }

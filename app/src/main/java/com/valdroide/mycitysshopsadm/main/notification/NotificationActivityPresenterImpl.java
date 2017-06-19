@@ -22,6 +22,8 @@ public class NotificationActivityPresenterImpl implements NotificationActivityPr
     @Override
     public void onCreate() {
         eventBus.register(this);
+        if (view != null)
+            view.showProgressDialog();
     }
 
     @Override
@@ -36,8 +38,18 @@ public class NotificationActivityPresenterImpl implements NotificationActivityPr
     }
 
     @Override
+    public void sendNotificationAdm(Context context, String notification) {
+        interactor.sendNotificationAdm(context, notification);
+    }
+
+    @Override
     public void validateNotificationExpire(Context context, String now) {
         interactor.validateNotificationExpire(context, now);
+    }
+
+    @Override
+    public NotificationActivityView getView() {
+        return this.view;
     }
 
     @Override
@@ -46,13 +58,20 @@ public class NotificationActivityPresenterImpl implements NotificationActivityPr
         if (this.view != null) {
             switch (event.getType()) {
                 case NotificationActivityEvent.SEND:
+                    view.hidePorgressDialog();
                     view.setSuccess(event.getDate());
                     break;
                 case NotificationActivityEvent.ISAVAILABLE:
+                    view.hidePorgressDialog();
                     view.isAvailable(event.is_available(), event.getDate());
                     break;
                 case NotificationActivityEvent.ERROR:
+                    view.hidePorgressDialog();
                     view.setError(event.getError());
+                    break;
+                case NotificationActivityEvent.SENDADM:
+                    view.hidePorgressDialog();
+                    view.setSuccessAdm();
                     break;
             }
         }

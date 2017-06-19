@@ -104,7 +104,7 @@ public class NotificationActivityRepositoryImpl implements NotificationActivityR
         Utils.writelogFile(context, "validateNotificationExpire(Notification, Repository)");
         try {
             String date = SQLite.select(Notification_Table.DATE_END).from(Notification.class).querySingle().getDATE_END();
-            boolean is_available = Utils.validateExpirateNotification(date);
+            boolean is_available = Utils.validateExpirateCurrentTime(date, context.getString(R.string.format_notification));
             post(NotificationActivityEvent.ISAVAILABLE, is_available, date);
         } catch (Exception e) {
             Utils.writelogFile(context, "validateNotificationExpire error: " + e.getMessage() + "(Notification, Repository)");
@@ -112,7 +112,48 @@ public class NotificationActivityRepositoryImpl implements NotificationActivityR
         }
     }
 
-    public Account getAccount(Context context) {
+    @Override
+    public void sendNotificationAdm(final Context context, String notification) {
+        Utils.writelogFile(context, "Metodo sendNotificationAdm y Se valida conexion a internet(Notification, Repository)");
+        if (Utils.isNetworkAvailable(context)) {
+            try {
+                Utils.writelogFile(context, "Call sendNotification(Notification, Repository)");
+                Call<ResponseWS> notificationService = service.sendNotificationAdm(Utils.getIdCity(context), notification);
+                notificationService.enqueue(new Callback<ResponseWS>() {
+                    @Override
+                    public void onResponse(Call<ResponseWS> call, Response<ResponseWS> response) {
+                        if (response.isSuccessful()) {
+                            Utils.writelogFile(context, "Response Successful y get ResponseWS(Notification, Repository)");
+                            if (response.body().getSuccess().equals("0")) {
+                                Utils.writelogFile(context, "getSuccess = 0 y post(Notification, Repository)");
+                                post(NotificationActivityEvent.SENDADM);
+                            } else {
+                                Utils.writelogFile(context, "getSuccess != 0 " + response.body().getMessage() + "(Notification, Repository)");
+                                post(NotificationActivityEvent.ERROR, response.body().getMessage());
+                            }
+                        } else {
+                            Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Notification, Repository)");
+                            post(NotificationActivityEvent.ERROR, context.getString(R.string.error_data_base));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseWS> call, Throwable t) {
+                        Utils.writelogFile(context, " Call error " + t.getMessage() + "(Notification, Repository)");
+                        post(NotificationActivityEvent.ERROR, t.getMessage());
+                    }
+                });
+            } catch (Exception e) {
+                Utils.writelogFile(context, "getDateShop error: " + e.getMessage() + "(Notification, Repository)");
+                post(NotificationActivityEvent.ERROR, e.getMessage());
+            }
+        } else {
+            Utils.writelogFile(context, " Internet error " + context.getString(R.string.error_internet) + "(Notification, Repository)");
+            post(NotificationActivityEvent.ERROR, context.getString(R.string.error_internet));
+        }
+    }
+
+    private Account getAccount(Context context) {
         Utils.writelogFile(context, "getAccount(Notification, Repository)");
         try {
             return SQLite.select().from(Account.class).querySingle();
@@ -157,20 +198,19 @@ public class NotificationActivityRepositoryImpl implements NotificationActivityR
         }
     }
 
-
-    public void post(int type) {
+    private void post(int type) {
         post(type, false, null, null);
     }
 
-    public void post(int type, String error) {
+    private void post(int type, String error) {
         post(type, false, null, error);
     }
 
-    public void post(int type, boolean is_available, String date) {
+    private void post(int type, boolean is_available, String date) {
         post(type, is_available, date, null);
     }
 
-    public void post(int type, boolean is_available, String date, String error) {
+    private void post(int type, boolean is_available, String date, String error) {
         NotificationActivityEvent event = new NotificationActivityEvent();
         event.setType(type);
         event.setIs_available(is_available);

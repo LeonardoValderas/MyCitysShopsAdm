@@ -61,7 +61,7 @@ public class SupportActivity extends AppCompatActivity implements SupportActivit
         app.getSupportActivityComponent(this, this).inject(this);
     }
 
-    public void initDialog() {
+    private void initDialog() {
         pDialog = new ProgressDialog(this);
         pDialog.setMessage(getString(R.string.processing));
         pDialog.setCancelable(false);
@@ -74,7 +74,7 @@ public class SupportActivity extends AppCompatActivity implements SupportActivit
             if (editTextEmail.getText().toString().equals(""))
                 setError("Ingrese un comentario");
             else {
-                pDialog.show();
+                showProgressDialog();
                 presenter.sendEmail(this, editTextEmail.getText().toString());
             }
         } catch (Exception e) {
@@ -90,7 +90,7 @@ public class SupportActivity extends AppCompatActivity implements SupportActivit
         setError(getString(R.string.email_success));
     }
 
-    private void setText(final EditText editText,final String value){
+    private void setText(final EditText editText, final String value) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -102,16 +102,24 @@ public class SupportActivity extends AppCompatActivity implements SupportActivit
     @Override
     public void setError(String error) {
         Utils.writelogFile(this, " setError " + error + "(support)");
+        Utils.showSnackBar(contentNavigation, error);
+    }
+
+    @Override
+    public void showProgressDialog() {
+        pDialog.show();
+    }
+
+    @Override
+    public void hidePorgressDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
-        Utils.showSnackBar(contentNavigation, error);
     }
 
     @Override
     protected void onDestroy() {
         Utils.writelogFile(this, "onDestroy(support)");
         presenter.onDestroy();
-        pDialog.dismiss();
         super.onDestroy();
     }
 }

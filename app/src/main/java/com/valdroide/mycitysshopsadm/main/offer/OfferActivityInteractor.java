@@ -9,4 +9,5 @@ public interface OfferActivityInteractor {
     void saveOffer(Context context, Offer offer);
     void updateOffer(Context context, Offer offer);
     void switchOffer(Context context, Offer offer);
+    void getCity(Context context);
 }

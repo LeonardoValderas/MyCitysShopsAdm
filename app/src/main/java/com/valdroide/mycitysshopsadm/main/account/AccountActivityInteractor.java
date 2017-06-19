@@ -6,5 +6,6 @@ import com.valdroide.mycitysshopsadm.entities.shop.Account;
 
 public interface AccountActivityInteractor {
     void getAccount(Context context);
+    void getCity(Context context);
     void updateAccount(Context context, Account account);
 }

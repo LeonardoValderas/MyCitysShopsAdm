@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.valdroide.mycitysshopsadm.entities.shop.MyPlace;
 import com.valdroide.mycitysshopsadm.main.place.events.PlaceActivityEvent;
+import com.valdroide.mycitysshopsadm.main.place.ui.PlaceActivityView;
 
 public interface PlaceActivityPresenter {
     void onCreate();
@@ -12,5 +13,6 @@ public interface PlaceActivityPresenter {
     void getStateForCountry(Context context, int id_country);
     void getCitiesForState(Context context, int id_state);
     void savePlace(Context context, MyPlace place);
+    PlaceActivityView getView();
     void onEventMainThread(PlaceActivityEvent event);
 }

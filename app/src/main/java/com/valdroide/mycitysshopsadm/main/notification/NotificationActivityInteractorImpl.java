@@ -19,4 +19,9 @@ public class NotificationActivityInteractorImpl implements NotificationActivityI
     public void validateNotificationExpire(Context context, String now) {
         repository.validateNotificationExpire(context, now);
     }
+
+    @Override
+    public void sendNotificationAdm(Context context, String notification) {
+        repository.sendNotificationAdm(context, notification);
+    }
 }

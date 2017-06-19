@@ -9,4 +9,7 @@ public interface OfferActivityView {
     void updateOffer(Offer offer);
     void switchOffer(Offer offer);
     void error(String msg);
+    void showProgressDialog();
+    void hidePorgressDialog();
+    void setCity(String city);
 }

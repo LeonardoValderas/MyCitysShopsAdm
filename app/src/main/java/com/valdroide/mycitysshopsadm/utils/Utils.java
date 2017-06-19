@@ -90,9 +90,11 @@ public class Utils {
 //    public static String URL_IMAGE_DRAW = "http://mycitysshops.esy.es/my_citys_shops_adm/draw/image_draw/";
 
     //FECHAS
-    public static String getFechaLogFile() {
+    //"dd/MM/yyyy" log file
+    //"dd-MM-yyyy" draw
+    public static String getFechaLogFile(String format) {
         Date dateOficial = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(dateOficial);
     }
 
@@ -125,8 +127,10 @@ public class Utils {
         return df.format(cal.getTime());
     }
 
-    public static boolean validateExpirateNotification(String dateExperate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    // notification "dd/MM/yyyy"
+    //draw end yyyy-MM-dd HH:mm
+    public static boolean validateExpirateCurrentTime(String dateExperate, String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
         Date strDate = null;
         try {
             strDate = sdf.parse(dateExperate);
@@ -134,14 +138,15 @@ public class Utils {
             e.printStackTrace();
         }
         if (strDate != null)
-            if (System.currentTimeMillis() >= strDate.getTime()) {
+            if (System.currentTimeMillis() >= strDate.getTime()) {//si la fecha de hoy es mayor a la fecha dada, es true
                 return true;
             }
         return false;
     }
-
-    public static boolean validateExpirateVsLimit(String dateExperate, String dateLimit) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+   //"yyyy-MM-dd" validate create draw
+   //"dd-MM-yyyy" validate list
+    public static boolean validateExpirateVsLimit(String dateExperate, String dateLimit, String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
         Date strDate = null;
         Date limitDate = null;
         try {
@@ -157,44 +162,56 @@ public class Utils {
         return false;
     }
 
-    public static boolean validateCurrentDate(String dateExperate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Date strDate = null;
-        try {
-            strDate = sdf.parse(dateExperate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return false;
-        }
-        if (strDate != null)
-            if (System.currentTimeMillis() <= strDate.getTime()) {
-                return false;
-            }
-        return true;
-    }
+//    public static boolean validateCurrentDate(String dateExperate) {
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+//        Date strDate = null;
+//        try {
+//            strDate = sdf.parse(dateExperate);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//        if (strDate != null)
+//            if (System.currentTimeMillis() <= strDate.getTime()) {//la fecha es menor a la actual
+//                return false;
+//            }
+//        return true;
+//    }
 
-    public static String formatViewDate(String dateString, String dateClose) {
-        SimpleDateFormat sdfActual = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        SimpleDateFormat sdfActualClose = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        SimpleDateFormat sdfClose = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+    // "yyyy-MM-dd HH:mm:ss"
+    //"dd-MM-yyyy HH:mm:ss"
+    //yyyy-MM-dd HH:mm
+    //dd-MM-yyyy HH:mm
+    public static String formatViewDate(String dateString, String formatEnter, String formatExit) {
+        SimpleDateFormat sdfActual = new SimpleDateFormat(formatEnter);
+        SimpleDateFormat sdfClose = new SimpleDateFormat(formatExit);
         Date strDate = null;
         try {
-            if (!dateString.isEmpty())
-                strDate = sdfActual.parse(dateString);
-            else
-                strDate = sdfActualClose.parse(dateClose);
+            strDate = sdfActual.parse(dateString);
         } catch (ParseException e) {
             e.printStackTrace();
             return "";
         }
         if (strDate != null)
-            if (!dateString.isEmpty())
-                return sdf.format(strDate.getTime());
-            else
-                return sdfClose.format(strDate.getTime());
+            return sdfClose.format(strDate.getTime());
         else
             return "";
+    }
+
+    public static Long dateEndTimeFormat(String dateEnd) {
+        SimpleDateFormat sdfActual = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date strDate = null;
+        try {
+            if (!dateEnd.isEmpty())
+                strDate = sdfActual.parse(dateEnd);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (strDate != null)
+            return strDate.getTime();
+        else
+            return null;
     }
 
     public static int randomNumber() {
@@ -242,7 +259,12 @@ public class Utils {
         try {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             if (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting()) {
-                return internetConnectionAvailable(5000);
+                for (int i = 0; i <= 3; i++) {
+                    if (internetConnectionAvailable(5000)) {
+                        return true;
+                    }
+                }
+                return false;
             } else {
                 return false;
             }
@@ -372,7 +394,7 @@ public class Utils {
 
     public static boolean validateLogFile(Context context) {
         try {
-            if (getDateLogFile(context).equals("") || !getFechaLogFile().equals(getDateLogFile(context)))
+            if (getDateLogFile(context).equals("") || !getFechaLogFile("dd/MM/yyyy").equals(getDateLogFile(context)))
                 return createLogFile(context);
         } catch (Exception e) {
             return false;
@@ -385,12 +407,12 @@ public class Utils {
             File logFile = new File(context.getFilesDir() + "/" + context.getString(R.string.log_file_name));
             if (logFile.createNewFile()) {
                 writelogFile(context, "Se crea archivo log correctamente");
-                setDateLogFile(context, getFechaLogFile());
+                setDateLogFile(context, getFechaLogFile("dd/MM/yyyy"));
                 return true;
             } else {
                 logFile.delete();
                 logFile.createNewFile();
-                setDateLogFile(context, getFechaLogFile());
+                setDateLogFile(context, getFechaLogFile("dd/MM/yyyy"));
                 return true;
             }
         } catch (Exception e) {
@@ -422,6 +444,18 @@ public class Utils {
         }
     }
 
+    public static void setIdDrawEnd(Context context, int id) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.draw_id_shared), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(context.getString(R.string.id_draw), id);
+        editor.commit();
+    }
+
+    public static int getIdDrawEnd(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.draw_id_shared), Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(context.getString(R.string.id_draw), 0);
+    }
+
     public static void setIdCity(Context context, int id) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.my_city_id_shared), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -441,6 +475,17 @@ public class Utils {
         editor.commit();
     }
 
+    public static void setNameShop(Context context, String name) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.shop_name_shared), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getString(R.string.name_shop), name);
+        editor.commit();
+    }
+
+    public static String getNameShop(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.shop_name_shared), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(context.getString(R.string.name_shop), "");
+    }
 
     public static void setIdShop(Context context, int id) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.shop_id_shared), Context.MODE_PRIVATE);
@@ -631,6 +676,7 @@ public class Utils {
             }
         }
     }
+
     @SuppressWarnings("deprecation")
     public static Spanned fromHtml(String source) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

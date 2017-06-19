@@ -10,6 +10,7 @@ public interface AccountActivityPresenter {
     void onCreate();
     void onDestroy();
     AccountActivityView getView();
+    void getCity(Context context);
     void getAccount(Context context);
     void updateAccount(Context context, Account account);
     void onEventMainThread(AccountActivityEvent event);

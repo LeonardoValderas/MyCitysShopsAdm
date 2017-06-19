@@ -82,7 +82,7 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
     private Communicator communication;
     private byte[] imageByte;
     private ProgressDialog pDialog;
-    private String encode = "", name_image = "", url_image = "", date = "", time = "", limitDate = "";
+    private String encode = "", name_image = "", url_image = "", date = "", time = "", limitDate = "", city = "";
     private SimpleDateFormat formate = new SimpleDateFormat(
             "yyyy-MM-dd");
     private SimpleDateFormat formateView = new SimpleDateFormat(
@@ -94,13 +94,11 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
 
 
     public DrawFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_draw, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -118,25 +116,26 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
         super.onActivityCreated(savedInstanceState);
         setupInjection();
         presenter.onCreate();
+        presenter.getCity(getActivity());
         initDialog();
     }
 
-    public void setupInjection() {
+    private void setupInjection() {
         Utils.writelogFile(getActivity(), "setupInjection(DrawFragment)");
         MyCitysShopsAdmApp app = (MyCitysShopsAdmApp) getActivity().getApplication();
         app.getDrawFragmentComponent(this, this).inject(this);
     }
 
-    public void initDialog() {
+    private void initDialog() {
         Utils.writelogFile(getActivity(), "initDialog(DrawFragment)");
         pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage(getString(R.string.processing));
         pDialog.setCancelable(false);
     }
 
-    public Draw fillDraw(String descrip, String end_date, String limit_date, int for_following, String condition) {
+    private Draw fillDraw(String descrip, String end_date, String limit_date, int for_following, String condition) {
         Utils.writelogFile(getActivity(), "fillDraw(DrawFragment)");
-        pDialog.show();
+        showProgressDialog();
         try {
             if (imageByte != null) {
                 try {
@@ -146,13 +145,13 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
                     encode = "";
                 }
                 name_image = Utils.randomNumber() + Utils.getFechaOficial() + ".PNG";
-                url_image = Utils.URL_IMAGE_DRAW + name_image;
+                url_image = Utils.URL_IMAGE_DRAW + city + "/" + name_image;
             }
             String start_date = Utils.getFechaOficialSeparate();
 
             return new Draw(0, Utils.getIdShop(getActivity()), Utils.getIdCity(getActivity()), descrip, for_following,
                     condition, start_date, end_date, limit_date, url_image, name_image,
-                    start_date, 1, 0, 0, 0, encode, "", "");
+                    start_date, encode);
         } catch (Exception e) {
             Utils.writelogFile(getActivity(), "fillDraw error: " + e.getMessage() + " (DrawFragment)");
             return null;
@@ -160,7 +159,7 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
     }
 
 
-    public void cleanView() {
+    private void cleanView() {
         Utils.writelogFile(getActivity(), "cleanView (DrawFragment)");
         try {
             editTextThing.setText("");
@@ -196,7 +195,6 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
     @Override
     public void setError(String msg) {
         Utils.writelogFile(getActivity(), "setError " + msg + " (DrawFragment)");
-        validateDialog();
         Utils.showSnackBar(conteiner, msg);
     }
 
@@ -214,6 +212,11 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
         Utils.writelogFile(getActivity(), "onClickDateUseButton(DrawFragment)");
         isEnd = false;
         pickerDate();
+    }
+
+    @Override
+    public void setCity(String city) {
+        this.city = city;
     }
 
     @Override
@@ -248,19 +251,30 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
     public void createSuccess() {
         Utils.writelogFile(getActivity(), "createSuccess(DrawFragment)");
         cleanView();
-        validateDialog();
-        communication.refresh();
+        communication.refresh(false);
+        presenter.validateBroadcast(getActivity());
         Utils.showSnackBar(conteiner, getString(R.string.draw_create_success));
     }
 
-    public void pickerDate() {
+    @Override
+    public void showProgressDialog() {
+        pDialog.show();
+    }
+
+    @Override
+    public void hidePorgressDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
+
+    private void pickerDate() {
         Utils.writelogFile(getActivity(), "pickerDate(DrawFragment)");
         new DatePickerDialog(getActivity(), d, calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    public void pickerTime() {
+    private void pickerTime() {
         Utils.writelogFile(getActivity(), "pickerTime(DrawFragment)");
         new TimePickerDialog(getActivity(), t,
                 calenda.get(Calendar.HOUR_OF_DAY),
@@ -288,12 +302,6 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
             setTime();
         }
     };
-
-    private void validateDialog() {
-        Utils.writelogFile(getActivity(), "validateDialog(DrawFragment)");
-        if (pDialog.isShowing())
-            pDialog.dismiss();
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -326,7 +334,7 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
         }
     }
 
-    public void assignImage(Uri uri) {
+    private void assignImage(Uri uri) {
         Utils.writelogFile(getActivity(), "setPicasso() (DrawFragment)");
         Utils.setPicasso(getActivity(), uri.toString(), android.R.drawable.ic_menu_crop, imageViewImage);
         try {
@@ -375,12 +383,14 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
                     Utils.showSnackBar(conteiner, getString(R.string.end_date_empty));
                 else if (buttonTimeEnd.getText().toString().equalsIgnoreCase(getString(R.string.time_end_draw)))
                     Utils.showSnackBar(conteiner, getString(R.string.time_date_empty));
-                else if (Utils.validateCurrentDate(dateTime))
+                else if (Utils.validateExpirateCurrentTime(dateTime, getString(R.string.format_draw)))
                     Utils.showSnackBar(conteiner, getString(R.string.data_end_before));
                 else if (buttonDateUse.getText().toString().equalsIgnoreCase(getString(R.string.date_limit)))
                     Utils.showSnackBar(conteiner, getString(R.string.date_limit_empty));
-                else if (Utils.validateExpirateVsLimit(date, limitDate))
+                else if (Utils.validateExpirateVsLimit(date, limitDate, "yyyy-MM-dd"))
                     Utils.showSnackBar(conteiner, getString(R.string.error_dateLimit_vs_dateExpirate));
+                else if (city == null || city.isEmpty())
+                    Utils.showSnackBar(conteiner, getString(R.string.city_name_error));
                 else {
                     pDialog.show();
 

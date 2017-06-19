@@ -7,4 +7,7 @@ public interface AccountActivityView {
     void error(String mgs);
     void saveSuccess();
     void setAccount(Account account);
+    void setCity(String city);
+    void showProgressDialog();
+    void hidePorgressDialog();
 }

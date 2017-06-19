@@ -5,6 +5,7 @@ public class LoginActivityEvent {
     public static final int LOGIN = 0;
     public static final int ERROR = 1;
     public static final int CHANGEPLACE = 2;
+    public static final int ADM = 3;
     private String error;
 
     public int getType() {

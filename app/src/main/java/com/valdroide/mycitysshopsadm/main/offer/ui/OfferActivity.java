@@ -1,16 +1,11 @@
 package com.valdroide.mycitysshopsadm.main.offer.ui;
 
-import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.entities.shop.Offer;
@@ -72,7 +66,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     public static final int PERMISSION_GALERY = 1;
     public static final int GALERY = 1;
     private byte[] imageByte;
-    private String encode = "", name_image = "", url_image = "", name_before = "";
+    private String encode = "", name_image = "", url_image = "", name_before = "", city = "";
     private int is_active;
 
 
@@ -84,29 +78,28 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         ButterKnife.bind(this);
         Utils.writelogFile(this, "Se inicia Injection(offer)");
         setupInjection();
+        Utils.writelogFile(this, "Se inicia Dialog(offer)");
+        initDialog();
         Utils.writelogFile(this, "Se inicia presenter Oncreate(offer)");
         presenter.onCreate();
         Utils.writelogFile(this, "Se inicia toolbar Oncreate(offer)");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.offer_title);
-        Utils.writelogFile(this, "Se inicia Dialog(offer)");
-        initDialog();
+        presenter.getCity(this);
         Utils.writelogFile(this, "Se inicia RecyclerAdapter(offer)");
         initRecyclerViewAdapter();
-        Utils.writelogFile(this, "dialog show(offer)");
-        pDialog.show();
         Utils.writelogFile(this, "presenter.getOffer()(offer)");
         presenter.getOffer(this);
         editTextTitle.setFilters(new InputFilter[]{new InputFilter.AllCaps(), new InputFilter.LengthFilter(20)});
     }
 
-    public void initDialog() {
+    private void initDialog() {
         pDialog = new ProgressDialog(this);
         pDialog.setMessage(getString(R.string.processing));
         pDialog.setCancelable(false);
     }
 
-    public void initRecyclerViewAdapter() {
+    private void initRecyclerViewAdapter() {
         try {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setHasFixedSize(true);
@@ -119,7 +112,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         }
     }
 
-    public void setTextQuantity(String quantity) {
+    private void setTextQuantity(String quantity) {
         textViewQuantity.setText(getString(R.string.offer_available) + " " + quantity);
     }
 
@@ -147,7 +140,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
             }
     }
 
-    public void assignImage(Uri uri) {
+    private void assignImage(Uri uri) {
         Utils.writelogFile(this, "assignImage y setPicasso(offer)");
         try {
             Utils.setPicasso(this, uri.toString(), android.R.drawable.ic_menu_crop, imageViewImage);
@@ -184,7 +177,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         }
     }
 
-    public void cleanView() {
+    private void cleanView() {
         Utils.writelogFile(this, "cleanView (offer)");
         try {
             editTextTitle.setText("");
@@ -202,8 +195,8 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         }
     }
 
-    public Offer fillOffer(String title, String descrip) {
-        pDialog.show();
+    private Offer fillOffer(String title, String descrip) {
+        showProgressDialog();
         Utils.writelogFile(this, "fillOffer(offer)");
         try {
             if (imageByte != null) {
@@ -214,7 +207,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
                     encode = "";
                 }
                 name_image = Utils.randomNumber() + Utils.getFechaOficial() + ".PNG";
-                url_image = Utils.URL_IMAGE_OFFER + name_image;
+                url_image = Utils.URL_IMAGE_OFFER + city + "/" + name_image;
             }
 
             return new Offer(id_offer, Utils.getIdShop(this), Utils.getIdCity(this), title, descrip, url_image,
@@ -234,7 +227,6 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         updateQuantity();
         Utils.writelogFile(this, "adapter.setOffers (offer)");
         adapter.setOffers(offers);
-        validateDialog();
     }
 
     @Override
@@ -243,7 +235,6 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         adapter.setOffer(offer);
         updateQuantity();
         menuAdd();
-        validateDialog();
         cleanView();
         Utils.showSnackBar(conteiner, getString(R.string.offer_success));
     }
@@ -253,7 +244,6 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         Utils.writelogFile(this, "updateOffer (offer)");
         adapter.updateAdapter(offer, position);
         menuAdd();
-        validateDialog();
         cleanView();
         Utils.showSnackBar(conteiner, getString(R.string.offer_update));
     }
@@ -262,19 +252,28 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     public void switchOffer(Offer offer) {
         Utils.writelogFile(this, "switchOffer (offer)");
         adapter.updateAdapter(offer, position);
-        validateDialog();
         Utils.showSnackBar(conteiner, getString(R.string.offer_update));
     }
 
     @Override
     public void error(String msg) {
-        validateDialog();
         Utils.showSnackBar(conteiner, msg);
     }
 
-    private void validateDialog() {
+    @Override
+    public void showProgressDialog() {
+        pDialog.show();
+    }
+
+    @Override
+    public void hidePorgressDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    @Override
+    public void setCity(String city) {
+        this.city = city;
     }
 
     @Override
@@ -302,18 +301,18 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     @Override
     public void onClickSwitch(int position, Offer offer) {
         Utils.writelogFile(this, "onClickSwitch adapter y presenter.switchOffer(offer)");
-        pDialog.show();
+        showProgressDialog();
         this.position = position;
         presenter.switchOffer(this, offer);
     }
 
-    public void updateQuantity() {
+    private void updateQuantity() {
         Utils.writelogFile(this, "updateQuantity: " + this.offers.size() + " (offer)");
         quantity_offer = this.offers.size();
         setTextQuantity(String.valueOf(max_offer - quantity_offer));
     }
 
-    public void menuAdd() {
+    private void menuAdd() {
         Utils.writelogFile(this, "menuAdd (offer)");
         try {
             menu.clear();
@@ -333,7 +332,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         }
     }
 
-    public void hideUpdateMenu(Menu menu) {
+    private void hideUpdateMenu(Menu menu) {
         Utils.writelogFile(this, "hideUpdateMenu (offer)");
         try {
             menu.getItem(0).setVisible(false);// cancel
@@ -344,7 +343,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         }
     }
 
-    public void hideAllMenu(Menu menu) {
+    private void hideAllMenu(Menu menu) {
         Utils.writelogFile(this, "hideAllMenu (offer)");
         try {
             menu.getItem(0).setVisible(false);// cancel
@@ -356,7 +355,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         }
     }
 
-    public void menuUpdate() {
+    private void menuUpdate() {
         Utils.writelogFile(this, "menuUpdate (offer)");
         try {
             menu.clear();
@@ -368,7 +367,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
         }
     }
 
-    public void setEnable(boolean isEnable) {
+    private void setEnable(boolean isEnable) {
         Utils.writelogFile(this, "setEnable (offer)");
         try {
             imageViewImage.setEnabled(isEnable);
@@ -388,7 +387,6 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
     public void onDestroy() {
         Utils.writelogFile(this, "onDestroy (offer)");
         presenter.onDestroy();
-        pDialog.dismiss();
         super.onDestroy();
     }
 
@@ -421,7 +419,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
                 else if (editTextDescription.getText().toString().isEmpty())
                     Utils.showSnackBar(conteiner, getString(R.string.description_empty));
                 else {
-                    pDialog.show();
+                    showProgressDialog();
                     is_active = 1;
                     presenter.saveOffer(this, fillOffer(editTextTitle.getText().toString(),
                             editTextDescription.getText().toString()));
@@ -440,7 +438,7 @@ public class OfferActivity extends AppCompatActivity implements OnItemClickListe
                 else if (editTextDescription.getText().toString().isEmpty())
                     Utils.showSnackBar(conteiner, getString(R.string.description_empty));
                 else {
-                    pDialog.show();
+                    showProgressDialog();
                     presenter.updateOffer(this, fillOffer(editTextTitle.getText().toString(),
                             editTextDescription.getText().toString()));
                 }

@@ -21,4 +21,14 @@ public class DrawListFragmentInteractorImpl implements DrawListFragmentInteracto
     public void cancelDraw(Context context, Draw draw) {
         repository.cancelDraw(context, draw);
     }
+
+    @Override
+    public void forceDraw(Context context, Draw draw) {
+        repository.forceDraw(context, draw);
+    }
+
+    @Override
+    public void validateBroadcast(Context context) {
+        repository.validateBroadcast(context);
+    }
 }

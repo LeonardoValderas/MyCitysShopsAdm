@@ -1,6 +1,5 @@
 package com.valdroide.mycitysshopsadm.main.splash.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,10 +16,6 @@ import com.valdroide.mycitysshopsadm.main.login.ui.LoginActivity;
 import com.valdroide.mycitysshopsadm.main.navigation.ui.NavigationActivity;
 import com.valdroide.mycitysshopsadm.main.place.ui.PlaceActivity;
 import com.valdroide.mycitysshopsadm.main.splash.SplashActivityPresenter;
-import com.valdroide.mycitysshopsadm.main.support.SupportActivityPresenter;
-import com.valdroide.mycitysshopsadm.main.support.SupportActivityPresenterImpl;
-import com.valdroide.mycitysshopsadm.main.support.events.SupportActivityEvent;
-import com.valdroide.mycitysshopsadm.main.support.ui.SupportActivity;
 import com.valdroide.mycitysshopsadm.utils.Utils;
 
 import javax.inject.Inject;
@@ -86,7 +81,6 @@ public class SplashActivity extends AppCompatActivity implements SplashActivityV
     public void goToLog() {
         Utils.writelogFile(this, "Intent a LoginActivity(Splash)");
         try {
-            progressBar.setVisibility(View.INVISIBLE);
             startActivity(new Intent(this, LoginActivity.class));
         } catch (Exception e) {
             Utils.writelogFile(this, "Intent a LoginActivity error: " + e.getMessage() + "(Splash)");
@@ -98,7 +92,6 @@ public class SplashActivity extends AppCompatActivity implements SplashActivityV
     public void goToPlace() {
         Utils.writelogFile(this, "Intent a PlaceActivity(Splash)");
         try {
-            progressBar.setVisibility(View.INVISIBLE);
             startActivity(new Intent(this, PlaceActivity.class));
         } catch (Exception e) {
             Utils.writelogFile(this, "Intent a PlaceActivity error: " + e.getMessage() + "(Splash)");
@@ -110,7 +103,6 @@ public class SplashActivity extends AppCompatActivity implements SplashActivityV
     public void goToNav() {
         Utils.writelogFile(this, "Intent a NavigationActivity(Splash)");
         try {
-            progressBar.setVisibility(View.INVISIBLE);
             startActivity(new Intent(this, NavigationActivity.class));
         } catch (Exception e) {
             Utils.writelogFile(this, "Intent a NavigationActivity error: " + e.getMessage() + "(Splash)");
@@ -121,14 +113,17 @@ public class SplashActivity extends AppCompatActivity implements SplashActivityV
     @Override
     public void setError(String msg) {
         Utils.writelogFile(this, "Error: " + msg + " (Splash)");
-        progressBar.setVisibility(View.INVISIBLE);
-
         if (msg.equalsIgnoreCase(getString(R.string.error_internet))) {
             textViewDownload.setText(msg);
         } else {
             presenter.sendEmail(this, "Error Splash, Email Automatico.");
             textViewDownload.setText(msg + "\n" + getString(R.string.sent_emal_auto));
         }
+    }
+
+    @Override
+    public void hideProgress() {
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override

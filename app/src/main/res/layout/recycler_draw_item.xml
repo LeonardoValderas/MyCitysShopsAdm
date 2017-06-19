@@ -61,6 +61,17 @@
                 android:paddingLeft="5dp"
                 android:text="GANADOR: Juan Peres DNI: 30391852"
                 android:textStyle="bold"
+                android:textSize="18dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/textViewError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorRed"
+                android:paddingLeft="5dp"
+                android:text="GANADOR: Juan Peres DNI: 30391852"
+                android:textStyle="bold"
                 android:visibility="gone" />
         </LinearLayout>
     </android.support.v7.widget.CardView>

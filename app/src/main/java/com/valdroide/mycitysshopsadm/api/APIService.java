@@ -1,6 +1,7 @@
 package com.valdroide.mycitysshopsadm.api;
 
 import com.valdroide.mycitysshopsadm.entities.response.ResponseWS;
+import com.valdroide.mycitysshopsadm.entities.response.ResultDraw;
 import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
 import com.valdroide.mycitysshopsadm.entities.response.ResultShop;
 import com.valdroide.mycitysshopsadm.entities.response.ResultUser;
@@ -63,7 +64,10 @@ public interface APIService {
                                        @Field("shop") String shop, @Field("message") String message,
                                        @Field("url_shop") String url_shop, @Field("date_end") String date_end,
                                        @Field("date_unique") String date_unique);
-
+    @FormUrlEncoded
+    @POST("fcm/sendNotificationAdm.php")
+    Call<ResponseWS> sendNotificationAdm(@Field("id_city_foreign") int id_city,
+                                       @Field("message") String message);
     //SPLASH PLACE
     @FormUrlEncoded
     @POST("splash/validateDatePlace.php")
@@ -90,6 +94,9 @@ public interface APIService {
     @FormUrlEncoded
     @POST("login/validateLogin.php")
     Call<ResultShop> validateLogin(@Field("user") String user, @Field("pass") String pass, @Field("id_city") int id_city);
+    @FormUrlEncoded
+    @POST("login/validateLoginAdm.php")
+    Call<ResponseWS> validateLoginAdm(@Field("user") String user, @Field("pass") String pass, @Field("id_city") int id_city);
 
     //DRAW
     @FormUrlEncoded
@@ -105,7 +112,14 @@ public interface APIService {
     @POST("draw/cancelDraw.php")
     Call<ResponseWS> cancelDraw(@Field("id_shop_foreign") int id_shop, @Field("id_city_foreign") int id_city_foreign,
                                 @Field("id_draw") int id_draw, @Field("is_cancel") int is_cancel,
-                                @Field("is_take") int is_take,  @Field("is_limit") int is_limit, @Field("for_following") int for_following,
+                                @Field("is_take") int is_take,  @Field("is_limit") int is_limit, @Field("is_zero") int zero,
+                                @Field("for_following") int for_following,
                                 @Field("shop_name") String shop_name, @Field("date_unique") String date_unique);
+
+    @FormUrlEncoded
+    @POST("draw/getWinnerDraw.php")
+    Call<ResultDraw> getWinnerDraw(@Field("id_shop_foreign") int id_shop, @Field("id_city_foreign") int id_city_foreign,
+                                   @Field("id_draw") int id_draw, @Field("shop_name") String shop_name,
+                                   @Field("date_unique") String date_unique);
 
 }

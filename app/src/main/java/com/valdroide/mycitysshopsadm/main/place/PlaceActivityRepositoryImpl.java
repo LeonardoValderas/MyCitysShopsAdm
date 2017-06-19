@@ -103,27 +103,27 @@ public class PlaceActivityRepositoryImpl implements PlaceActivityRepository {
         }
     }
 
-    public void post(int type, MyPlace place) {
+    private void post(int type, MyPlace place) {
         post(type, null, null, null, null, place);
     }
 
-    public void post(int type, List<Country> countries) {
+    private void post(int type, List<Country> countries) {
         post(type, countries, null, null, null, null);
     }
 
-    public void post(int type, List<State> states, boolean isSub) {
+    private void post(int type, List<State> states, boolean isSub) {
         post(type, null, states, null, null, null);
     }
 
-    public void post(int type, int nothing, List<City> cities) {
+    private void post(int type, int nothing, List<City> cities) {
         post(type, null, null, cities, null, null);
     }
 
-    public void post(int type, String error) {
+    private void post(int type, String error) {
         post(type, null, null, null, error, null);
     }
 
-    public void post(int type, List<Country> countries, List<State> states, List<City> cities, String error, MyPlace place) {
+    private void post(int type, List<Country> countries, List<State> states, List<City> cities, String error, MyPlace place) {
         PlaceActivityEvent event = new PlaceActivityEvent();
         event.setType(type);
         event.setCountries(countries);

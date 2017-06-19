@@ -4,7 +4,9 @@ public class DrawFragmentEvent {
     private int type;
     public static final int CREATEDRAW = 0;
     public static final int ERROR = 1;
+    public static final int CITY = 2;
     private String error;
+    private String city;
 
     public int getType() {
         return type;
@@ -20,5 +22,13 @@ public class DrawFragmentEvent {
 
     public void setError(String error) {
         this.error = error;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

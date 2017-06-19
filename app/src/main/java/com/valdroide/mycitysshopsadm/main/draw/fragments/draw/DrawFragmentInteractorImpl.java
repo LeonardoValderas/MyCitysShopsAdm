@@ -16,4 +16,14 @@ public class DrawFragmentInteractorImpl implements DrawFragmentInteractor {
     public void createDraw(Context context, Draw draw) {
         repository.createDraw(context, draw);
     }
+
+    @Override
+    public void validateBroadcast(Context context) {
+        repository.validateBroadcast(context);
+    }
+
+    @Override
+    public void getCity(Context context) {
+        repository.getCity(context);
+    }
 }

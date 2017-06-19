@@ -29,4 +29,9 @@ public class OfferActivityInteractorImpl implements OfferActivityInteractor {
     public void switchOffer(Context context, Offer offer) {
         repository.switchOffer(context, offer);
     }
+
+    @Override
+    public void getCity(Context context) {
+        repository.getCity(context);
+    }
 }

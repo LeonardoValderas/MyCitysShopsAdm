@@ -23,6 +23,8 @@ public class AccountActivityPresenterImpl implements AccountActivityPresenter {
     @Override
     public void onCreate() {
         eventBus.register(this);
+        if (view != null)
+            view.showProgressDialog();
     }
 
     @Override
@@ -33,7 +35,12 @@ public class AccountActivityPresenterImpl implements AccountActivityPresenter {
 
     @Override
     public AccountActivityView getView() {
-        return  this.view;
+        return this.view;
+    }
+
+    @Override
+    public void getCity(Context context) {
+        interactor.getCity(context);
     }
 
     @Override
@@ -53,15 +60,21 @@ public class AccountActivityPresenterImpl implements AccountActivityPresenter {
             switch (event.getType()) {
                 case AccountActivityEvent.GETACCOUNT:
                     view.setAccount(event.getAccount());
+                    view.hidePorgressDialog();
                     break;
                 case AccountActivityEvent.SAVEACCOUNT:
+                    view.hidePorgressDialog();
                     view.saveSuccess();
                     break;
                 case AccountActivityEvent.UPDATEACCOUNT:
+                    view.hidePorgressDialog();
                     view.saveSuccess();
                     break;
                 case AccountActivityEvent.ERROR:
+                    view.hidePorgressDialog();
                     view.error(event.getError());
+                case AccountActivityEvent.CITY:
+                    view.setCity(event.getCity());
             }
         }
     }

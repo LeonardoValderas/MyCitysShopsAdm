@@ -2,6 +2,7 @@ package com.valdroide.mycitysshopsadm;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.support.v4.app.Fragment;
 
 import com.facebook.stetho.Stetho;
@@ -11,6 +12,11 @@ import com.valdroide.mycitysshopsadm.main.account.di.AccountActivityComponent;
 import com.valdroide.mycitysshopsadm.main.account.di.AccountActivityModule;
 import com.valdroide.mycitysshopsadm.main.account.di.DaggerAccountActivityComponent;
 import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivityView;
+import com.valdroide.mycitysshopsadm.main.draw.broadcast.di.BroadcastDrawComponent;
+import com.valdroide.mycitysshopsadm.main.draw.broadcast.di.BroadcastDrawModule;
+import com.valdroide.mycitysshopsadm.main.draw.broadcast.di.DaggerBroadcastDrawComponent;
+import com.valdroide.mycitysshopsadm.main.draw.broadcast.ui.BroadcastDraw;
+import com.valdroide.mycitysshopsadm.main.draw.broadcast.ui.BroadcastDrawView;
 import com.valdroide.mycitysshopsadm.main.draw.fragments.draw.di.DaggerDrawFragmentComponent;
 import com.valdroide.mycitysshopsadm.main.draw.fragments.draw.di.DrawFragmentComponent;
 import com.valdroide.mycitysshopsadm.main.draw.fragments.draw.di.DrawFragmentModule;
@@ -87,6 +93,16 @@ public class MyCitysShopsAdmApp extends Application {
         libsModule = new LibsModule();
         myCitysShopsAdmAppModule = new MyCitysShopsAdmAppModule(this);
     }
+
+    public BroadcastDrawComponent getBroadcastDrawComponent(BroadcastDrawView view, BroadcastReceiver receiver) {
+        return DaggerBroadcastDrawComponent
+                .builder()
+                .myCitysShopsAdmAppModule(myCitysShopsAdmAppModule)
+                .libsModule(new LibsModule(receiver))
+                .broadcastDrawModule(new BroadcastDrawModule(receiver, view))
+                .build();
+    }
+
 
     public MapActivityComponent getMapActivityComponent(MapActivityView view, Activity activity) {
         return DaggerMapActivityComponent

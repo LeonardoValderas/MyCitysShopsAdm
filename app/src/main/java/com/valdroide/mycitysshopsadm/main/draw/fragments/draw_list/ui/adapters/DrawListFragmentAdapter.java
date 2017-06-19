@@ -1,6 +1,7 @@
 package com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.ui.adapters;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -45,18 +46,36 @@ public class DrawListFragmentAdapter extends RecyclerView.Adapter<DrawListFragme
         holder.textViewDraw.setText(draw.getDESCRIPTION());
         holder.textViewDraw.setTypeface(Utils.setFontExoTextView(fragment.getActivity()));
 
-        fromHtml = Utils.fromHtml("<b>" + fragment.getActivity().getString(R.string.date_create_hint) + "</b>" + " " + Utils.formatViewDate(draw.getSTART_DATE(), ""));
+        fromHtml = Utils.fromHtml("<b>" + fragment.getActivity().getString(R.string.date_create_hint) + "</b>" + " " +
+                   Utils.formatViewDate(draw.getSTART_DATE(),
+                   fragment.getActivity().getString(R.string.format_draw_adapter_enter_start),
+                   fragment.getActivity().getString(R.string.format_draw_adapter_exit_start)));
         holder.textViewCreateDate.setText(fromHtml);
-        fromHtml = Utils.fromHtml("<b>" + fragment.getActivity().getString(R.string.date_end_hint) + "</b>" + " " + Utils.formatViewDate("", draw.getEND_DATE()));
+
+        fromHtml = Utils.fromHtml("<b>" + fragment.getActivity().getString(R.string.date_end_hint) + "</b>" + " " + Utils.formatViewDate(draw.getEND_DATE(),
+                   fragment.getActivity().getString(R.string.format_draw_adapter_enter_end),
+                   fragment.getActivity().getString(R.string.format_draw_adapter_exit_end)));
         holder.textViewEndDate.setText(fromHtml);
-        fromHtml = Utils.fromHtml("<b>" + fragment.getActivity().getString(R.string.date_limit_hint) + "</b>" + " " + draw.getLIMIT_DATE());
+        fromHtml = Utils.fromHtml("<b>" + fragment.getActivity().getString(R.string.date_limit_hint) + "</b>" + " " + draw.getLIMIT_DATE() +" (inclusive)");
         holder.textViewLimitDate.setText(fromHtml);
-        if (!draw.getWinner().isEmpty()) {
+        if (!draw.getWinner().isEmpty() && draw.getIS_ACTIVE() == 0) {
+            holder.textViewError.setVisibility(View.GONE);
             holder.textViewWinner.setVisibility(View.VISIBLE);
             holder.textViewWinner.setText(draw.getWinner());
+            holder.textViewWinner.setTextColor(ContextCompat.getColor(fragment.getActivity(), R.color.colorAccent));
         } else
             holder.textViewWinner.setVisibility(View.GONE);
-
+        if (draw.getERROR_REPORTING() == 1) {
+            holder.textViewError.setVisibility(View.VISIBLE);
+            holder.textViewError.setText(R.string.error_reporting_draw_adapter);
+            holder.textViewError.setTextColor(ContextCompat.getColor(fragment.getActivity(), R.color.colorRed));
+        } else if (draw.getIS_ZERO() == 1) {
+            holder.textViewError.setVisibility(View.VISIBLE);
+            holder.textViewError.setText(R.string.draw_zero_adapter);
+            holder.textViewError.setTextColor(ContextCompat.getColor(fragment.getActivity(), R.color.colorAccent));
+        } else {
+            holder.textViewError.setVisibility(View.GONE);
+        }
         holder.setOnItemClickListener(onItemClickListener, position, draw);
     }
 
@@ -75,12 +94,11 @@ public class DrawListFragmentAdapter extends RecyclerView.Adapter<DrawListFragme
         notifyDataSetChanged();
     }
 
-//    public void setUpdateDraw(int position) {
-//        if (drawList.get(position).getPARTICIPATION() == 0) {
-//            drawList.get(position).setPARTICIPATION(1);
-//        }
-//        notifyDataSetChanged();
-//    }
+    public void setUpdateDraw(int position, Draw draw) {
+        drawList.remove(position);
+        drawList.add(position, draw);
+        notifyDataSetChanged();
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.textViewDraw)
@@ -93,6 +111,8 @@ public class DrawListFragmentAdapter extends RecyclerView.Adapter<DrawListFragme
         TextView textViewLimitDate;
         @Bind(R.id.textViewWinner)
         TextView textViewWinner;
+        @Bind(R.id.textViewError)
+        TextView textViewError;
         @Bind(R.id.linearConteiner)
         LinearLayout linearConteiner;
         private View v;

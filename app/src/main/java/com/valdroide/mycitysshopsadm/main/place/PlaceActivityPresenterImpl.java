@@ -25,11 +25,14 @@ public class PlaceActivityPresenterImpl implements PlaceActivityPresenter {
     @Override
     public void onCreate() {
         eventBus.register(this);
+        if (view != null)
+            view.showProgressDialog();
     }
 
     @Override
     public void onDestroy() {
         eventBus.unregister(this);
+        view = null;
     }
 
     @Override
@@ -53,23 +56,33 @@ public class PlaceActivityPresenterImpl implements PlaceActivityPresenter {
     }
 
     @Override
+    public PlaceActivityView getView() {
+        return this.view;
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(PlaceActivityEvent event) {
         if (this.view != null) {
             switch (event.getType()) {
                 case PlaceActivityEvent.GETCOUNTRIES:
                     view.setCountry(event.getCountries());
+                    view.hidePorgressDialog();
                     break;
                 case PlaceActivityEvent.GETSTATES:
                     view.setState(event.getStates());
+                    view.hidePorgressDialog();
                     break;
                 case PlaceActivityEvent.GETCITIES:
                     view.setCity(event.getCities());
+                    view.hidePorgressDialog();
                     break;
                 case PlaceActivityEvent.SAVE:
+                    view.hidePorgressDialog();
                     view.saveSuccess(event.getPlace());
                     break;
                 case PlaceActivityEvent.ERROR:
+                    view.hidePorgressDialog();
                     view.setError(event.getError());
                     break;
             }

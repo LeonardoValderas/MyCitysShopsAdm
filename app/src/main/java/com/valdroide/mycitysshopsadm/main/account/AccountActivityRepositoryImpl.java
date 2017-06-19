@@ -5,6 +5,8 @@ import android.content.Context;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.api.APIService;
+import com.valdroide.mycitysshopsadm.entities.place.City;
+import com.valdroide.mycitysshopsadm.entities.place.City_Table;
 import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
 import com.valdroide.mycitysshopsadm.entities.shop.Account;
 import com.valdroide.mycitysshopsadm.entities.response.ResponseWS;
@@ -48,6 +50,19 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
     }
 
     @Override
+    public void getCity(Context context) {
+        Utils.writelogFile(context, "getCity(Account, Repository)");
+        try {
+            String city = SQLite.select(City_Table.CITY).from(City.class).where(City_Table.ID_CITY_KEY.eq(Utils.getIdCity(context))).querySingle().getCITY();
+            post(AccountActivityEvent.CITY, true, city);
+        }catch (Exception e){
+            Utils.writelogFile(context, "getCity catch error " + e.getMessage() + " (Account, Repository)");
+            post(AccountActivityEvent.ERROR, e.getMessage());
+        }
+
+    }
+
+    @Override
     public void updateAccount(final Context context, final Account account) {
         Utils.writelogFile(context, "Metodo updateAccount y Se valida conexion a internet(Account, Repository)");
         if (Utils.isNetworkAvailable(context)) {
@@ -78,31 +93,31 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
                                     Utils.writelogFile(context, "dateShop.update() ok y post UPDATEACCOUNT (Account, Repository)");
                                     post(AccountActivityEvent.UPDATEACCOUNT);
                                 } else {
-                                    Utils.writelogFile(context, " getSuccess = error " + responseWS.getMessage() + "(Account, Repository)");
+                                    Utils.writelogFile(context, "getSuccess = error " + responseWS.getMessage() + "(Account, Repository)");
                                     post(AccountActivityEvent.ERROR, responseWS.getMessage());
                                 }
                             } else {
-                                Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Account, Repository)");
+                                Utils.writelogFile(context, "Base de datos error(Account, Repository)");
                                 post(AccountActivityEvent.ERROR, context.getString(R.string.error_data_base));
                             }
                         } else {
-                            Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Account, Repository)");
+                            Utils.writelogFile(context, "Base de datos error(Account, Repository)");
                             post(AccountActivityEvent.ERROR, context.getString(R.string.error_data_base));
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResultPlace> call, Throwable t) {
-                        Utils.writelogFile(context, " Call error " + t.getMessage() + "(Account, Repository)");
+                        Utils.writelogFile(context, "Call error " + t.getMessage() + "(Account, Repository)");
                         post(AccountActivityEvent.ERROR, t.getMessage());
                     }
                 });
             } catch (Exception e) {
-                Utils.writelogFile(context, " catch error " + e.getMessage() + "(Account, Repository)");
+                Utils.writelogFile(context, "catch error " + e.getMessage() + "(Account, Repository)");
                 post(AccountActivityEvent.ERROR, e.getMessage());
             }
         } else {
-            Utils.writelogFile(context, " Internet error " + context.getString(R.string.error_internet) + "(Account, Repository)");
+            Utils.writelogFile(context, "Internet error(Account, Repository)");
             post(AccountActivityEvent.ERROR, context.getString(R.string.error_internet));
         }
     }
@@ -116,7 +131,7 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
                 dateShop.setACCOUNT_DATE(date_edit);
                 dateShop.setDATE_SHOP_DATE(date_edit);
             } else {
-                Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Account, Repository)");
+                Utils.writelogFile(context, " Base de datos error(Account, Repository)");
                 post(AccountActivityEvent.ERROR, context.getString(R.string.error_data_base));
             }
         } catch (Exception e) {
@@ -125,22 +140,27 @@ public class AccountActivityRepositoryImpl implements AccountActivityRepository 
         }
     }
 
-    public void post(int type, Account account) {
-        post(type, account, null);
+    private void post(int type, Account account) {
+        post(type, account, null, null);
     }
 
-    public void post(int type) {
-        post(type, null, null);
+    private void post(int type) {
+        post(type, null, null, null);
     }
 
-    public void post(int type, String error) {
-        post(type, null, error);
+    private void post(int type, boolean iscity, String city) {
+        post(type, null, city, null);
     }
 
-    public void post(int type, Account account, String error) {
+    private void post(int type, String error) {
+        post(type, null, null, error);
+    }
+
+    private void post(int type, Account account, String city, String error) {
         AccountActivityEvent event = new AccountActivityEvent();
         event.setType(type);
         event.setError(error);
+        event.setCity(city);
         event.setAccount(account);
         eventBus.post(event);
     }

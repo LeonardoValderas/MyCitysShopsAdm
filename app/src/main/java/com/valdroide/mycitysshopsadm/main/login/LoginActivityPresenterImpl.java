@@ -29,6 +29,7 @@ public class LoginActivityPresenterImpl implements LoginActivityPresenter {
     @Override
     public void onDestroy() {
         eventBus.unregister(this);
+        view = null;
     }
 
     @Override
@@ -42,18 +43,35 @@ public class LoginActivityPresenterImpl implements LoginActivityPresenter {
     }
 
     @Override
+    public void validateLoginAdm(Context context, String user, String pass, int id_city) {
+        interactor.validateLoginAdm(context, user, pass, id_city);
+    }
+
+    @Override
+    public LoginActivityView getView() {
+        return this.view;
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(LoginActivityEvent event) {
         if (this.view != null) {
             switch (event.getType()) {
                 case LoginActivityEvent.LOGIN:
+                    view.hidePorgressDialog();
                     view.loginSuccess();
                     break;
                 case LoginActivityEvent.ERROR:
+                    view.hidePorgressDialog();
                     view.setError(event.getError());
                     break;
                 case LoginActivityEvent.CHANGEPLACE:
+                    view.hidePorgressDialog();
                     view.goToPlace();
+                    break;
+                case LoginActivityEvent.ADM:
+                    view.hidePorgressDialog();
+                    view.goToNotification();
                     break;
             }
         }

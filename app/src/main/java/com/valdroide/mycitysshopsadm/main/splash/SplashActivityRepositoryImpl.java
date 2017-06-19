@@ -10,7 +10,6 @@ import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
 import com.valdroide.mycitysshopsadm.entities.response.ResultShop;
 import com.valdroide.mycitysshopsadm.entities.response.ResultUser;
 import com.valdroide.mycitysshopsadm.entities.shop.Account;
-import com.valdroide.mycitysshopsadm.entities.shop.Account_Table;
 import com.valdroide.mycitysshopsadm.entities.shop.DateShop;
 import com.valdroide.mycitysshopsadm.entities.shop.MyPlace;
 import com.valdroide.mycitysshopsadm.entities.place.City;
@@ -97,7 +96,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
         }
     }
 
-    public void validateDatePlace(final Context context, String date, String cou, String sta, String ci) {
+    private void validateDatePlace(final Context context, String date, String cou, String sta, String ci) {
         Utils.writelogFile(context, "Metodo validateDatePlace y Se valida conexion a internet(Splash, Repository)");
         if (Utils.isNetworkAvailable(context)) {
             try {
@@ -156,7 +155,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                     }
                                     post(SplashActivityEvent.GOTOPLACE);
                                 } else if (responseWS.getSuccess().equals("4")) {
-                                    Utils.writelogFile(context, " getSuccess = 4 y post GOTOPLACE(Splash, Repository)");
+                                    Utils.writelogFile(context, "getSuccess = 4 y post GOTOPLACE(Splash, Repository)");
                                     post(SplashActivityEvent.GOTOPLACE);
                                 } else {
                                     Utils.writelogFile(context, " getSuccess = error " + responseWS.getMessage() + "(Splash, Repository)");
@@ -164,7 +163,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                 }
                             }
                         } else {
-                            Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
+                            Utils.writelogFile(context, "Base de datos error(Splash, Repository)");
                             post(SplashActivityEvent.ERROR, context.getString(R.string.error_data_base));
                         }
                     }
@@ -180,12 +179,12 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                 post(SplashActivityEvent.ERROR, e.getMessage());
             }
         } else {
-            Utils.writelogFile(context, " Internet error " + context.getString(R.string.error_internet) + "(Splash, Repository)");
+            Utils.writelogFile(context, "Internet error (Splash, Repository)");
             post(SplashActivityEvent.ERROR, context.getString(R.string.error_internet));
         }
     }
 
-    public void getPlace(final Context context) {
+    private void getPlace(final Context context) {
         Utils.writelogFile(context, "Metodo getPlace y Se valida conexion a internet(Splash, Repository)");
         if (Utils.isNetworkAvailable(context)) {
             try {
@@ -244,12 +243,12 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                     }
                                     post(SplashActivityEvent.GOTOPLACE);
                                 } else {
-                                    Utils.writelogFile(context, " getSuccess = error " + responseWS.getMessage() + "(Splash, Repository)");
+                                    Utils.writelogFile(context, "getSuccess = error " + responseWS.getMessage() + "(Splash, Repository)");
                                     post(SplashActivityEvent.ERROR, responseWS.getMessage());
                                 }
                             }
                         } else {
-                            Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
+                            Utils.writelogFile(context, "Base de datos error(Splash, Repository)");
                             post(SplashActivityEvent.ERROR, context.getString(R.string.error_data_base));
                         }
                     }
@@ -265,7 +264,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                 post(SplashActivityEvent.ERROR, e.getMessage());
             }
         } else {
-            Utils.writelogFile(context, " Internet error " + context.getString(R.string.error_internet) + "(Splash, Repository)");
+            Utils.writelogFile(context, "Internet error(Splash, Repository)");
             post(SplashActivityEvent.ERROR, context.getString(R.string.error_internet));
         }
     }
@@ -286,7 +285,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                     Utils.setIdFollow(context, shop.getFOLLOW());
                     getShopData(context, shop.getID_SHOP_KEY());
                 } else {
-                    Utils.writelogFile(context, "shop == null, " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
+                    Utils.writelogFile(context, "shop == null(Splash, Repository)");
                     post(SplashActivityEvent.ERROR, context.getString(R.string.error_data_base));
                 }
             }
@@ -308,9 +307,9 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
             support.setPASS("Vsupport2017");
         }
         Utils.writelogFile(context, "getShopName(Splash, Repository)");
-        String name = getShopName();
-        if (name == null) {
-            Utils.writelogFile(context, "name == null(Splash, Repository)");
+        String name = Utils.getNameShop(context);
+        if (name.isEmpty()) {
+            Utils.writelogFile(context, "name.isEmpty()(Splash, Repository)");
             name = context.getString(R.string.shop_name_empty);
         }
         final String finalName = name;
@@ -324,7 +323,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
         new Thread(runnable).start();
     }
 
-    public void sendEmail(Context context, final Support support, String Shop_name, String comment) {
+    private void sendEmail(Context context, final Support support, String Shop_name, String comment) {
         if (Utils.isNetworkAvailable(context)) {
             String to = support.getTO();
             final String from = support.getFROM();
@@ -344,17 +343,17 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
             post(SupportActivityEvent.ERROR, context.getString(R.string.error_internet));
     }
 
-    public Support getSupport() {
+    private Support getSupport() {
         return SQLite.select().from(Support.class).querySingle();
     }
 
-    private String getShopName() {
-        try {
-            return SQLite.select(Account_Table.SHOP_NAME).from(Account.class).querySingle().getSHOP_NAME();
-        } catch (Exception e) {
-            return null;
-        }
-    }
+//    private String getShopName() {
+//        try {
+//            return SQLite.select(Account_Table.SHOP_NAME).from(Account.class).querySingle().getSHOP_NAME();
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
 
     private void validateDateShop(final Context context, final DateShop dateShop) {
         Utils.writelogFile(context, "Metodo validateDateShop y Se valida conexion a internet(Splash, Repository)");
@@ -425,15 +424,15 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                     }
                                     post(SplashActivityEvent.GOTONAV);
                                 } else if (responseWS.getSuccess().equals("4")) {
-                                    Utils.writelogFile(context, " getSuccess = 4 y post GOTONAV(Splash, Repository)");
+                                    Utils.writelogFile(context, "getSuccess = 4 y post GOTONAV(Splash, Repository)");
                                     post(SplashActivityEvent.GOTONAV);
                                 } else {
-                                    Utils.writelogFile(context, " getSuccess = error " + responseWS.getMessage() + "(Splash, Repository)");
+                                    Utils.writelogFile(context, "getSuccess = error " + responseWS.getMessage() + "(Splash, Repository)");
                                     post(SplashActivityEvent.ERROR, responseWS.getMessage());
                                 }
                             }
                         } else {
-                            Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
+                            Utils.writelogFile(context, "Base de datos error(Splash, Repository)");
                             post(SplashActivityEvent.ERROR, context.getString(R.string.error_data_base));
                         }
                     }
@@ -521,28 +520,28 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                 }
                             }
                         } else {
-                            Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
+                            Utils.writelogFile(context, "Base de datos error(Splash, Repository)");
                             post(SplashActivityEvent.ERROR, context.getString(R.string.error_data_base));
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResultUser> call, Throwable t) {
-                        Utils.writelogFile(context, " Call error " + t.getMessage() + "(Splash, Repository)");
+                        Utils.writelogFile(context, "Call error " + t.getMessage() + "(Splash, Repository)");
                         post(SplashActivityEvent.ERROR, t.getMessage());
                     }
                 });
             } catch (Exception e) {
-                Utils.writelogFile(context, " catch error " + e.getMessage() + "(Splash, Repository)");
+                Utils.writelogFile(context, "catch error " + e.getMessage() + "(Splash, Repository)");
                 post(SplashActivityEvent.ERROR, e.getMessage());
             }
         } else {
-            Utils.writelogFile(context, " Internet error " + context.getString(R.string.error_internet) + "(Splash, Repository)");
+            Utils.writelogFile(context, "Internet error(Splash, Repository)");
             post(SplashActivityEvent.ERROR, context.getString(R.string.error_internet));
         }
     }
 
-    public void validateLogin(final Context context, final Shop shop) {
+    private void validateLogin(final Context context, final Shop shop) {
         Utils.writelogFile(context, "Metodo validateLogin y Se valida conexion a internet(Splash, Repository)");
         if (Utils.isNetworkAvailable(context)) {
             try {
@@ -567,7 +566,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                         Utils.setIdFollow(context, shop.getFOLLOW());
                                         Utils.writelogFile(context, "update shop ok y GOTONAV(Splash, Repository)");
                                     } else {
-                                        Utils.writelogFile(context, "shop == null " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
+                                        Utils.writelogFile(context, "shop == null (Splash, Repository)");
                                         post(SplashActivityEvent.ERROR, context.getString(R.string.error_data_base));
                                     }
                                     post(SplashActivityEvent.GOTONAV);
@@ -576,11 +575,11 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                     post(SplashActivityEvent.GOTOLOG);
                                 }
                             } else {
-                                Utils.writelogFile(context, "responseWS == null " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
+                                Utils.writelogFile(context, "responseWS == null (Splash, Repository)");
                                 post(SplashActivityEvent.ERROR, context.getString(R.string.error_data_base));
                             }
                         } else {
-                            Utils.writelogFile(context, "!response.isSuccessful() " + context.getString(R.string.error_data_base) + "(Splash, Repository)");
+                            Utils.writelogFile(context, "!response.isSuccessful()(Splash, Repository)");
                             post(SplashActivityEvent.ERROR, context.getString(R.string.error_data_base));
                         }
                     }
@@ -596,16 +595,16 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                 post(SplashActivityEvent.ERROR, e.getMessage());
             }
         } else {
-            Utils.writelogFile(context, "Internet error " + context.getString(R.string.error_internet) + "(Splash, Repository)");
+            Utils.writelogFile(context, "Internet error(Splash, Repository)");
             post(SplashActivityEvent.ERROR, context.getString(R.string.error_internet));
         }
     }
 
-    public void post(int type) {
+    private void post(int type) {
         post(type, null);
     }
 
-    public void post(int type, String error) {
+    private void post(int type, String error) {
         SplashActivityEvent event = new SplashActivityEvent();
         event.setType(type);
         event.setError(error);

@@ -16,6 +16,11 @@ public class AccountActivityInteractorImpl implements AccountActivityInteractor 
     }
 
     @Override
+    public void getCity(Context context) {
+        repository.getCity(context);
+    }
+
+    @Override
     public void updateAccount(Context context, Account account) {
         repository.updateAccount(context, account);
     }

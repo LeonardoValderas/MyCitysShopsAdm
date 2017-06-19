@@ -5,6 +5,7 @@ public class NotificationActivityEvent {
     public static final int SEND = 0;
     public static final int ERROR = 1;
     public static final int ISAVAILABLE = 2;
+    public static final int SENDADM = 3;
     private String error;
     private boolean is_available;
     private String date;

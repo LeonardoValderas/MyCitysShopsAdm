@@ -10,7 +10,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class SplashActivityPresenterImpl implements SplashActivityPresenter {
 
-
     private SplashActivityView view;
     private EventBus eventBus;
     private SplashActivityInteractor interactor;
@@ -29,6 +28,7 @@ public class SplashActivityPresenterImpl implements SplashActivityPresenter {
     @Override
     public void onDestroy() {
         eventBus.unregister(this);
+        view = null;
     }
 
     @Override
@@ -47,20 +47,29 @@ public class SplashActivityPresenterImpl implements SplashActivityPresenter {
     }
 
     @Override
+    public SplashActivityView getView() {
+        return this.view;
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(SplashActivityEvent event) {
         if (this.view != null) {
             switch (event.getType()) {
                 case SplashActivityEvent.GOTOLOG:
+                    view.hideProgress();
                     view.goToLog();
                     break;
                 case SplashActivityEvent.GOTONAV:
+                    view.hideProgress();
                     view.goToNav();
                     break;
                 case SplashActivityEvent.GOTOPLACE:
+                    view.hideProgress();
                     view.goToPlace();
                     break;
                 case SplashActivityEvent.ERROR:
+                    view.hideProgress();
                     view.setError(event.getError());
                     break;
             }

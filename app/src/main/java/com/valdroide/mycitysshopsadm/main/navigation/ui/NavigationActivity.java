@@ -77,7 +77,7 @@ public class NavigationActivity extends AppCompatActivity
         setFollow();
     }
 
-    public void setFollow() {
+    private void setFollow() {
         Utils.writelogFile(this, "set follow textview Oncreate(Navigation)");
         try {
             textViewFollow.setText(String.valueOf(Utils.getIdFollow(this)));
@@ -178,6 +178,4 @@ public class NavigationActivity extends AppCompatActivity
         Utils.writelogFile(this, "setError " + error + "(Navigation)");
         Utils.showSnackBar(content, error);
     }
-
-
 }

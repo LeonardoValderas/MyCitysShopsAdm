@@ -8,10 +8,12 @@ public class DrawListFragmentEvent {
     private int type;
     private String error;
     private List<Draw> drawList;
+    private Draw draw;
     public static final int DRAWS = 0;
     public static final int ERROR = 1;
     public static final int CANCELSUCCESS = 2;
-//    public static final int GETDRAWSREFRESH = 4;
+    public static final int FORCEDRAW = 3;
+    public static final int ZERODRAW = 4;
 
     public int getType() {
         return type;
@@ -35,5 +37,13 @@ public class DrawListFragmentEvent {
 
     public void setDrawList(List<Draw> drawList) {
         this.drawList = drawList;
+    }
+
+    public Draw getDraw() {
+        return draw;
+    }
+
+    public void setDraw(Draw draw) {
+        this.draw = draw;
     }
 }

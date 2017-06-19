@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.entities.shop.MyPlace;
@@ -76,12 +77,10 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
         ButterKnife.bind(this);
         Utils.writelogFile(this, "Se inicia Injection(Place)");
         setupInjection();
-        Utils.writelogFile(this, "Se inicia presenter Oncreate(Place)");
-        presenter.onCreate();
         Utils.writelogFile(this, "Se inicia Dialog(Place)");
         initDialog();
-        Utils.writelogFile(this, "Se show Dialog(Place)");
-        pDialog.show();
+        Utils.writelogFile(this, "Se inicia presenter Oncreate(Place)");
+        presenter.onCreate();
         Utils.writelogFile(this, "Se inicia AdapterSpinner(Place)");
         initAdapterSpinner();
         Utils.writelogFile(this, "Se inicia setOnItemSelectedCountry(Place)");
@@ -97,13 +96,13 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
         app.getPlaceActivityComponent(this, this).inject(this);
     }
 
-    public void initDialog() {
+    private void initDialog() {
         pDialog = new ProgressDialog(this);
         pDialog.setMessage(getString(R.string.processing));
         pDialog.setCancelable(false);
     }
 
-    public void initAdapterSpinner() {
+    private void initAdapterSpinner() {
         try {
             spinnerCountry.setAdapter(adapterSpinnerCountry);
             spinnerState.setAdapter(adapterSpinnerState);
@@ -114,7 +113,7 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
         }
     }
 
-    public void setOnItemSelectedCountry() {
+    private void setOnItemSelectedCountry() {
         try {
             spinnerCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -133,7 +132,7 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
         }
     }
 
-    public void setOnItemSelectedState() {
+    private void setOnItemSelectedState() {
         try {
             spinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -165,9 +164,6 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
             Utils.writelogFile(this, "setCountry error: " + e.getMessage() + "(Place)");
             setError(e.getMessage());
         }
-        Utils.writelogFile(this, "dialog dismiss(Place)");
-        if (pDialog.isShowing())
-            pDialog.dismiss();
     }
 
     @Override
@@ -206,16 +202,11 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
             Utils.writelogFile(this, "setCity error: " + e.getMessage() + "(Place)");
             setError(e.getMessage());
         }
-        Utils.writelogFile(this, "dialog dismiss(Place)");
-        if (pDialog.isShowing())
-            pDialog.dismiss();
     }
 
     @Override
     public void setError(String mgs) {
         Utils.writelogFile(this, "Error, dialog dismiss: " + mgs + "(Place)");
-        if (pDialog.isShowing())
-            pDialog.dismiss();
         Utils.showSnackBar(conteiner, mgs);
     }
 
@@ -229,7 +220,7 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
             Utils.showSnackBar(conteiner, getString(R.string.error_fill_place));
         } else {
             Utils.writelogFile(this, "dialog show(Place)");
-            pDialog.show();
+            showProgressDialog();
             Utils.writelogFile(this, "cast country spinner(Place)");
             MyPlace myPlace = null;
             try {
@@ -259,8 +250,6 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
                 Utils.writelogFile(this, "place != null y setIdCity shared(Place)");
                 Utils.setIdCity(this, place.getID_CITY_FOREIGN());
                 Utils.writelogFile(this, "dialog dismiss(Place)");
-                if (pDialog.isShowing())
-                    pDialog.dismiss();
                 Utils.writelogFile(this, "Intent Login(Place)");
                 startActivity(new Intent(this, LoginActivity.class));
             } else {
@@ -274,9 +263,19 @@ public class PlaceActivity extends AppCompatActivity implements PlaceActivityVie
     }
 
     @Override
+    public void showProgressDialog() {
+        pDialog.show();
+    }
+
+    @Override
+    public void hidePorgressDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
+
+    @Override
     protected void onDestroy() {
         Utils.writelogFile(this, "Ondestroy(Place)");
-        pDialog.dismiss();
         super.onDestroy();
     }
 }

@@ -23,11 +23,14 @@ public class DrawListFragmentPresenterImpl implements DrawListFragmentPresenter 
     @Override
     public void onCreate() {
         eventBus.register(this);
+        if (view != null)
+            view.showProgressDialog();
     }
 
     @Override
     public void onDestroy() {
         eventBus.unregister(this);
+        view = null;
     }
 
     @Override
@@ -46,18 +49,35 @@ public class DrawListFragmentPresenterImpl implements DrawListFragmentPresenter 
     }
 
     @Override
+    public void forceDraw(Context context, Draw draw) {
+        interactor.forceDraw(context, draw);
+    }
+
+    @Override
+    public void validateBroadcast(Context context) {
+        interactor.validateBroadcast(context);
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(DrawListFragmentEvent event) {
         if (view != null) {
             switch (event.getType()) {
                 case DrawListFragmentEvent.DRAWS:
+                    view.hidePorgressDialog();
                     view.setDraws(event.getDrawList());
                     break;
                 case DrawListFragmentEvent.ERROR:
+                    view.hidePorgressDialog();
                     view.setError(event.getError());
                     break;
                 case DrawListFragmentEvent.CANCELSUCCESS:
+                    view.hidePorgressDialog();
                     view.cancelSuccess();
+                    break;
+                case DrawListFragmentEvent.FORCEDRAW:
+                    view.hidePorgressDialog();
+                    view.forceSuccess(event.getDraw());
                     break;
             }
         }

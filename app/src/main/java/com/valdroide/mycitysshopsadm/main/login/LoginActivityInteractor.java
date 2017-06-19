@@ -4,5 +4,6 @@ import android.content.Context;
 
 public interface LoginActivityInteractor {
     void validateLogin(Context context, String user, String pass, int id_city);
+    void validateLoginAdm(Context context, String user, String pass, int id_city);
     void changePlace(Context context);
 }

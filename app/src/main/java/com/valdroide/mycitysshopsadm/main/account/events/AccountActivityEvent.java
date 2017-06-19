@@ -8,9 +8,10 @@ public class AccountActivityEvent {
     public static final int SAVEACCOUNT = 1;
     public static final int ERROR = 2;
     public static final int UPDATEACCOUNT = 3;
+    public static final int CITY = 4;
     private String error;
     private Account account;
-
+    private String city;
     public int getType() {
         return type;
     }
@@ -33,5 +34,13 @@ public class AccountActivityEvent {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

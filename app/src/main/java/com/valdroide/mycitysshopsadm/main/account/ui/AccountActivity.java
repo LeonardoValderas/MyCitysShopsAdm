@@ -1,16 +1,11 @@
 package com.valdroide.mycitysshopsadm.main.account.ui;
 
-import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.Menu;
@@ -21,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.entities.shop.Account;
@@ -77,7 +71,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
     private ProgressDialog pDialog;
     private Uri uriExtra;
     private Menu menu;
-
+    private String city = "";
     @Inject
     AccountActivityPresenter presenter;
 
@@ -89,17 +83,16 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         ButterKnife.bind(this);
         Utils.writelogFile(this, "Se inicia Injection(Account)");
         setupInjection();
+        Utils.writelogFile(this, "inicia dialog (Account)");
+        initDialog();
         Utils.writelogFile(this, "Se inicia presenter Oncreate(Account)");
         presenter.onCreate();
         Utils.writelogFile(this, "Se inicia toolbar setDisplayHomeAsUpEnabled(Account)");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        presenter.getCity(this);
         Utils.writelogFile(this, "Se inicia toolbar setTitle(Account)");
         getSupportActionBar().setTitle(R.string.my_account_title);
         setEnable(false);
-        Utils.writelogFile(this, "inicia dialog (Account)");
-        initDialog();
-        Utils.writelogFile(this, "show dialog (Account)");
-        pDialog.show();
         Utils.writelogFile(this, "presenter.getAccount() (Account)");
         presenter.getAccount(this);
         Utils.writelogFile(this, "getBooleanExtra() isMap; (Account)");
@@ -116,17 +109,16 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
             }
             Utils.writelogFile(this, "fillExtraData(); (Account)");
             fillExtraData();
-
         }
     }
 
-    public void initDialog() {
+    private void initDialog() {
         pDialog = new ProgressDialog(this);
         pDialog.setMessage(getString(R.string.processing));
         pDialog.setCancelable(false);
     }
 
-    public void setEnable(boolean isEnable) {
+    private void setEnable(boolean isEnable) {
         Utils.writelogFile(this, "setEnable todos los componentes (Account)");
         try {
             imageViewLogo.setEnabled(isEnable);
@@ -148,7 +140,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         }
     }
 
-    public void fillExtraData() {
+    private void fillExtraData() {
         Utils.writelogFile(this, "fillExtraData todos los componentes (Account)");
         try {
             editTextPhone.setText(getIntent().getStringExtra("phone"));
@@ -171,7 +163,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         setEnable(true);
     }
 
-    public void setAttributeEdit(EditText editText, boolean isEnable) {
+    private void setAttributeEdit(EditText editText, boolean isEnable) {
         editText.setEnabled(isEnable);
         editText.setFocusable(isEnable);
         editText.setFocusableInTouchMode(isEnable);
@@ -197,13 +189,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
     @Override
     public void error(String mgs) {
         Utils.writelogFile(this, "error " + mgs + " (Account)");
-        dismissDialog();
         Utils.showSnackBar(activityAccount, mgs);
-    }
-
-    public void dismissDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
     }
 
     @Override
@@ -214,7 +200,6 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         menuEdit();
         setEnable(false);
         Utils.writelogFile(this, "pDialog.dismiss() y showSnackBar(Account)");
-        pDialog.dismiss();
         Utils.showSnackBar(activityAccount, getString(R.string.account_save));
     }
 
@@ -251,12 +236,27 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         } catch (Exception e) {
             Utils.writelogFile(this, "error catch " + e.getMessage());
         }
-        dismissDialog();
     }
 
-    public Account prepareAccount() {
-        Utils.writelogFile(this, "prepareAccount() y show dialog(Account)");
+    @Override
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @Override
+    public void showProgressDialog() {
         pDialog.show();
+    }
+
+    @Override
+    public void hidePorgressDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
+
+    private Account prepareAccount() {
+        Utils.writelogFile(this, "prepareAccount() y show dialog(Account)");
+        showProgressDialog();
         Utils.writelogFile(this, "fill account object(Account)");
         try {
             if (imageByte != null) {
@@ -272,7 +272,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
                         name = name.replace(" ", "");
                 }
                 name_logo = Utils.removeAccents(name) + Utils.getFechaOficial() + ".PNG";
-                url_logo = Utils.URL_IMAGE + name_logo;
+                url_logo = Utils.URL_IMAGE + city + "/" + name_logo;
             }
 
             return new Account(id_account, textViewName.getText().toString(), url_logo, name_logo,
@@ -298,7 +298,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
             }
     }
 
-    public void assignImage(Uri uri) {
+    private void assignImage(Uri uri) {
         Utils.writelogFile(this, "setPicasso() (Account)");
         Utils.setPicasso(this, uri.toString(), android.R.drawable.ic_menu_crop, imageViewLogo);
         try {
@@ -335,7 +335,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         }
     }
 
-    public void menuSave() {
+    private void menuSave() {
         Utils.writelogFile(this, "menuSave()(Account)");
         try {
             menu.clear();
@@ -349,7 +349,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         }
     }
 
-    public void menuEdit() {
+    private void menuEdit() {
         Utils.writelogFile(this, "menuEdit()(Account)");
         try {
             menu.clear();
@@ -390,6 +390,8 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
                 Utils.showSnackBar(activityAccount, getString(R.string.error_description));
             else if (editTextWorking.getText().toString().isEmpty())
                 Utils.showSnackBar(activityAccount, getString(R.string.error_working));
+            else if (city == null || city.isEmpty())
+                Utils.showSnackBar(activityAccount, getString(R.string.city_name_error));
             else
                 presenter.updateAccount(this, prepareAccount());
         } else if (id == R.id.action_map) {

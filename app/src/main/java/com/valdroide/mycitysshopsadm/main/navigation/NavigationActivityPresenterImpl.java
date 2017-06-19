@@ -28,6 +28,7 @@ public class NavigationActivityPresenterImpl implements NavigationActivityPresen
     @Override
     public void onDestroy() {
         eventBus.unregister(this);
+        view = null;
     }
 
     @Override
@@ -38,6 +39,11 @@ public class NavigationActivityPresenterImpl implements NavigationActivityPresen
     @Override
     public void getURLShop(Context context) {
         interactor.getURLShop(context);
+    }
+
+    @Override
+    public NavigationActivityView getView() {
+        return this.view;
     }
 
     @Override

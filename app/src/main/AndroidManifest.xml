@@ -29,6 +29,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <receiver android:name=".main.draw.broadcast.ui.BroadcastDraw" />
 
         <activity
             android:name=".main.navigation.ui.NavigationActivity"

@@ -12,5 +12,7 @@ public interface DrawListFragmentPresenter {
     void getDraws(Context context);
     DrawListFragmentView getView();
     void cancelDraw(Context context, Draw draw);
+    void forceDraw(Context context, Draw draw);
+    void validateBroadcast(Context context);
     void onEventMainThread(DrawListFragmentEvent event);
 }

@@ -48,19 +48,19 @@ public class NavigationActivityRepositoryImpl implements NavigationActivityRepos
         }
     }
 
-    public void post(int type) {
+    private void post(int type) {
         post(type, null, null);
     }
 
-    public void post(int type, boolean isURL, String url) {
+    private void post(int type, boolean isURL, String url) {
         post(type, null, url);
     }
 
-    public void post(int type, String error) {
+    private void post(int type, String error) {
         post(type, error, null);
     }
 
-    public void post(int type, String error, String url) {
+    private void post(int type, String error, String url) {
         NavigationActivityEvent event = new NavigationActivityEvent();
         event.setType(type);
         event.setError(error);

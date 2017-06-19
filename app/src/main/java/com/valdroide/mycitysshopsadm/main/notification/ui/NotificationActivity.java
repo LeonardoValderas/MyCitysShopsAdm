@@ -40,6 +40,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
     @Bind(R.id.textViewUnavailable)
     TextView textViewUnavailable;
     private ProgressDialog pDialog;
+    private boolean isADM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +51,27 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         Utils.writelogFile(this, "Se inicia Injection(Notification)");
         setupInjection();
         Utils.writelogFile(this, "Se inicia presenter Oncreate(Notification)");
+        initDialog();
         presenter.onCreate();
         Utils.writelogFile(this, "Se inicia toolbar Oncreate(Notification)");
         initToolBar();
-        initDialog();
-        pDialog.show();
         editTextEmailHint.setHint(getString(R.string.hint_notification));
-        presenter.validateNotificationExpire(this, Utils.getFechaLogFile());
+        isADM = isADM();
+        if (!isADM)
+            presenter.validateNotificationExpire(this, Utils.getFechaLogFile("dd/MM/yyyy"));
+        else
+            hidePorgressDialog();
+
     }
 
-    private void initToolBar(){
+    private void initToolBar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.notification_title);
+    }
+
+    private boolean isADM() {
+        return getIntent().getBooleanExtra("isADM", false);
     }
 
     private void setupInjection() {
@@ -70,7 +79,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         app.getNotificationActivityComponent(this, this).inject(this);
     }
 
-    public void initDialog() {
+    private void initDialog() {
         pDialog = new ProgressDialog(this);
         pDialog.setMessage(getString(R.string.processing));
         pDialog.setCancelable(false);
@@ -84,8 +93,11 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                 Utils.showSnackBar(conteiner, getString(R.string.notification_empty));
             else {
                 Utils.writelogFile(this, "sendNotification sendNotification(Notification)");
-                pDialog.show();
-                presenter.sendNotification(this, editTextEmail.getText().toString());
+                showProgressDialog();
+                if (isADM)
+                    presenter.sendNotificationAdm(this, editTextEmail.getText().toString());
+                else
+                    presenter.sendNotification(this, editTextEmail.getText().toString());
             }
         } catch (Exception e) {
             Utils.writelogFile(this, " catch error " + e.getMessage() + "(Notification)");
@@ -102,10 +114,15 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
     }
 
     @Override
+    public void setSuccessAdm() {
+        Utils.writelogFile(this, "setSuccessAdm(Notification)");
+        editTextEmail.setText("");
+        Utils.showSnackBar(conteiner, getString(R.string.send_notification_success));
+    }
+
+    @Override
     public void setError(String error) {
         Utils.writelogFile(this, "setError: " + error + "(Notification)");
-        if (pDialog.isShowing())
-            pDialog.dismiss();
         Utils.showSnackBar(conteiner, error);
     }
 
@@ -121,7 +138,18 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         }
     }
 
-    public void setEnable(boolean isEnable, String date) {
+    @Override
+    public void showProgressDialog() {
+        pDialog.show();
+    }
+
+    @Override
+    public void hidePorgressDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
+
+    private void setEnable(boolean isEnable, String date) {
         Utils.writelogFile(this, "setEnable editText (Notification)");
         try {
             setAttributeEdit(editTextEmail, isEnable, date);
@@ -131,7 +159,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         }
     }
 
-    public void setAttributeEdit(EditText editText, boolean isEnable, String date) {
+    private void setAttributeEdit(EditText editText, boolean isEnable, String date) {
         Utils.writelogFile(this, "setAttributeEdit (Notification)");
         editText.setEnabled(isEnable);
         editText.setFocusable(isEnable);

@@ -57,17 +57,15 @@ public class Draw extends BaseModel {
     @Column
     @SerializedName("date_unique")
     private String DATE_UNIQUE;
-//    @Column
-//    @SerializedName("is_active")
+    @Column
+    @SerializedName("is_active")
     private int IS_ACTIVE;
-//    @Column
-//    @SerializedName("is_cancel")
+    @Column
+    @SerializedName("is_zero")
+    private int IS_ZERO;
+
     private int IS_CANCEL;
-//    @Column
-//    @SerializedName("is_limit")
     private int IS_LIMIT;
-//    @Column
-//    @SerializedName("is_take")
     private int IS_TAKE;
 
     @Column
@@ -78,15 +76,45 @@ public class Draw extends BaseModel {
     @SerializedName("dni")
     private String DNI;
 
+    @Column
+    @SerializedName("error_reporting")
+    private int ERROR_REPORTING;
+
     private String Encode;
 
     public Draw() {
     }
 
+//    public Draw(int ID_DRAW_KEY, int ID_SHOP_FOREIGN, int ID_CITY_FOREIGN, String DESCRIPTION,
+//                int FOR_FOLLOWING, String CONDITION, String START_DATE, String END_DATE, String LIMIT_DATE,
+//                String URL_LOGO, String NAME_LOGO, String DATE_UNIQUE, int IS_ACTIVE, int IS_CANCEL, int IS_LIMIT,
+//                int IS_TAKE, String encode, String NAME, String DNI, int ERROR_REPORTING) {
+//
+//        this.ID_DRAW_KEY = ID_DRAW_KEY;
+//        this.ID_SHOP_FOREIGN = ID_SHOP_FOREIGN;
+//        this.ID_CITY_FOREIGN = ID_CITY_FOREIGN;
+//        this.DESCRIPTION = DESCRIPTION;
+//        this.FOR_FOLLOWING = FOR_FOLLOWING;
+//        this.CONDITION = CONDITION;
+//        this.START_DATE = START_DATE;
+//        this.END_DATE = END_DATE;
+//        this.LIMIT_DATE = LIMIT_DATE;
+//        this.URL_LOGO = URL_LOGO;
+//        this.NAME_LOGO = NAME_LOGO;
+//        this.DATE_UNIQUE = DATE_UNIQUE;
+//        this.IS_ACTIVE = IS_ACTIVE;
+//        this.IS_CANCEL = IS_CANCEL;
+//        this.IS_LIMIT = IS_LIMIT;
+//        this.IS_TAKE = IS_TAKE;
+//        Encode = encode;
+//        this.NAME = NAME;
+//        this.DNI = DNI;
+//        this.ERROR_REPORTING = ERROR_REPORTING;
+//    }
+
     public Draw(int ID_DRAW_KEY, int ID_SHOP_FOREIGN, int ID_CITY_FOREIGN, String DESCRIPTION,
                 int FOR_FOLLOWING, String CONDITION, String START_DATE, String END_DATE, String LIMIT_DATE,
-                String URL_LOGO, String NAME_LOGO, String DATE_UNIQUE, int IS_ACTIVE, int IS_CANCEL, int IS_LIMIT,
-                int IS_TAKE, String encode, String NAME, String DNI) {
+                String URL_LOGO, String NAME_LOGO, String DATE_UNIQUE, String encode) {
 
         this.ID_DRAW_KEY = ID_DRAW_KEY;
         this.ID_SHOP_FOREIGN = ID_SHOP_FOREIGN;
@@ -100,13 +128,7 @@ public class Draw extends BaseModel {
         this.URL_LOGO = URL_LOGO;
         this.NAME_LOGO = NAME_LOGO;
         this.DATE_UNIQUE = DATE_UNIQUE;
-        this.IS_ACTIVE = IS_ACTIVE;
-        this.IS_CANCEL = IS_CANCEL;
-        this.IS_LIMIT = IS_LIMIT;
-        this.IS_TAKE = IS_TAKE;
         Encode = encode;
-        this.NAME = NAME;
-        this.DNI = DNI;
     }
 
     public int getID_DRAW_KEY() {
@@ -261,8 +283,25 @@ public class Draw extends BaseModel {
         this.DNI = DNI;
     }
 
+    public int getERROR_REPORTING() {
+        return ERROR_REPORTING;
+    }
+
+    public void setERROR_REPORTING(int ERROR_REPORTING) {
+        this.ERROR_REPORTING = ERROR_REPORTING;
+    }
+
+    public int getIS_ZERO() {
+        return IS_ZERO;
+    }
+
+    public void setIS_ZERO(int IS_ZERO) {
+        this.IS_ZERO = IS_ZERO;
+    }
+
     public String getWinner() {
-        if (!getDNI().isEmpty() && !getNAME().isEmpty())
+
+        if (getDNI() != null && !getDNI().isEmpty() && getNAME() != null && !getNAME().isEmpty())
             return "GANADOR: " + getNAME() + " DNI: " + getDNI();
         else
             return "";
