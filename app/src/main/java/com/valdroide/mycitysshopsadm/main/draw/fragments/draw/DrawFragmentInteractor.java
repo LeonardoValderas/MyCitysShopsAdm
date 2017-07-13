@@ -8,4 +8,5 @@ public interface DrawFragmentInteractor {
     void createDraw(Context context, Draw draw);
     void validateBroadcast(Context context);
     void getCity(Context context);
+    void validateDateShop(Context context);
 }

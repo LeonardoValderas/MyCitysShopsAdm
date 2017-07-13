@@ -14,29 +14,35 @@ public class DateShop extends BaseModel {
     @Column
     @PrimaryKey
     @SerializedName("id")
-    public int ID_DATE_SHOP_KEY;
+    private int ID_DATE_SHOP_KEY;
 
     @Column
     @SerializedName("id_shop")
-    public int ID_SHOP_FOREIGN;
+    private int ID_SHOP_FOREIGN;
 
     @Column
     @SerializedName("account_date")
-    public String ACCOUNT_DATE;
+    private String ACCOUNT_DATE;
 
     @Column
     @SerializedName("offer_date")
-    public String OFFER_DATE;
+    private String OFFER_DATE;
+
     @Column
     @SerializedName("draw_date")
-    public String DRAW_DATE;
+    private String DRAW_DATE;
+
     @Column
     @SerializedName("notification_date")
-    public String NOTIFICATION_DATE;
+    private String NOTIFICATION_DATE;
 
     @Column
     @SerializedName("date_shop_date")
-    public String DATE_SHOP_DATE;
+    private String DATE_SHOP_DATE;
+
+    @Column
+    @SerializedName("support_date")
+    private String SUPPORT_DATE;
 
     public DateShop() {
     }
@@ -95,5 +101,13 @@ public class DateShop extends BaseModel {
 
     public void setDRAW_DATE(String DRAW_DATE) {
         this.DRAW_DATE = DRAW_DATE;
+    }
+
+    public String getSUPPORT_DATE() {
+        return SUPPORT_DATE;
+    }
+
+    public void setSUPPORT_DATE(String SUPPORT_DATE) {
+        this.SUPPORT_DATE = SUPPORT_DATE;
     }
 }

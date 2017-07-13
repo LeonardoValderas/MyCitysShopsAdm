@@ -52,6 +52,11 @@ public class DrawFragmentPresenterImpl implements DrawFragmentPresenter {
     }
 
     @Override
+    public void validateDateShop(Context context) {
+        interactor.validateDateShop(context);
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(DrawFragmentEvent event) {
         if (this.view != null) {
@@ -63,8 +68,17 @@ public class DrawFragmentPresenterImpl implements DrawFragmentPresenter {
                 case DrawFragmentEvent.ERROR:
                     view.hidePorgressDialog();
                     view.setError(event.getError());
+                    break;
                 case DrawFragmentEvent.CITY:
                     view.setCity(event.getCity());
+                    break;
+                case DrawFragmentEvent.UPDATESUCCESS:
+                    view.refreshAdapter();
+                    view.hidePorgressDialog();
+                    break;
+                case DrawFragmentEvent.UPDATEWITHOUTCHANGE:
+                    view.hidePorgressDialog();
+                    break;
             }
         }
     }

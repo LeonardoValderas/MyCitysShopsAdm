@@ -6,19 +6,21 @@
     android:layout_height="match_parent"
     android:background="@drawable/back"
     android:orientation="vertical"
-    tools:context=".main.offer.ui.OfferActivity">
+    tools:context=".main.offer.fragments.offer.ui.OfferFragment">
 
     <TextView
         android:id="@+id/textViewQuantity"
         style="@style/TextView_Quantity_Offer"
         android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:text="Actividades disponibles: 0"
         android:textSize="15dp" />
 
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,9 +47,9 @@
                     style="@style/EditText_Offer"
                     android:hint="@string/hint_title_offer"
                     android:inputType="textCapCharacters"
-                    android:textIsSelectable="true"
-                    android:textAllCaps="true"
                     android:maxLength="20"
+                    android:textAllCaps="true"
+                    android:textIsSelectable="true"
                     android:textSize="20dp" />
             </android.support.design.widget.TextInputLayout>
 
@@ -65,11 +67,4 @@
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
     </ScrollView>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="3dp" />
-
 </LinearLayout>

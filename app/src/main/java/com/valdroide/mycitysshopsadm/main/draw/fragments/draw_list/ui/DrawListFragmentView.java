@@ -12,4 +12,6 @@ public interface DrawListFragmentView {
     void forceSuccess(Draw draw);
     void showProgressDialog();
     void hidePorgressDialog();
+    void withoutChange();
+    void refreshDateShops();
 }

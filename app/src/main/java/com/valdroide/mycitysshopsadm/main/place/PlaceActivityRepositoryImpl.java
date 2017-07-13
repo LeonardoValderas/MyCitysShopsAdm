@@ -37,11 +37,11 @@ public class PlaceActivityRepositoryImpl implements PlaceActivityRepository {
                 Utils.writelogFile(context, "countries != null y post GETCOUNTRIES (Place, Repository)");
                 post(PlaceActivityEvent.GETCOUNTRIES, countries);
             } else {
-                Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Place, Repository)");
+                Utils.writelogFile(context, "Base de datos error(Place, Repository)");
                 post(PlaceActivityEvent.ERROR, context.getString(R.string.error_data_base));
             }
         } catch (Exception e) {
-            Utils.writelogFile(context, " catch error " + e.getMessage() + "(Splash, Repository)");
+            Utils.writelogFile(context, "catch error " + e.getMessage() + "(Splash, Repository)");
             post(PlaceActivityEvent.ERROR, e.getMessage());
         }
     }
@@ -58,7 +58,7 @@ public class PlaceActivityRepositoryImpl implements PlaceActivityRepository {
                 Utils.writelogFile(context, "states != null y post GETSTATES(Place, Repository)");
                 post(PlaceActivityEvent.GETSTATES, states, true);
             } else {
-                Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Place, Repository)");
+                Utils.writelogFile(context, "Base de datos error(Place, Repository)");
                 post(PlaceActivityEvent.ERROR, context.getString(R.string.error_data_base));
             }
         } catch (Exception e) {
@@ -79,11 +79,11 @@ public class PlaceActivityRepositoryImpl implements PlaceActivityRepository {
                 Utils.writelogFile(context, "cities != null y post GETCITIES(Place, Repository)");
                 post(PlaceActivityEvent.GETCITIES, 0, cities);
             } else {
-                Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Place, Repository)");
+                Utils.writelogFile(context, "Base de datos error(Place, Repository)");
                 post(PlaceActivityEvent.ERROR, context.getString(R.string.error_data_base));
             }
         } catch (Exception e) {
-            Utils.writelogFile(context, " catch error " + e.getMessage() + "(Splash, Repository)");
+            Utils.writelogFile(context, "catch error " + e.getMessage() + "(Splash, Repository)");
             post(PlaceActivityEvent.ERROR, e.getMessage());
         }
     }

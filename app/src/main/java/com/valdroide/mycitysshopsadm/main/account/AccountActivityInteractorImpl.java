@@ -24,4 +24,9 @@ public class AccountActivityInteractorImpl implements AccountActivityInteractor 
     public void updateAccount(Context context, Account account) {
         repository.updateAccount(context, account);
     }
+
+    @Override
+    public void validateDateShop(Context context) {
+        repository.validateDateShop(context);
+    }
 }

@@ -7,4 +7,5 @@ public interface NotificationActivityView {
     void isAvailable(boolean is_available, String date);
     void showProgressDialog();
     void hidePorgressDialog();
+    void validateDate();
 }

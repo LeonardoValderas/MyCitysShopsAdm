@@ -9,6 +9,8 @@ public class AccountActivityEvent {
     public static final int ERROR = 2;
     public static final int UPDATEACCOUNT = 3;
     public static final int CITY = 4;
+    public static final int UPDATESUCCESS = 5;
+    public static final int UPDATEWHITOUTCHANGE = 6;
     private String error;
     private Account account;
     private String city;

@@ -59,6 +59,11 @@ public class DrawListFragmentPresenterImpl implements DrawListFragmentPresenter 
     }
 
     @Override
+    public void validateDateShop(Context context) {
+        interactor.validateDateShop(context);
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(DrawListFragmentEvent event) {
         if (view != null) {
@@ -78,6 +83,12 @@ public class DrawListFragmentPresenterImpl implements DrawListFragmentPresenter 
                 case DrawListFragmentEvent.FORCEDRAW:
                     view.hidePorgressDialog();
                     view.forceSuccess(event.getDraw());
+                    break;
+                case DrawListFragmentEvent.UPDATESUCCESS:
+                    view.refreshDateShops();
+                    break;
+                case DrawListFragmentEvent.WITHOUTCHANGE:
+                    view.withoutChange();
                     break;
             }
         }

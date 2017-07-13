@@ -8,4 +8,5 @@ public interface BroadcastDrawView {
     void setError(String error);
     void setWinnerSuccess();
     void refresh();
+    void unRegister();
 }

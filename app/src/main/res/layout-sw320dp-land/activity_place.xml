@@ -10,6 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="3dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -30,7 +31,7 @@
                 style="@style/Spinner_Place_Normal"
                 android:layout_height="45dp"
                 android:layout_below="@+id/textCountry"
-                android:layout_margin="15dp"
+                android:layout_margin="12dp"
                 android:background="@drawable/border_style_spinner" />
 
             <TextView
@@ -45,7 +46,7 @@
                 style="@style/Spinner_Place_Normal"
                 android:layout_height="45dp"
                 android:layout_below="@+id/textState"
-                android:layout_margin="15dp"
+                android:layout_margin="12dp"
                 android:background="@drawable/border_style_spinner" />
 
             <TextView
@@ -60,7 +61,7 @@
                 style="@style/Spinner_Place_Normal"
                 android:layout_height="45dp"
                 android:layout_below="@+id/textCity"
-                android:layout_margin="15dp"
+                android:layout_margin="12dp"
                 android:background="@drawable/border_style_spinner" />
 
         </LinearLayout>

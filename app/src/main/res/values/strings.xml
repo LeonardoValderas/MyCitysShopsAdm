@@ -116,8 +116,6 @@
     <string name="sent_emal_auto">Se envió una email automaticamente a soporte.</string>
     <string name="my_location">MI UBICACIÓN</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="create_draw_fragment">Crear</string>
     <string name="close_draw_fragment">Cerrar</string>
     <string name="time_end_draw">Hora Fin</string>
@@ -128,14 +126,15 @@
     <string name="data_end_before">Seleccione una fecha superior a la actual.</string>
     <string name="draw_create_success">Sorteo creado correctamente.</string>
     <string name="error_draw_null">Problemas para generar el sorteo.</string>
-    <string name="error_draw_date_end_exist">La fecha de cierre ya existe, ingrese una diferrente.</string>
+    <string name="error_draw_close">Problemas para cerrar el sorteo.</string>
+    <string name="error_draw_date_end_exist">La fecha de cierre ya existe, ingrese una diferente.</string>
     <string name="date_limit">Fecha limite uso o retiro</string>
     <string name="date_limit_empty">Seleccione una fecha limite de uso o retiro del premio.</string>
-    <string name="error_dateLimit_vs_dateExpirate">Seleccione una fecha limite de uso o retiro mayor a la fecha de finalización del sorteo.</string>
+    <string name="error_dateLimit_vs_dateExpirate">Seleccione una fecha límite de uso o retiro mayor a la fecha de finalización del sorteo.</string>
     <string name="draw_title">Sorteo</string>
     <string name="date_create_hint">Fecha de creación:</string>
     <string name="date_end_hint">Fecha de Cierre:</string>
-    <string name="date_limit_hint">Fecha limite de uso o retiro:</string>
+    <string name="date_limit_hint">Fecha límite de uso o retiro:</string>
     <string name="draw_cancel_success">Sorteo cerrado correctamente.</string>
     <string name="winner_text">GANADOR:</string>
     <string name="DNI">DNI</string>
@@ -143,7 +142,9 @@
     <string name="error_reporting_draw_adapter">Problemas al intentar cerrar el sorteo y seleccionar un ganador. Intente forzar ésta acción haciendo click.</string>
     <string name="draw_zero_adapter">El sorteo no tuvo participantes. Ya puede cerrar el sorteo.</string>
     <string name="draw_force_list">Sorteo forzado correctamente.</string>
-<!--DRAW-->
+    <!--DRAW-->
     <string name="error_draw">Problema al gestionar el sorteo.</string>
     <string name="city_name_error">Problemas para obtener su ciudad.</string>
+    <!--OFFER-->
+    <string name="edit_offer">EDITAR</string>
 </resources>

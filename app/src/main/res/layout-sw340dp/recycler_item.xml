@@ -64,8 +64,8 @@
 
                     <ImageView
                         android:id="@+id/imageViewMenu"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
                         android:src="@drawable/ic_menu_recycler" />
 
                 </LinearLayout>

@@ -7,4 +7,5 @@ public interface AccountActivityRepository {
     void getAccount(Context context);
     void getCity(Context context);
     void updateAccount(Context context, Account account);
+    void validateDateShop(Context context);
 }

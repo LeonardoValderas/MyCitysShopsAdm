@@ -18,11 +18,12 @@ import android.widget.TextView;
 import com.valdroide.mycitysshopsadm.MyCitysShopsAdmApp;
 import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivity;
-import com.valdroide.mycitysshopsadm.main.draw.activity.ui.DrawActivity;
+import com.valdroide.mycitysshopsadm.main.draw.activities.ui.DrawActivity;
 import com.valdroide.mycitysshopsadm.main.login.ui.LoginActivity;
 import com.valdroide.mycitysshopsadm.main.navigation.NavigationActivityPresenter;
 import com.valdroide.mycitysshopsadm.main.notification.ui.NotificationActivity;
-import com.valdroide.mycitysshopsadm.main.offer.ui.OfferActivity;
+import com.valdroide.mycitysshopsadm.main.offer.activities.ui.OfferActivity;
+import com.valdroide.mycitysshopsadm.main.offer.fragments.offer.ui.OfferFragment;
 import com.valdroide.mycitysshopsadm.main.support.ui.SupportActivity;
 import com.valdroide.mycitysshopsadm.utils.Utils;
 
@@ -143,13 +144,13 @@ public class NavigationActivity extends AppCompatActivity
             Utils.writelogFile(this, "my_account click Intent AccountActivity(Navigation)");
             startActivity(new Intent(this, AccountActivity.class));
         } else if (id == R.id.offers) {
-            Utils.writelogFile(this, "offers click Intent OfferActivity(Navigation)");
+            Utils.writelogFile(this, "offers click Intent OfferFragment(Navigation)");
             startActivity(new Intent(this, OfferActivity.class));
         } else if (id == R.id.notification) {
             Utils.writelogFile(this, "notification click Intent NotificationActivity(Navigation)");
             startActivity(new Intent(this, NotificationActivity.class));
         } else if (id == R.id.draw) {
-            Utils.writelogFile(this, "notification click Intent NotificationActivity(Navigation)");
+            Utils.writelogFile(this, "draw click Intent DrawActivity(Navigation)");
             startActivity(new Intent(this, DrawActivity.class));
         }
         Utils.writelogFile(this, "closeDrawer(Navigation)");

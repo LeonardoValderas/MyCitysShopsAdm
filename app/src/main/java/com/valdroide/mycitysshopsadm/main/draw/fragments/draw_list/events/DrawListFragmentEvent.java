@@ -13,7 +13,8 @@ public class DrawListFragmentEvent {
     public static final int ERROR = 1;
     public static final int CANCELSUCCESS = 2;
     public static final int FORCEDRAW = 3;
-    public static final int ZERODRAW = 4;
+    public static final int UPDATESUCCESS = 4;
+    public static final int WITHOUTCHANGE = 5;
 
     public int getType() {
         return type;

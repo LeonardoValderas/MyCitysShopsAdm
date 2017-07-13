@@ -1,0 +1,139 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".main.draw.fragments.draw.ui.DrawFragment">
+
+    <RelativeLayout
+        android:id="@+id/activity_draw"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="@drawable/back">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imageViewImage"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_centerHorizontal="true"
+                    android:clickable="true"
+                    android:src="@android:drawable/ic_menu_crop" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/editTextThingHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imageViewImage">
+
+                    <EditText
+                        android:id="@+id/editTextThing"
+                        style="@style/EditText_Style_Account"
+                        android:drawableLeft="@drawable/ic_present"
+                        android:hint="@string/draw_thing"
+                        android:maxLength="20"
+                        android:textSize="25dp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/editTextThingHint"
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <RadioButton
+                        android:id="@+id/radioFollowing"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="60"
+                        android:checked="true"
+                        android:text="@string/only_following"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/radioAll"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="40"
+                        android:text="@string/for_all"
+                        android:textStyle="bold" />
+
+                </RadioGroup>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/editTextDescriptionHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/radioGroup">
+
+                    <EditText
+                        android:id="@+id/editTextDescription"
+                        style="@style/EditText_Style_Account"
+                        android:drawableLeft="@drawable/ic_description"
+                        android:hint="@string/draw_condition_string"
+                        android:maxLength="100"
+                        android:textSize="25dp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearButtons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/editTextDescriptionHint"
+                    android:layout_marginTop="18dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/buttonDateEnd"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_weight="50"
+                        android:background="@drawable/background_oval_button"
+                        android:padding="10dp"
+                        android:text="@string/date_end_draw"
+                        android:textSize="20dp"
+                        android:textColor="@color/colorWhite" />
+
+                    <Button
+                        android:id="@+id/buttonTimeEnd"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_weight="50"
+                        android:background="@drawable/background_oval_button"
+                        android:padding="10dp"
+                        android:textSize="20dp"
+                        android:text="@string/time_end_draw"
+                        android:textColor="@color/colorWhite" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/buttonDateUse"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/linearButtons"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="12dp"
+                    android:textSize="20dp"
+                    android:background="@drawable/background_oval_button"
+                    android:padding="10dp"
+                    android:text="@string/date_limit"
+                    android:textColor="@color/colorWhite" />
+            </RelativeLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+</FrameLayout>

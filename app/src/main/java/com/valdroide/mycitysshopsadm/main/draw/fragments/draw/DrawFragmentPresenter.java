@@ -13,5 +13,6 @@ public interface DrawFragmentPresenter {
     void getCity(Context context);
     void createDraw(Context context, Draw draw);
     void validateBroadcast(Context context);
+    void validateDateShop(Context context);
     void onEventMainThread(DrawFragmentEvent event);
 }

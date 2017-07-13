@@ -9,4 +9,5 @@ public interface DrawListFragmentInteractor {
     void cancelDraw(Context context, Draw draw);
     void forceDraw(Context context, Draw draw);
     void validateBroadcast(Context context);
+    void validateDateShop(Context context);
 }

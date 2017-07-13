@@ -201,7 +201,7 @@
                     style="@style/EditText_Style_Account"
                     android:drawableLeft="@drawable/ic_working_hours"
                     android:hint="@string/hint_working"
-                    android:maxLength="100"
+                    android:maxLength="150"
                     android:textSize="35dp" />
             </android.support.design.widget.TextInputLayout>
 

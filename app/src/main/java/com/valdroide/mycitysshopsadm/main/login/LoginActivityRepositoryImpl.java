@@ -7,6 +7,7 @@ import com.valdroide.mycitysshopsadm.R;
 import com.valdroide.mycitysshopsadm.api.APIService;
 import com.valdroide.mycitysshopsadm.entities.response.ResponseWS;
 import com.valdroide.mycitysshopsadm.entities.response.ResultShop;
+import com.valdroide.mycitysshopsadm.entities.shop.Login;
 import com.valdroide.mycitysshopsadm.entities.shop.MyPlace;
 import com.valdroide.mycitysshopsadm.entities.shop.Shop;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
@@ -48,14 +49,13 @@ public class LoginActivityRepositoryImpl implements LoginActivityRepository {
                                     Shop shop = response.body().getShop();
                                     if (shop != null) {
                                         Utils.writelogFile(context, "shop != null y save shop (Login, Repository)");
-                                        shop.setUSER(user);
-                                        shop.setPASS(pass);
                                         shop.save();
+                                        setLogin(user, pass);
                                         Utils.setIdShop(context, shop.getID_SHOP_KEY());
                                         Utils.setNameShop(context, shop.getSHOP());
                                         post(LoginActivityEvent.LOGIN);
                                     } else {
-                                        Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Login, Repository)");
+                                        Utils.writelogFile(context, "Base de datos error(Login, Repository)");
                                         post(LoginActivityEvent.ERROR, context.getString(R.string.error_data_base));
                                     }
                                 } else {
@@ -63,11 +63,11 @@ public class LoginActivityRepositoryImpl implements LoginActivityRepository {
                                     post(LoginActivityEvent.ERROR, responseWS.getMessage());
                                 }
                             } else {
-                                Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Login, Repository)");
+                                Utils.writelogFile(context, "Base de datos error(Login, Repository)");
                                 post(LoginActivityEvent.ERROR, context.getString(R.string.error_data_base));
                             }
                         } else {
-                            Utils.writelogFile(context, " Base de datos error " + context.getString(R.string.error_data_base) + "(Login, Repository)");
+                            Utils.writelogFile(context, "Base de datos error(Login, Repository)");
                             post(LoginActivityEvent.ERROR, context.getString(R.string.error_data_base));
                         }
                     }
@@ -83,9 +83,16 @@ public class LoginActivityRepositoryImpl implements LoginActivityRepository {
                 post(LoginActivityEvent.ERROR, e.getMessage());
             }
         } else {
-            Utils.writelogFile(context, " Internet error " + context.getString(R.string.error_internet) + "(Login, Repository)");
+            Utils.writelogFile(context, "Internet error(Login, Repository)");
             post(LoginActivityEvent.ERROR, context.getString(R.string.error_internet));
         }
+    }
+
+    private void setLogin(String user, String pass){
+        Login login = new Login();
+        login.setUSER(user);
+        login.setPASS(pass);
+        login.save();
     }
 
     @Override
@@ -125,7 +132,7 @@ public class LoginActivityRepositoryImpl implements LoginActivityRepository {
                 post(LoginActivityEvent.ERROR, e.getMessage());
             }
         } else {
-            Utils.writelogFile(context, " Internet error " + context.getString(R.string.error_internet) + "(Login, Repository)");
+            Utils.writelogFile(context, "Internet error(Login, Repository)");
             post(LoginActivityEvent.ERROR, context.getString(R.string.error_internet));
         }
     }

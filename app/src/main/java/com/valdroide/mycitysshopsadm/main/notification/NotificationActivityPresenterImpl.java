@@ -53,6 +53,11 @@ public class NotificationActivityPresenterImpl implements NotificationActivityPr
     }
 
     @Override
+    public void validateDateShop(Context context) {
+        interactor.validateDateShop(context);
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(NotificationActivityEvent event) {
         if (this.view != null) {
@@ -72,6 +77,10 @@ public class NotificationActivityPresenterImpl implements NotificationActivityPr
                 case NotificationActivityEvent.SENDADM:
                     view.hidePorgressDialog();
                     view.setSuccessAdm();
+                    break;
+                case NotificationActivityEvent.UPDATESUCCESS:
+                    view.validateDate();
+                    view.hidePorgressDialog();
                     break;
             }
         }

@@ -13,4 +13,5 @@ public interface DrawFragmentView {
     void createSuccess();
     void showProgressDialog();
     void hidePorgressDialog();
+    void refreshAdapter();
 }

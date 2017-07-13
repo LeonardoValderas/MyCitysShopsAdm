@@ -1,14 +1,17 @@
 package com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.ui;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,13 +40,16 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
     RecyclerView recyclerView;
     @Bind(R.id.conteiner)
     FrameLayout conteiner;
-    private ProgressDialog pDialog;
+    @Bind(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
     @Inject
     DrawListFragmentAdapter adapter;
     @Inject
     DrawListFragmentPresenter presenter;
-    AlertDialog.Builder builder;
+
+    private AlertDialog.Builder builder;
     private int position;
+    private ProgressDialog pDialog;
 
     public DrawListFragment() {
         // Required empty public constructor
@@ -54,6 +60,8 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_draw_list, container, false);
         ButterKnife.bind(this, view);
+        initDialog();
+        initSwipeRefreshLayout(getActivity());
         return view;
     }
 
@@ -62,7 +70,6 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setupInjection();
-        initDialog();
         presenter.onCreate();
         initRecyclerViewAdapter();
         presenter.getDraws(getActivity());
@@ -72,6 +79,46 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
         Utils.writelogFile(getActivity(), "setupInjection(DrawListFragment)");
         MyCitysShopsAdmApp app = (MyCitysShopsAdmApp) getActivity().getApplication();
         app.getDrawListFragmentComponent(this, this, this).inject(this);
+    }
+
+    private void initSwipeRefreshLayout(final Context context) {
+        Utils.writelogFile(getActivity(), "initSwipeRefreshLayout(offerList)");
+        try {
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Utils.writelogFile(context, "onRefresh(DrawFragment)");
+                    presenter.validateDateShop(context);
+                }
+            });
+        } catch (Exception e) {
+            Utils.writelogFile(getActivity(), "initSwipeRefreshLayout catch error " + e.getMessage() + "(offerList)");
+            setError(e.getMessage());
+        }
+    }
+
+    @Override
+    public void withoutChange() {
+        verifySwipeRefresh();
+    }
+
+    @Override
+    public void refreshDateShops() {
+        presenter.getDraws(getActivity());
+    }
+
+    private void verifySwipeRefresh() {
+        Utils.writelogFile(getActivity(), "verifySwipeRefresh(offerList)");
+        try {
+            if (swipeRefreshLayout != null) {
+                if (swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        } catch (Exception e) {
+            Utils.writelogFile(getActivity(), "verifySwipeRefresh catch error " + e.getMessage() + "(offerList)");
+            setError(e.getMessage());
+        }
     }
 
     private void initRecyclerViewAdapter() {
@@ -89,7 +136,7 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
 
     public void refresh(boolean isBroadcast) {
         presenter.getDraws(getActivity());
-        if(isBroadcast)
+        if (isBroadcast)
             presenter.validateBroadcast(getActivity());
     }
 
@@ -103,6 +150,7 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
     @Override
     public void setDraws(List<Draw> draws) {
         Utils.writelogFile(getActivity(), "setDraws(DrawListFragment)");
+        verifySwipeRefresh();
         adapter.setDraw(draws);
     }
 
@@ -165,8 +213,13 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
                 showProgressDialog();
                 draw.setIS_ACTIVE(0);
                 closeDraw(draw);
-            } else {
-                createDialog("Desea cerra el sorteo?", draw, 0);
+            } else if (draw.getIS_ACTIVE() == 1) {
+                if (Utils.validateExpirateCurrentTime(draw.getEND_DATE(), getString(R.string.format_draw))) {
+                    showProgressDialog();
+                    presenter.forceDraw(getActivity(), draw);
+                } else {
+                    createDialog("Desea cerra el sorteo?", draw, 0);
+                }
             }
         }
     }

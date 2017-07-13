@@ -26,4 +26,9 @@ public class DrawFragmentInteractorImpl implements DrawFragmentInteractor {
     public void getCity(Context context) {
         repository.getCity(context);
     }
+
+    @Override
+    public void validateDateShop(Context context) {
+        repository.validateDateShop(context);
+    }
 }

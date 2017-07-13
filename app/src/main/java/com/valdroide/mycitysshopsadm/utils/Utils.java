@@ -81,13 +81,13 @@ public class Utils {
 //    public static String URL_IMAGE_OFFER = "http://myd.esy.es/my_citys_shops_adm/offer/image_offer/";
 
     //DEB
-    public static String URL_IMAGE = "http://mycitysshops.esy.es/deb/my_citys_shops_adm/account/image_account/";
-    public static String URL_IMAGE_OFFER = "http://mycitysshops.esy.es/deb/my_citys_shops_adm/offer/image_offer/";
-    public static String URL_IMAGE_DRAW = "http://mycitysshops.esy.es/deb/my_citys_shops_adm/draw/image_draw/";
+//    public static String URL_IMAGE = "http://mycitysshops.esy.es/deb/my_citys_shops_adm/account/image_account/";
+//    public static String URL_IMAGE_OFFER = "http://mycitysshops.esy.es/deb/my_citys_shops_adm/offer/image_offer/";
+ //   public static String URL_IMAGE_DRAW = "http://mycitysshops.esy.es/deb/my_citys_shops_adm/draw/image_draw/";
     //PRODUCT
-//    public static String URL_IMAGE = "http://mycitysshops.esy.es/my_citys_shops_adm/account/image_account/";
-//    public static String URL_IMAGE_OFFER = "http://mycitysshops.esy.es/my_citys_shops_adm/offer/image_offer/";
-//    public static String URL_IMAGE_DRAW = "http://mycitysshops.esy.es/my_citys_shops_adm/draw/image_draw/";
+    public static String URL_IMAGE = "http://mycitysshops.esy.es/my_citys_shops_adm/account/image_account/";
+    public static String URL_IMAGE_OFFER = "http://mycitysshops.esy.es/my_citys_shops_adm/offer/image_offer/";
+    public static String URL_IMAGE_DRAW = "http://mycitysshops.esy.es/my_citys_shops_adm/draw/image_draw/";
 
     //FECHAS
     //"dd/MM/yyyy" log file

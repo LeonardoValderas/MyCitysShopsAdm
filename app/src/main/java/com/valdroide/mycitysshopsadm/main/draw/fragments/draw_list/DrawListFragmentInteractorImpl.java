@@ -31,4 +31,9 @@ public class DrawListFragmentInteractorImpl implements DrawListFragmentInteracto
     public void validateBroadcast(Context context) {
         repository.validateBroadcast(context);
     }
+
+    @Override
+    public void validateDateShop(Context context) {
+        repository.validateDateShop(context);
+    }
 }

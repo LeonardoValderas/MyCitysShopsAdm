@@ -57,17 +57,24 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         initToolBar();
         editTextEmailHint.setHint(getString(R.string.hint_notification));
         isADM = isADM();
-        if (!isADM)
-            presenter.validateNotificationExpire(this, Utils.getFechaLogFile("dd/MM/yyyy"));
-        else
-            hidePorgressDialog();
-
+        validateDateShop();
     }
 
     private void initToolBar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.notification_title);
+    }
+
+    private void validateDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void validateDateShop() {
+        Utils.writelogFile(this, "validateDateShop(Notification)");
+        showProgressDialog();
+        presenter.validateDateShop(this);
     }
 
     private boolean isADM() {
@@ -93,7 +100,8 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                 Utils.showSnackBar(conteiner, getString(R.string.notification_empty));
             else {
                 Utils.writelogFile(this, "sendNotification sendNotification(Notification)");
-                showProgressDialog();
+                validateDateShop();
+                validateDialog();
                 if (isADM)
                     presenter.sendNotificationAdm(this, editTextEmail.getText().toString());
                 else
@@ -147,6 +155,15 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
     public void hidePorgressDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    @Override
+    public void validateDate() {
+        if (!isADM) {
+            validateDialog();
+            presenter.validateNotificationExpire(this, Utils.getFechaLogFile("dd/MM/yyyy"));
+        }else
+            hidePorgressDialog();
     }
 
     private void setEnable(boolean isEnable, String date) {

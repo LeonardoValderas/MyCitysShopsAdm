@@ -6,11 +6,15 @@ import com.valdroide.mycitysshopsadm.entities.response.ResultPlace;
 import com.valdroide.mycitysshopsadm.entities.response.ResultShop;
 import com.valdroide.mycitysshopsadm.entities.response.ResultUser;
 
+import java.util.List;
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.QueryMap;
 
 
 public interface APIService {
@@ -27,7 +31,7 @@ public interface APIService {
                                     @Field("facebook") String facebook, @Field("instagram") String instagram,
                                     @Field("twitter") String twitter, @Field("snapchat") String snapchat,
                                     @Field("latitud") String latitud, @Field("longitud") String longitud,
-                                    @Field("adrress") String adrress, @Field("date_unique") String date_unique);
+                                    @Field("adrress") String adrress, @Field("date_unique") String date_unique, @Field("user_change") String user_change);
 
     //OFFER
     @FormUrlEncoded
@@ -35,7 +39,8 @@ public interface APIService {
     Call<ResultPlace> insertOffer(@Field("id_shop_foreign") int id_shop, @Field("id_city_foreign") int id_city_foreign,
                                   @Field("title") String title, @Field("offer") String offer,
                                   @Field("url_image") String url_image, @Field("name_image") String name_image,
-                                  @Field("date_unique") String date_unique, @Field("encode") String encode);
+                                  @Field("date_unique") String date_unique, @Field("encode") String encode,
+                                  @Field("user_change") String user_change);
 
     @FormUrlEncoded
     @POST("offer/updateOffer.php")
@@ -44,17 +49,22 @@ public interface APIService {
                                   @Field("offer") String offer, @Field("url_image") String url_image,
                                   @Field("name_image") String name_image, @Field("is_active") int is_active,
                                   @Field("date_unique") String date_edit, @Field("encode") String encode,
-                                  @Field("name_before") String name_before);
+                                  @Field("name_before") String name_before, @Field("user_change") String user_change);
 
     @FormUrlEncoded
     @POST("offer/switchOffer.php")
     Call<ResultPlace> switchOffer(@Field("id_offer") int id_offer, @Field("id_shop_foreign") int id_shop,
                                   @Field("id_city_foreign") int id_city_foreign, @Field("is_active") int is_active,
-                                  @Field("date_unique") String date_edit);
+                                  @Field("date_unique") String date_edit, @Field("user_change") String user_change);
+
+//    @FormUrlEncoded
+//    @POST("offer/deleteOffer.php")
+//    Call<ResultPlace> deleteOffer(@Field("id_offer") int id_offer, @Field("id_shop_foreign") int id_shop,
+//                                  @Field("id_city_foreign") int id_city, @Field("date_unique") String date_unique);
 
     @FormUrlEncoded
     @POST("offer/deleteOffer.php")
-    Call<ResultPlace> deleteOffer(@Field("id_offer") int id_offer, @Field("id_shop_foreign") int id_shop,
+    Call<ResultPlace> deleteOffer(@Field("ids[]") List<Integer> ids, @Field("id_shop_foreign") int id_shop,
                                   @Field("id_city_foreign") int id_city, @Field("date_unique") String date_unique);
 
     //NOTIFICATION
@@ -63,7 +73,7 @@ public interface APIService {
     Call<ResultPlace> sendNotification(@Field("id_shop_foreign") int id_shop, @Field("id_city_foreign") int id_city,
                                        @Field("shop") String shop, @Field("message") String message,
                                        @Field("url_shop") String url_shop, @Field("date_end") String date_end,
-                                       @Field("date_unique") String date_unique);
+                                       @Field("date_unique") String date_unique, @Field("user_change") String user_change);
     @FormUrlEncoded
     @POST("fcm/sendNotificationAdm.php")
     Call<ResponseWS> sendNotificationAdm(@Field("id_city_foreign") int id_city,
@@ -84,7 +94,8 @@ public interface APIService {
                                       @Field("date_account") String date_account,
                                       @Field("date_offer") String date_offer,
                                       @Field("date_notification") String date_notification,
-                                      @Field("date_shop_date") String date_user_date);
+                                      @Field("date_draw") String date_draw,
+                                      @Field("date_shop_date") String date_user_date, @Field("date_support") String date_support);
 
     @FormUrlEncoded
     @POST("splash_user/getShopData.php")
@@ -107,14 +118,14 @@ public interface APIService {
                                 @Field("end_date") String end_date, @Field("limit_date") String limit_date,
                                 @Field("url_logo") String url_logo, @Field("name_logo") String name_logo,
                                 @Field("date_unique") String date_unique, @Field("encode") String encode,
-                                @Field("shop_name") String shop_name);
+                                @Field("shop_name") String shop_name, @Field("user_change") String user_change);
     @FormUrlEncoded
     @POST("draw/cancelDraw.php")
     Call<ResponseWS> cancelDraw(@Field("id_shop_foreign") int id_shop, @Field("id_city_foreign") int id_city_foreign,
                                 @Field("id_draw") int id_draw, @Field("is_cancel") int is_cancel,
                                 @Field("is_take") int is_take,  @Field("is_limit") int is_limit, @Field("is_zero") int zero,
-                                @Field("for_following") int for_following,
-                                @Field("shop_name") String shop_name, @Field("date_unique") String date_unique);
+                                @Field("for_following") int for_following, @Field("shop_name") String shop_name,
+                                @Field("date_unique") String date_unique, @Field("user_change") String user_change);
 
     @FormUrlEncoded
     @POST("draw/getWinnerDraw.php")

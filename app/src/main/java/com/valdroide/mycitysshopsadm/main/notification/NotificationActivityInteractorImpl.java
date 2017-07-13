@@ -24,4 +24,9 @@ public class NotificationActivityInteractorImpl implements NotificationActivityI
     public void sendNotificationAdm(Context context, String notification) {
         repository.sendNotificationAdm(context, notification);
     }
+
+    @Override
+    public void validateDateShop(Context context) {
+        repository.validateDateShop(context);
+    }
 }

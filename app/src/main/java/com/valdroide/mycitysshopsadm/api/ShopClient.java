@@ -14,9 +14,9 @@ public class ShopClient {
 
 
     //DEB
-    private final static String BASE_URL = "http://mycitysshops.esy.es/deb/my_citys_shops_adm/";
+   // private final static String BASE_URL = "http://mycitysshops.esy.es/deb/my_citys_shops_adm/";
     //PRODUCCION
-  //  private final static String BASE_URL = "http://mycitysshops.esy.es/my_citys_shops_adm/";
+    private final static String BASE_URL = "http://mycitysshops.esy.es/my_citys_shops_adm/";
 
     public ShopClient() {
         retrofit = new Retrofit.Builder()

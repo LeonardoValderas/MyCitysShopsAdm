@@ -54,6 +54,11 @@ public class AccountActivityPresenterImpl implements AccountActivityPresenter {
     }
 
     @Override
+    public void validateDateShop(Context context) {
+        interactor.validateDateShop(context);
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(AccountActivityEvent event) {
         if (this.view != null) {
@@ -73,8 +78,16 @@ public class AccountActivityPresenterImpl implements AccountActivityPresenter {
                 case AccountActivityEvent.ERROR:
                     view.hidePorgressDialog();
                     view.error(event.getError());
+                    break;
                 case AccountActivityEvent.CITY:
                     view.setCity(event.getCity());
+                    break;
+                case AccountActivityEvent.UPDATESUCCESS:
+                    view.getAccount();
+                    break;
+//                case AccountActivityEvent.UPDATEWHITOUTCHANGE:
+//                    view.hidePorgressDialog();
+//                    break;
             }
         }
     }

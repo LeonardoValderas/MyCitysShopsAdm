@@ -58,23 +58,25 @@ public class DrawListFragmentAdapter extends RecyclerView.Adapter<DrawListFragme
         holder.textViewEndDate.setText(fromHtml);
         fromHtml = Utils.fromHtml("<b>" + fragment.getActivity().getString(R.string.date_limit_hint) + "</b>" + " " + draw.getLIMIT_DATE() +" (inclusive)");
         holder.textViewLimitDate.setText(fromHtml);
+
         if (!draw.getWinner().isEmpty() && draw.getIS_ACTIVE() == 0) {
             holder.textViewError.setVisibility(View.GONE);
             holder.textViewWinner.setVisibility(View.VISIBLE);
             holder.textViewWinner.setText(draw.getWinner());
             holder.textViewWinner.setTextColor(ContextCompat.getColor(fragment.getActivity(), R.color.colorAccent));
-        } else
-            holder.textViewWinner.setVisibility(View.GONE);
-        if (draw.getERROR_REPORTING() == 1) {
-            holder.textViewError.setVisibility(View.VISIBLE);
-            holder.textViewError.setText(R.string.error_reporting_draw_adapter);
-            holder.textViewError.setTextColor(ContextCompat.getColor(fragment.getActivity(), R.color.colorRed));
-        } else if (draw.getIS_ZERO() == 1) {
-            holder.textViewError.setVisibility(View.VISIBLE);
-            holder.textViewError.setText(R.string.draw_zero_adapter);
-            holder.textViewError.setTextColor(ContextCompat.getColor(fragment.getActivity(), R.color.colorAccent));
         } else {
-            holder.textViewError.setVisibility(View.GONE);
+            holder.textViewWinner.setVisibility(View.GONE);
+            if (draw.getERROR_REPORTING() == 1) {
+                holder.textViewError.setVisibility(View.VISIBLE);
+                holder.textViewError.setText(R.string.error_reporting_draw_adapter);
+                holder.textViewError.setTextColor(ContextCompat.getColor(fragment.getActivity(), R.color.colorRed));
+            } else if (draw.getIS_ZERO() == 1) {
+                holder.textViewError.setVisibility(View.VISIBLE);
+                holder.textViewError.setText(R.string.draw_zero_adapter);
+                holder.textViewError.setTextColor(ContextCompat.getColor(fragment.getActivity(), R.color.colorAccent));
+            } else {
+                holder.textViewError.setVisibility(View.GONE);
+            }
         }
         holder.setOnItemClickListener(onItemClickListener, position, draw);
     }

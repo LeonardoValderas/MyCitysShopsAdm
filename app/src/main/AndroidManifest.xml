@@ -41,7 +41,7 @@
                 android:value=".main.navigation.ui.NavigationActivity" />
         </activity>
         <activity android:name=".main.map.ui.MapActivity" />
-        <activity android:name=".main.offer.ui.OfferActivity">
+        <activity android:name=".main.offer.activities.ui.OfferActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".main.navigation.ui.NavigationActivity" />
@@ -81,7 +81,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".main.navigation.ui.NavigationActivity" />
         </activity>
-        <activity android:name=".main.draw.activity.ui.DrawActivity">
+        <activity android:name=".main.draw.activities.ui.DrawActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".main.navigation.ui.NavigationActivity" />

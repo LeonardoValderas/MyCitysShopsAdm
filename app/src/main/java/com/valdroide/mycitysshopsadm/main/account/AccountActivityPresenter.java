@@ -13,6 +13,7 @@ public interface AccountActivityPresenter {
     void getCity(Context context);
     void getAccount(Context context);
     void updateAccount(Context context, Account account);
+    void validateDateShop(Context context);
     void onEventMainThread(AccountActivityEvent event);
 
 }

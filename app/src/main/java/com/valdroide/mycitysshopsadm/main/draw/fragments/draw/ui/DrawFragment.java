@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.text.InputFilter;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -91,7 +92,7 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
     private Calendar calendar = Calendar.getInstance();
     private Calendar calenda = Calendar.getInstance();
     private boolean isEnd = true;
-
+    private MenuItem itemSave;
 
     public DrawFragment() {
     }
@@ -101,6 +102,7 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_draw, container, false);
         ButterKnife.bind(this, view);
+        editTextThing.setFilters(new InputFilter[]{new InputFilter.AllCaps(), new InputFilter.LengthFilter(20)});
         return view;
     }
 
@@ -116,8 +118,15 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
         super.onActivityCreated(savedInstanceState);
         setupInjection();
         presenter.onCreate();
-        presenter.getCity(getActivity());
         initDialog();
+        presenter.getCity(getActivity());
+        validateDateShop();
+    }
+
+    private void validateDateShop() {
+        Utils.writelogFile(getActivity(), "validateDateShop(DrawFragment)");
+        showProgressDialog();
+        presenter.validateDateShop(getActivity());
     }
 
     private void setupInjection() {
@@ -150,7 +159,7 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
             String start_date = Utils.getFechaOficialSeparate();
 
             return new Draw(0, Utils.getIdShop(getActivity()), Utils.getIdCity(getActivity()), descrip, for_following,
-                    condition, start_date, end_date, limit_date, url_image, name_image,
+                    condition, start_date, end_date+":00", limit_date, url_image, name_image,
                     start_date, encode);
         } catch (Exception e) {
             Utils.writelogFile(getActivity(), "fillDraw error: " + e.getMessage() + " (DrawFragment)");
@@ -175,6 +184,7 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
             imageByte = null;
             isEnd = true;
             imageViewImage.setImageResource(android.R.drawable.ic_menu_crop);
+            itemSave.setEnabled(true);
         } catch (Exception e) {
             Utils.writelogFile(getActivity(), "cleanView error: " + e.getMessage() + " (DrawFragment)");
             setError(e.getMessage());
@@ -195,6 +205,7 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
     @Override
     public void setError(String msg) {
         Utils.writelogFile(getActivity(), "setError " + msg + " (DrawFragment)");
+        itemSave.setEnabled(true);
         Utils.showSnackBar(conteiner, msg);
     }
 
@@ -267,6 +278,11 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
             pDialog.dismiss();
     }
 
+    @Override
+    public void refreshAdapter() {
+        communication.refresh(false);
+    }
+
     private void pickerDate() {
         Utils.writelogFile(getActivity(), "pickerDate(DrawFragment)");
         new DatePickerDialog(getActivity(), d, calendar.get(Calendar.YEAR),
@@ -315,22 +331,25 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALERY) {
-            Uri imageUri = CropImage.getPickImageResultUri(getActivity(), data);
-            Utils.startCropImageActivity(null, this, imageUri);
-        }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (result != null) {
-                if (resultCode == RESULT_OK) {
-                    assignImage(result.getUri());
-                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    if (!result.getError().toString().contains("ENOENT"))
-                        Utils.showSnackBar(conteiner, "Error al asignar imagen: " + result.getError());
+        try {
+            if (requestCode == GALERY) {
+                Uri imageUri = CropImage.getPickImageResultUri(getActivity(), data);
+                Utils.startCropImageActivity(null, this, imageUri);
+            }
+            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (result != null) {
+                    if (resultCode == RESULT_OK) {
+                        assignImage(result.getUri());
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        if (!result.getError().toString().contains("ENOENT"))
+                            Utils.showSnackBar(conteiner, "Error al asignar imagen: " + result.getError());
+                    }
                 }
             }
-        } else {
-            Utils.showSnackBar(conteiner, "Error al asignar imagen.");
+        } catch (Exception e) {
+            Utils.writelogFile(getActivity(), "onActivityResult image() error: " + e.getMessage() + " (Draw)");
+            setError(e.getMessage());
         }
     }
 
@@ -365,35 +384,53 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    private void validateDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
         if (id == R.id.action_save) {
+            item.setEnabled(false);
+            itemSave = item;
             try {
                 Utils.writelogFile(getActivity(), "action_save click y  presenter.createDraw(DrawFragment)");
                 String dateTime = date + " " + time;
-                if (imageByte == null)
-                    Utils.showSnackBar(conteiner, getString(R.string.error_image));
-                else if (editTextThing.getText().toString().isEmpty())
-                    Utils.showSnackBar(conteiner, getString(R.string.object_empty));
-                else if (editTextDescription.getText().toString().isEmpty())
-                    Utils.showSnackBar(conteiner, getString(R.string.conditions_empty));
-                else if (buttonDateEnd.getText().toString().equalsIgnoreCase(getString(R.string.date_end_draw)))
-                    Utils.showSnackBar(conteiner, getString(R.string.end_date_empty));
-                else if (buttonTimeEnd.getText().toString().equalsIgnoreCase(getString(R.string.time_end_draw)))
-                    Utils.showSnackBar(conteiner, getString(R.string.time_date_empty));
-                else if (Utils.validateExpirateCurrentTime(dateTime, getString(R.string.format_draw)))
-                    Utils.showSnackBar(conteiner, getString(R.string.data_end_before));
-                else if (buttonDateUse.getText().toString().equalsIgnoreCase(getString(R.string.date_limit)))
-                    Utils.showSnackBar(conteiner, getString(R.string.date_limit_empty));
-                else if (Utils.validateExpirateVsLimit(date, limitDate, "yyyy-MM-dd"))
-                    Utils.showSnackBar(conteiner, getString(R.string.error_dateLimit_vs_dateExpirate));
-                else if (city == null || city.isEmpty())
-                    Utils.showSnackBar(conteiner, getString(R.string.city_name_error));
-                else {
-                    pDialog.show();
+                pDialog.show();
+                presenter.getCity(getActivity());
 
+                if (imageByte == null) {
+                    hidePorgressDialog();
+                    setError(getString(R.string.error_image));
+                } else if (editTextThing.getText().toString().isEmpty()) {
+                    hidePorgressDialog();
+                    setError(getString(R.string.object_empty));
+                } else if (editTextDescription.getText().toString().isEmpty()) {
+                    hidePorgressDialog();
+                    setError(getString(R.string.conditions_empty));
+                } else if (buttonDateEnd.getText().toString().equalsIgnoreCase(getString(R.string.date_end_draw))) {
+                    hidePorgressDialog();
+                    setError(getString(R.string.end_date_empty));
+                } else if (buttonTimeEnd.getText().toString().equalsIgnoreCase(getString(R.string.time_end_draw))) {
+                    hidePorgressDialog();
+                    setError(getString(R.string.time_date_empty));
+                } else if (Utils.validateExpirateCurrentTime(dateTime, getString(R.string.format_draw))) {
+                    hidePorgressDialog();
+                    setError(getString(R.string.data_end_before));
+                } else if (buttonDateUse.getText().toString().equalsIgnoreCase(getString(R.string.date_limit))) {
+                    hidePorgressDialog();
+                    setError(getString(R.string.date_limit_empty));
+                } else if (Utils.validateExpirateVsLimit(date, limitDate, "yyyy-MM-dd")) {
+                    hidePorgressDialog();
+                    setError(getString(R.string.error_dateLimit_vs_dateExpirate));
+                } else if (this.city == null || this.city.isEmpty()) {
+                    hidePorgressDialog();
+                    setError(getString(R.string.city_name_error));
+                } else {
+                    validateDialog();
                     int radioSelected;
                     if (radioFollowing.isChecked()) {
                         Utils.writelogFile(getActivity(), "radioFollowing.isChecked()(DrawFragment)");
@@ -402,6 +439,7 @@ public class DrawFragment extends Fragment implements DrawFragmentView {
                         Utils.writelogFile(getActivity(), "!radioFollowing.isChecked()(DrawFragment)");
                         radioSelected = 1;
                     }
+
                     presenter.createDraw(getActivity(),
                             fillDraw(editTextThing.getText().toString(), dateTime, buttonDateUse.getText().toString(),
                                     radioSelected, editTextDescription.getText().toString()));

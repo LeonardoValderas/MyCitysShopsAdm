@@ -11,5 +11,6 @@ public interface NotificationActivityPresenter {
     void sendNotificationAdm(Context context, String notification);
     void validateNotificationExpire(Context context, String now);
     NotificationActivityView getView();
+    void validateDateShop(Context context);
     void onEventMainThread(NotificationActivityEvent event);
 }

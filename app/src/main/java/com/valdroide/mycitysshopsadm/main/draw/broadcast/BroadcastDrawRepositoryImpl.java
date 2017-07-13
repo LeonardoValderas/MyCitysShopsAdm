@@ -14,7 +14,6 @@ import com.valdroide.mycitysshopsadm.entities.response.ResultDraw;
 import com.valdroide.mycitysshopsadm.entities.shop.DateShop;
 import com.valdroide.mycitysshopsadm.entities.shop.Draw;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
-import com.valdroide.mycitysshopsadm.main.draw.activity.ui.DrawActivity;
 import com.valdroide.mycitysshopsadm.main.draw.broadcast.events.BroadcastDrawEvent;
 import com.valdroide.mycitysshopsadm.utils.Utils;
 
@@ -77,6 +76,7 @@ public class BroadcastDrawRepositoryImpl implements BroadcastDrawRepository {
                                                 draw.setNAME(drawAux.getNAME());
                                                 draw.setDNI(drawAux.getDNI());
                                                 draw.setIS_ACTIVE(0);
+                                                draw.setERROR_REPORTING(0);
                                                 draw.setDATE_UNIQUE(date);
                                                 draw.update();
                                                 Utils.setIdDrawEnd(context, 0);
@@ -84,55 +84,57 @@ public class BroadcastDrawRepositoryImpl implements BroadcastDrawRepository {
                                                 post(BroadcastDrawEvent.WINNIER);
                                             } else {
                                                 Utils.writelogFile(context, "drawAux data isEmpty or null(Broadcast, Repository)");
-                                                setError(draw, context.getString(R.string.error_draw));
+                                                setError(context, draw, context.getString(R.string.error_draw));
                                             }
                                         } else {
                                             Utils.writelogFile(context, "drawAux == null (Broadcast, Repository)");
-                                            setError(draw, context.getString(R.string.error_draw));
+                                            setError(context, draw, context.getString(R.string.error_draw));
                                         }
                                     } else if (responseWS.getSuccess().equals("4")) {
                                         draw.setIS_ZERO(1);
                                         draw.setDATE_UNIQUE(date);
+                                        draw.setERROR_REPORTING(0);
                                         draw.setIS_ACTIVE(0);
                                         draw.update();
                                         post(BroadcastDrawEvent.WITHOUTPARTICIPATE);
                                     } else {
                                         Utils.writelogFile(context, "getSuccess = error " + responseWS.getMessage() + "(Broadcast, Repository)");
-                                        setError(draw, responseWS.getMessage());
+                                        setError(context, draw, responseWS.getMessage());
                                     }
                                 } else {
                                     Utils.writelogFile(context, "responseWS == null (Broadcast, Repository)");
-                                    setError(draw, context.getString(R.string.error_draw));
+                                    setError(context, draw, context.getString(R.string.error_draw));
                                 }
                             } else {
                                 Utils.writelogFile(context, "!response.isSuccessful()(Broadcast, Repository)");
-                                setError(draw, context.getString(R.string.error_draw));
+                                setError(context, draw, context.getString(R.string.error_draw));
                             }
                         }
 
                         @Override
                         public void onFailure(Call<ResultDraw> call, Throwable t) {
                             Utils.writelogFile(context, "Call error " + t.getMessage() + "(Broadcast, Repository)");
-                            setError(draw, t.getMessage());
+                            setError(context, draw, t.getMessage());
                         }
                     });
                 } catch (Exception e) {
                     Utils.writelogFile(context, "catch error " + e.getMessage() + "(Broadcast, Repository)");
-                    setError(draw, e.getMessage());
+                    setError(context, draw, e.getMessage());
                 }
             } else {
                 Utils.writelogFile(context, "Internet error (Broadcast, Repository)");
-                setError(draw, context.getString(R.string.error_internet));
+                setError(context, draw, context.getString(R.string.error_internet));
             }
         } else {
             Utils.writelogFile(context, "Name isEmpty(Broadcast, Repository)");
-            setError(draw, context.getString(R.string.error_draw));
+            setError(context, draw, context.getString(R.string.error_draw));
         }
     }
 
-    private void setError(Draw draw, String error){
+    private void setError(Context context, Draw draw, String error){
         draw.setERROR_REPORTING(1);
         draw.update();
+        Utils.setIdDrawEnd(context, 0);
         post(BroadcastDrawEvent.ERROR, error);
     }
 

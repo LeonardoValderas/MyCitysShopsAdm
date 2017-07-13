@@ -117,7 +117,7 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
     @Override
     public void goToPlace() {
         Utils.writelogFile(this, "Metodo goToPlace Intente Place(Login)");
-        startActivity(new Intent(this, PlaceActivity.class));
+        startActivity(new Intent(this, SplashActivity.class));
     }
 
     @Override

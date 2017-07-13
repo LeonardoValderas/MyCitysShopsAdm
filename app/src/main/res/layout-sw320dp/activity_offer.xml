@@ -6,17 +6,19 @@
     android:layout_height="match_parent"
     android:background="@drawable/back"
     android:orientation="vertical"
-    tools:context=".main.offer.ui.OfferActivity">
+    tools:context=".main.offer.fragments.offer.ui.OfferFragment">
 
     <TextView
         android:id="@+id/textViewQuantity"
         style="@style/TextView_Quantity_Offer"
+        android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
         android:text="Actividades disponibles: 0" />
 
 
     <ScrollView
         android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -62,11 +64,4 @@
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
     </ScrollView>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp" />
-
 </LinearLayout>

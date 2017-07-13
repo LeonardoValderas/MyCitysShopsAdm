@@ -81,9 +81,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         setContentView(R.layout.activity_account);
         Utils.writelogFile(this, "Se inicia ButterKnife(Account)");
         ButterKnife.bind(this);
-        Utils.writelogFile(this, "Se inicia Injection(Account)");
         setupInjection();
-        Utils.writelogFile(this, "inicia dialog (Account)");
         initDialog();
         Utils.writelogFile(this, "Se inicia presenter Oncreate(Account)");
         presenter.onCreate();
@@ -93,8 +91,10 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         Utils.writelogFile(this, "Se inicia toolbar setTitle(Account)");
         getSupportActionBar().setTitle(R.string.my_account_title);
         setEnable(false);
-        Utils.writelogFile(this, "presenter.getAccount() (Account)");
-        presenter.getAccount(this);
+        showProgressDialog();
+        validateDateShop();
+//        Utils.writelogFile(this, "presenter.getAccount() (Account)");
+//        presenter.getAccount(this);
         Utils.writelogFile(this, "getBooleanExtra() isMap; (Account)");
         isMap = getIntent().getBooleanExtra("isMap", false);
         if (isMap) {
@@ -113,9 +113,15 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
     }
 
     private void initDialog() {
+        Utils.writelogFile(this, "inicia dialog (Account)");
         pDialog = new ProgressDialog(this);
         pDialog.setMessage(getString(R.string.processing));
         pDialog.setCancelable(false);
+    }
+
+    private void validateDateShop() {
+        Utils.writelogFile(this, "validateDateShop(Account)");
+        presenter.validateDateShop(this);
     }
 
     private void setEnable(boolean isEnable) {
@@ -182,6 +188,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
     }
 
     private void setupInjection() {
+        Utils.writelogFile(this, "Se inicia Injection(Account)");
         MyCitysShopsAdmApp app = (MyCitysShopsAdmApp) getApplication();
         app.getAccountActivityComponent(this, this).inject(this);
     }
@@ -245,13 +252,21 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
 
     @Override
     public void showProgressDialog() {
+        Utils.writelogFile(this, "showProgressDialog(Account)");
         pDialog.show();
     }
 
     @Override
     public void hidePorgressDialog() {
+        Utils.writelogFile(this, "hidePorgressDialog(Account)");
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    @Override
+    public void getAccount() {
+        Utils.writelogFile(this, "getAccount(Account)");
+        presenter.getAccount(this);
     }
 
     private Account prepareAccount() {
@@ -392,8 +407,10 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
                 Utils.showSnackBar(activityAccount, getString(R.string.error_working));
             else if (city == null || city.isEmpty())
                 Utils.showSnackBar(activityAccount, getString(R.string.city_name_error));
-            else
+            else {
+                validateDateShop();
                 presenter.updateAccount(this, prepareAccount());
+            }
         } else if (id == R.id.action_map) {
             Utils.writelogFile(this, "action_map click Intent set extras(Account)");
             if (Utils.getIdCity(this) != 0) {

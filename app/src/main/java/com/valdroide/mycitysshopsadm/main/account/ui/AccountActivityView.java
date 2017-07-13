@@ -10,4 +10,5 @@ public interface AccountActivityView {
     void setCity(String city);
     void showProgressDialog();
     void hidePorgressDialog();
+    void getAccount();
 }

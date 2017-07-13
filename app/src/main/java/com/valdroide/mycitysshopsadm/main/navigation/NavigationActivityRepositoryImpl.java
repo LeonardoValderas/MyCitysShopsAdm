@@ -33,7 +33,6 @@ public class NavigationActivityRepositoryImpl implements NavigationActivityRepos
             Utils.writelogFile(context, " catch error " + e.getMessage() + "(Splash, Repository)");
             post(NavigationActivityEvent.ERROR, e.getMessage());
         }
-
     }
 
     @Override

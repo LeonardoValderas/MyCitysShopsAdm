@@ -2,6 +2,7 @@ package com.valdroide.mycitysshopsadm.main.draw.broadcast;
 
 
 import android.content.Context;
+import android.util.Log;
 
 import com.valdroide.mycitysshopsadm.entities.shop.Draw;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
@@ -53,17 +54,24 @@ public class BroadcastDrawPresenterImpl implements BroadcastDrawPresenter {
             switch (event.getType()) {
                 case BroadcastDrawEvent.DRAW:
                     view.setDraw(event.getDraw());
+               //     view.unRegister();
                     break;
                 case BroadcastDrawEvent.ERROR:
+                    Log.i("DRAW", "ERROR presenter");
                     view.refresh();
                     view.setError(event.getError());
+                    view.unRegister();
                     break;
                 case BroadcastDrawEvent.WINNIER:
+                    Log.i("DRAW", "WINNIER presenter");
                     view.setWinnerSuccess();
                     view.refresh();
+                    view.unRegister();
                     break;
                 case BroadcastDrawEvent.WITHOUTPARTICIPATE:
+                    Log.i("DRAW", "WITHOUTPARTICIPATE presenter");
                     view.refresh();
+                    view.unRegister();
                     break;
             }
         }

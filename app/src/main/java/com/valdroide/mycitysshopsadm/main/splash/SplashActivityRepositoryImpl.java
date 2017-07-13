@@ -11,6 +11,8 @@ import com.valdroide.mycitysshopsadm.entities.response.ResultShop;
 import com.valdroide.mycitysshopsadm.entities.response.ResultUser;
 import com.valdroide.mycitysshopsadm.entities.shop.Account;
 import com.valdroide.mycitysshopsadm.entities.shop.DateShop;
+import com.valdroide.mycitysshopsadm.entities.shop.Draw;
+import com.valdroide.mycitysshopsadm.entities.shop.Login;
 import com.valdroide.mycitysshopsadm.entities.shop.MyPlace;
 import com.valdroide.mycitysshopsadm.entities.place.City;
 import com.valdroide.mycitysshopsadm.entities.place.Country;
@@ -55,6 +57,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
     private Account account;
     private Notification notification;
     private List<Offer> offers;
+    private List<Draw> draws;
     private Shop shop;
     private Support support;
 
@@ -347,22 +350,14 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
         return SQLite.select().from(Support.class).querySingle();
     }
 
-//    private String getShopName() {
-//        try {
-//            return SQLite.select(Account_Table.SHOP_NAME).from(Account.class).querySingle().getSHOP_NAME();
-//        } catch (Exception e) {
-//            return null;
-//        }
-//    }
-
     private void validateDateShop(final Context context, final DateShop dateShop) {
         Utils.writelogFile(context, "Metodo validateDateShop y Se valida conexion a internet(Splash, Repository)");
         if (Utils.isNetworkAvailable(context)) {
             try {
                 Utils.writelogFile(context, "Call validateDateShop(Splash, Repository)");
                 Call<ResultUser> validateDateShop = service.validateDateShop(dateShop.getID_SHOP_FOREIGN(), Utils.getIdCity(context),
-                        dateShop.getACCOUNT_DATE(), dateShop.getOFFER_DATE(), dateShop.getNOTIFICATION_DATE(),
-                        dateShop.getDATE_SHOP_DATE());
+                        dateShop.getACCOUNT_DATE(), dateShop.getOFFER_DATE(), dateShop.getNOTIFICATION_DATE(), dateShop.getDRAW_DATE(),
+                        dateShop.getDATE_SHOP_DATE(), dateShop.getSUPPORT_DATE());
                 validateDateShop.enqueue(new Callback<ResultUser>() {
                     @Override
                     public void onResponse(Call<ResultUser> call, Response<ResultUser> response) {
@@ -388,23 +383,53 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                         Utils.writelogFile(context, "delete Account ok y save account(Splash, Repository)");
                                         account.save();
                                         Utils.writelogFile(context, "save Account ok(Splash, Repository)");
-                                        Utils.writelogFile(context, "save Follow y getOffers(Splash, Repository)");
                                     }
+                                    shop = response.body().getShop();
+                                    if (shop != null) {
+                                        Utils.writelogFile(context, "shop != null y delete Shop(Splash, Repository)");
+                                        Delete.table(Shop.class);
+                                        Utils.writelogFile(context, "delete Shop ok y save shop(Splash, Repository)");
+                                        shop.save();
+                                        Utils.writelogFile(context, "save shop ok(Splash, Repository)");
+                                    }
+
 
                                     offers = response.body().getOffers();
                                     if (offers != null) {
-                                        Utils.writelogFile(context, "offers != null y delete Offer(Splash, Repository)");
-                                        Delete.table(Offer.class);
-                                        Utils.writelogFile(context, "delete Offer ok y save offers(Splash, Repository)");
-                                        for (Offer offer : offers) {
-                                            Utils.writelogFile(context, "save offer: " + offer.getID_OFFER_KEY() + " (Splash, Repository)");
-                                            offer.save();
+                                        Utils.writelogFile(context, "offers != null(Splash, Repository)");
+                                        if (offers.size() > 0) {
+                                            Utils.writelogFile(context, "offers.size() > 0 y delete Offer(Splash, Repository)");
+                                            Delete.table(Offer.class);
+                                            Utils.writelogFile(context, "delete Offer ok y save offers(Splash, Repository)");
+                                            for (Offer offer : offers) {
+                                                Utils.writelogFile(context, "save offer: " + offer.getID_OFFER_KEY() + " (Splash, Repository)");
+                                                offer.save();
+                                            }
+                                            Utils.writelogFile(context, "fin FOR offer y getNotification (Splash, Repository)");
+                                        } else {
+                                            Utils.writelogFile(context, "offers == null y delete Offer(Splash, Repository)");
+                                            Delete.table(Offer.class);
                                         }
-                                        Utils.writelogFile(context, "fin FOR offer y getNotification (Splash, Repository)");
-                                    } else {
-                                        Utils.writelogFile(context, "offers == null y delete Offer(Splash, Repository)");
-                                        Delete.table(Offer.class);
                                     }
+
+                                    draws = response.body().getDraws();
+                                    if (draws != null) {
+                                        Utils.writelogFile(context, "draws != null(Splash, Repository)");
+                                        if (draws.size() > 0) {
+                                            Utils.writelogFile(context, "draws.size() > 0 y delete Draw(Splash, Repository)");
+                                            Delete.table(Draw.class);
+                                            Utils.writelogFile(context, "delete draws ok y save Draw(Splash, Repository)");
+                                            for (Draw draw : draws) {
+                                                Utils.writelogFile(context, "save draw: " + draw.getID_DRAW_KEY() + " (Splash, Repository)");
+                                                draw.save();
+                                            }
+                                            Utils.writelogFile(context, "fin FOR draw y getNotification(Splash, Repository)");
+                                        } else {
+                                            Utils.writelogFile(context, "draws == null y delete Draw(Splash, Repository)");
+                                            Delete.table(Draw.class);
+                                        }
+                                    }
+
                                     notification = response.body().getNotification();
                                     if (notification != null) {
                                         Utils.writelogFile(context, "notification != null y delete Notification(Splash, Repository)");
@@ -448,7 +473,7 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                 post(SplashActivityEvent.ERROR, e.getMessage());
             }
         } else {
-            Utils.writelogFile(context, " Internet error " + context.getString(R.string.error_internet) + "(Splash, Repository)");
+            Utils.writelogFile(context, "Internet error(Splash, Repository)");
             post(SplashActivityEvent.ERROR, context.getString(R.string.error_internet));
         }
     }
@@ -497,6 +522,19 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
                                         }
                                         Utils.writelogFile(context, "fin FOR offer y getNotification (Splash, Repository)");
                                     }
+
+                                    draws = response.body().getDraws();
+                                    if (draws != null) {
+                                        Utils.writelogFile(context, "draws != null y delete Draw(Splash, Repository)");
+                                        Delete.table(Draw.class);
+                                        Utils.writelogFile(context, "delete draws ok y save Draw(Splash, Repository)");
+                                        for (Draw draw : draws) {
+                                            Utils.writelogFile(context, "save draw: " + draw.getID_DRAW_KEY() + " (Splash, Repository)");
+                                            draw.save();
+                                        }
+                                        Utils.writelogFile(context, "fin FOR draw y getNotification(Splash, Repository)");
+                                    }
+
                                     notification = response.body().getNotification();
                                     if (notification != null) {
                                         Utils.writelogFile(context, "notification != null y delete Notification(Splash, Repository)");
@@ -546,8 +584,9 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
         if (Utils.isNetworkAvailable(context)) {
             try {
                 Utils.writelogFile(context, "Call validateLogin(Splash, Repository)");
-                Call<ResultShop> loginService = service.validateLogin(shop.getUSER(),
-                        shop.getPASS(), shop.getID_CITY_FOREIGN());
+                Login login = getLogin(context);
+                Call<ResultShop> loginService = service.validateLogin(login.getUSER(),
+                        login.getPASS(), shop.getID_CITY_FOREIGN());
                 loginService.enqueue(new Callback<ResultShop>() {
                     @Override
                     public void onResponse(Call<ResultShop> call, Response<ResultShop> response) {
@@ -598,6 +637,11 @@ public class SplashActivityRepositoryImpl implements SplashActivityRepository {
             Utils.writelogFile(context, "Internet error(Splash, Repository)");
             post(SplashActivityEvent.ERROR, context.getString(R.string.error_internet));
         }
+    }
+
+    private Login getLogin(Context context){
+        Utils.writelogFile(context, "Internet error(Splash, Repository)");
+        return SQLite.select().from(Login.class).querySingle();
     }
 
     private void post(int type) {

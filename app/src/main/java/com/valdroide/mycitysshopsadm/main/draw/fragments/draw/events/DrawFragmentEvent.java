@@ -5,6 +5,8 @@ public class DrawFragmentEvent {
     public static final int CREATEDRAW = 0;
     public static final int ERROR = 1;
     public static final int CITY = 2;
+    public static final int UPDATESUCCESS = 3;
+    public static final int UPDATEWITHOUTCHANGE = 4;
     private String error;
     private String city;
 

@@ -4,8 +4,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.valdroide.mycitysshopsadm.entities.shop.Account;
 import com.valdroide.mycitysshopsadm.entities.shop.DateShop;
+import com.valdroide.mycitysshopsadm.entities.shop.Draw;
 import com.valdroide.mycitysshopsadm.entities.shop.Notification;
 import com.valdroide.mycitysshopsadm.entities.shop.Offer;
+import com.valdroide.mycitysshopsadm.entities.shop.Shop;
 import com.valdroide.mycitysshopsadm.entities.shop.Support;
 
 import java.util.List;
@@ -20,6 +22,9 @@ public class ResultUser {
     @SerializedName("account")
     @Expose
     Account account;
+    @SerializedName("shop")
+    @Expose
+    Shop shop;
     @SerializedName("offer")
     @Expose
     List<Offer> offers;
@@ -29,7 +34,9 @@ public class ResultUser {
     @SerializedName("support")
     @Expose
     Support support;
-
+    @SerializedName("draw")
+    @Expose
+    List<Draw> draws;
     public ResponseWS getResponseWS() {
         return responseWS;
     }
@@ -73,5 +80,21 @@ public class ResultUser {
 
     public void setSupport(Support support) {
         this.support = support;
+    }
+
+    public List<Draw> getDraws() {
+        return draws;
+    }
+
+    public void setDraws(List<Draw> draws) {
+        this.draws = draws;
+    }
+
+    public Shop getShop() {
+        return shop;
+    }
+
+    public void setShop(Shop shop) {
+        this.shop = shop;
     }
 }

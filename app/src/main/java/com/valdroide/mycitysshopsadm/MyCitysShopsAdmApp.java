@@ -15,17 +15,14 @@ import com.valdroide.mycitysshopsadm.main.account.ui.AccountActivityView;
 import com.valdroide.mycitysshopsadm.main.draw.broadcast.di.BroadcastDrawComponent;
 import com.valdroide.mycitysshopsadm.main.draw.broadcast.di.BroadcastDrawModule;
 import com.valdroide.mycitysshopsadm.main.draw.broadcast.di.DaggerBroadcastDrawComponent;
-import com.valdroide.mycitysshopsadm.main.draw.broadcast.ui.BroadcastDraw;
 import com.valdroide.mycitysshopsadm.main.draw.broadcast.ui.BroadcastDrawView;
 import com.valdroide.mycitysshopsadm.main.draw.fragments.draw.di.DaggerDrawFragmentComponent;
 import com.valdroide.mycitysshopsadm.main.draw.fragments.draw.di.DrawFragmentComponent;
 import com.valdroide.mycitysshopsadm.main.draw.fragments.draw.di.DrawFragmentModule;
-import com.valdroide.mycitysshopsadm.main.draw.fragments.draw.ui.DrawFragment;
 import com.valdroide.mycitysshopsadm.main.draw.fragments.draw.ui.DrawFragmentView;
 import com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.di.DaggerDrawListFragmentComponent;
 import com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.di.DrawListFragmentComponent;
 import com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.di.DrawListFragmentModule;
-import com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.ui.DrawListFragment;
 import com.valdroide.mycitysshopsadm.main.draw.fragments.draw_list.ui.DrawListFragmentView;
 import com.valdroide.mycitysshopsadm.main.login.di.DaggerLoginActivityComponent;
 import com.valdroide.mycitysshopsadm.main.login.di.LoginActivityComponent;
@@ -43,11 +40,15 @@ import com.valdroide.mycitysshopsadm.main.notification.di.DaggerNotificationActi
 import com.valdroide.mycitysshopsadm.main.notification.di.NotificationActivityComponent;
 import com.valdroide.mycitysshopsadm.main.notification.di.NotificationActivityModule;
 import com.valdroide.mycitysshopsadm.main.notification.ui.NotificationActivityView;
-import com.valdroide.mycitysshopsadm.main.offer.di.DaggerOfferActivityComponent;
-import com.valdroide.mycitysshopsadm.main.offer.di.OfferActivityComponent;
-import com.valdroide.mycitysshopsadm.main.offer.di.OfferActivityModule;
-import com.valdroide.mycitysshopsadm.main.offer.ui.OfferActivityView;
-import com.valdroide.mycitysshopsadm.main.offer.ui.adapters.OnItemClickListener;
+import com.valdroide.mycitysshopsadm.main.offer.fragments.offer.di.DaggerOfferFragmentComponent;
+import com.valdroide.mycitysshopsadm.main.offer.fragments.offer.di.OfferFragmentComponent;
+import com.valdroide.mycitysshopsadm.main.offer.fragments.offer.di.OfferFragmentModule;
+import com.valdroide.mycitysshopsadm.main.offer.fragments.offer.ui.OfferFragmentView;
+import com.valdroide.mycitysshopsadm.main.offer.fragments.offer_list.di.DaggerOfferListFragmentComponent;
+import com.valdroide.mycitysshopsadm.main.offer.fragments.offer_list.di.OfferListFragmentComponent;
+import com.valdroide.mycitysshopsadm.main.offer.fragments.offer_list.di.OfferListFragmentModule;
+import com.valdroide.mycitysshopsadm.main.offer.fragments.offer_list.ui.OfferListFragmentView;
+import com.valdroide.mycitysshopsadm.main.offer.fragments.offer_list.ui.adapters.OnItemClickListener;
 import com.valdroide.mycitysshopsadm.main.place.di.DaggerPlaceActivityComponent;
 import com.valdroide.mycitysshopsadm.main.place.di.PlaceActivityComponent;
 import com.valdroide.mycitysshopsadm.main.place.di.PlaceActivityModule;
@@ -140,12 +141,20 @@ public class MyCitysShopsAdmApp extends Application {
                 .build();
     }
 
-    public OfferActivityComponent getOfferActivityComponent(OfferActivityView view, Activity activity, OnItemClickListener onItemClickListener) {
-        return DaggerOfferActivityComponent
+    public OfferFragmentComponent getOfferFragmentComponent(OfferFragmentView view, Fragment fragment) {
+        return DaggerOfferFragmentComponent
                 .builder()
                 .myCitysShopsAdmAppModule(myCitysShopsAdmAppModule)
-                .libsModule(new LibsModule(activity))
-                .offerActivityModule(new OfferActivityModule(view, activity, onItemClickListener))
+                .libsModule(new LibsModule(fragment))
+                .offerFragmentModule(new OfferFragmentModule(view, fragment))
+                .build();
+    }
+    public OfferListFragmentComponent getOfferListFragmentComponent(OfferListFragmentView view, Fragment fragment, OnItemClickListener onItemClickListener) {
+        return DaggerOfferListFragmentComponent
+                .builder()
+                .myCitysShopsAdmAppModule(myCitysShopsAdmAppModule)
+                .libsModule(new LibsModule(fragment))
+                .offerListFragmentModule(new OfferListFragmentModule(view, fragment, onItemClickListener))
                 .build();
     }
 
