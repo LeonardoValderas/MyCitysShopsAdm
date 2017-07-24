@@ -91,8 +91,8 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
         Utils.writelogFile(this, "Se inicia toolbar setTitle(Account)");
         getSupportActionBar().setTitle(R.string.my_account_title);
         setEnable(false);
-        showProgressDialog();
-        validateDateShop();
+
+
 //        Utils.writelogFile(this, "presenter.getAccount() (Account)");
 //        presenter.getAccount(this);
         Utils.writelogFile(this, "getBooleanExtra() isMap; (Account)");
@@ -109,6 +109,9 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
             }
             Utils.writelogFile(this, "fillExtraData(); (Account)");
             fillExtraData();
+        }else {
+            showProgressDialog();
+            validateDateShop();
         }
     }
 
@@ -149,6 +152,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
     private void fillExtraData() {
         Utils.writelogFile(this, "fillExtraData todos los componentes (Account)");
         try {
+            id_account = getIntent().getIntExtra("id", 0);
             editTextPhone.setText(getIntent().getStringExtra("phone"));
             editTextWhatsaap.setText(getIntent().getStringExtra("whatsaap"));
             editTextEmail.setText(getIntent().getStringExtra("email"));
@@ -379,6 +383,12 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
     }
 
     @Override
+    protected void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.account, menu);
         this.menu = menu;
@@ -408,7 +418,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
             else if (city == null || city.isEmpty())
                 Utils.showSnackBar(activityAccount, getString(R.string.city_name_error));
             else {
-                validateDateShop();
+                //validateDateShop();
                 presenter.updateAccount(this, prepareAccount());
             }
         } else if (id == R.id.action_map) {
@@ -418,6 +428,7 @@ public class AccountActivity extends AppCompatActivity implements AccountActivit
                 try {
                     Intent intent = new Intent(this, MapActivity.class);
                     intent.putExtra("map", true);
+                    intent.putExtra("id", id_account);
                     intent.putExtra("name", textViewName.getText().toString());
                     if (uriExtra != null)
                         intent.putExtra("uri", uriExtra.toString());

@@ -7,6 +7,7 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.valdroide.mycitysshopsadm.entities.shop.Account;
 import com.valdroide.mycitysshopsadm.entities.shop.Account_Table;
 import com.valdroide.mycitysshopsadm.entities.shop.DateShop;
+import com.valdroide.mycitysshopsadm.entities.shop.Login;
 import com.valdroide.mycitysshopsadm.entities.shop.Shop;
 import com.valdroide.mycitysshopsadm.lib.base.EventBus;
 import com.valdroide.mycitysshopsadm.main.navigation.events.NavigationActivityEvent;
@@ -28,6 +29,7 @@ public class NavigationActivityRepositoryImpl implements NavigationActivityRepos
             Delete.table(Shop.class);
             Utils.writelogFile(context, "setIdFollow 0 y post GOTOOUT(Navigation, Repository)");
             Utils.setIdFollow(context, 0);
+            Delete.table(Login.class);
             post(NavigationActivityEvent.LOGOUT);
         } catch (Exception e) {
             Utils.writelogFile(context, " catch error " + e.getMessage() + "(Splash, Repository)");

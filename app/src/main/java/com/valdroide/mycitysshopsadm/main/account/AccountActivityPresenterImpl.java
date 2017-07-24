@@ -23,8 +23,6 @@ public class AccountActivityPresenterImpl implements AccountActivityPresenter {
     @Override
     public void onCreate() {
         eventBus.register(this);
-        if (view != null)
-            view.showProgressDialog();
     }
 
     @Override

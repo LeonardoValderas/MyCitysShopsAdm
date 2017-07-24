@@ -44,6 +44,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private CameraUpdate cu;
     @Inject
     MapActivityPresenter presenter;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +133,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void getExtraInfo() {
         if (actualizar) {
+            id = getIntent().getIntExtra("id", 0);
             name = getIntent().getStringExtra("name");
             uriExtra = getIntent().getStringExtra("uri");
             phone = getIntent().getStringExtra("phone");
@@ -178,6 +180,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         try {
             Intent intent = new Intent(this, AccountActivity.class);
             intent.putExtra("isMap", true);
+            intent.putExtra("id", id);
             intent.putExtra("uri", uriExtra);
             intent.putExtra("phone", phone);
             intent.putExtra("whatsaap", whatsapp);

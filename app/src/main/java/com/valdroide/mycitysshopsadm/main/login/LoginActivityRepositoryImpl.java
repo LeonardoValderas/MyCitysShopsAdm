@@ -90,6 +90,7 @@ public class LoginActivityRepositoryImpl implements LoginActivityRepository {
 
     private void setLogin(String user, String pass){
         Login login = new Login();
+        login.setID_LOGIN_KEY(1);
         login.setUSER(user);
         login.setPASS(pass);
         login.save();

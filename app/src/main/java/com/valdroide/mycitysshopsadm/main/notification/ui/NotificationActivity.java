@@ -57,7 +57,10 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         initToolBar();
         editTextEmailHint.setHint(getString(R.string.hint_notification));
         isADM = isADM();
-        validateDateShop();
+        if (!isADM)
+            validateDateShop();
+        else
+            hidePorgressDialog();
     }
 
     private void initToolBar() {
@@ -100,7 +103,8 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                 Utils.showSnackBar(conteiner, getString(R.string.notification_empty));
             else {
                 Utils.writelogFile(this, "sendNotification sendNotification(Notification)");
-                validateDateShop();
+                if (!isADM)
+                    validateDateShop();
                 validateDialog();
                 if (isADM)
                     presenter.sendNotificationAdm(this, editTextEmail.getText().toString());
@@ -162,7 +166,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         if (!isADM) {
             validateDialog();
             presenter.validateNotificationExpire(this, Utils.getFechaLogFile("dd/MM/yyyy"));
-        }else
+        } else
             hidePorgressDialog();
     }
 

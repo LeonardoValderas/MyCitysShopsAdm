@@ -220,6 +220,8 @@ public class DrawListFragment extends Fragment implements DrawListFragmentView, 
                 } else {
                     createDialog("Desea cerra el sorteo?", draw, 0);
                 }
+            } else{
+                createDialog("Desea cerra el sorteo?", draw, 0);
             }
         }
     }
